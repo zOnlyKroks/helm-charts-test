@@ -1,0 +1,133 @@
+## @param replicaCount Number of MongoDB replicas to deploy
+replicaCount: 1
+
+image:
+  ## @param image.repository MongoDB Docker image repository
+  repository: mongo
+  ## @param image.tag MongoDB Docker image tag
+  tag: "8.0.12"
+  ## @param image.digest MongoDB Docker image digest
+  digest: "sha256:a6bda40d00e56682aeaa1bfc88e024b7dd755782c575c02760104fe02010f94f"
+  ## @param image.pullPolicy MongoDB image pull policy
+  pullPolicy: IfNotPresent
+
+## @param nameOverride String to partially override mongodb.fullname
+nameOverride: ""
+## @param fullnameOverride String to fully override mongodb.fullname
+fullnameOverride: "mongodb"
+
+service:
+  ## @param service.type Kubernetes service type
+  type: ClusterIP
+  ## @param service.port MongoDB service port
+  port: 27017
+
+auth:
+  ## @param auth.enabled Enable MongoDB authentication
+  enabled: true
+  ## @param auth.rootUsername MongoDB root username
+  rootUsername: admin
+  ## @param auth.rootPassword MongoDB root password (if empty, random password will be generated)
+  rootPassword: ""
+  ## @param auth.existingSecret Name of existing secret containing MongoDB password
+  # existingSecret: ""
+  ## @param auth.existingSecretPasswordKey Key in existing secret containing MongoDB password
+  # existingSecretPasswordKey: ""
+
+## @param databases Array of additional databases to create
+databases: []
+# - name: myapp
+#   user: myappuser
+#   password: myapppass
+
+## @param config MongoDB configuration options
+config: {}
+  # Set MongoDB configuration here
+  # Example: dbPath: /data/db
+
+persistence:
+  ## @param persistence.enabled Enable persistent storage
+  enabled: true
+  ## @param persistence.storageClass Storage class to use for persistent volume
+  storageClass: ""
+  ## @param persistence.accessMode Access mode for persistent volume
+  accessMode: ReadWriteOnce
+  ## @param persistence.size Size of persistent volume
+  size: 8Gi
+  ## @param persistence.mountPath Mount path for MongoDB data
+  mountPath: /data/db
+
+## @param resources Resource limits and requests for MongoDB pod
+resources:
+  limits:
+    memory: 512Mi
+  requests:
+    cpu: 50m
+    memory: 512Mi
+
+## @param nodeSelector Node selector for pod assignment
+nodeSelector: {}
+
+## @param tolerations Tolerations for pod assignment
+tolerations: []
+
+## @param affinity Affinity rules for pod assignment
+affinity: {}
+
+securityContext:
+  ## @param securityContext.fsGroup Group ID for filesystem ownership
+  fsGroup: 999
+  ## @param securityContext.runAsUser User ID to run the container
+  runAsUser: 999
+  ## @param securityContext.runAsNonRoot Run as non-root user
+  runAsNonRoot: true
+
+## @param podSecurityContext Security context for the pod
+podSecurityContext: {}
+
+serviceAccount:
+  ## @param serviceAccount.create Create a service account
+  create: true
+  ## @param serviceAccount.annotations Annotations to add to the service account
+  annotations: {}
+  ## @param serviceAccount.name Name of the service account (if empty, uses generated name)
+  name: ""
+
+livenessProbe:
+  ## @param livenessProbe.enabled Enable liveness probe
+  enabled: true
+  ## @param livenessProbe.initialDelaySeconds Initial delay before starting probes
+  initialDelaySeconds: 30
+  ## @param livenessProbe.periodSeconds How often to perform the probe
+  periodSeconds: 10
+  ## @param livenessProbe.timeoutSeconds Timeout for each probe attempt
+  timeoutSeconds: 5
+  ## @param livenessProbe.failureThreshold Number of failures before pod is restarted
+  failureThreshold: 6
+  ## @param livenessProbe.successThreshold Number of successes to mark probe as successful
+  successThreshold: 1
+
+readinessProbe:
+  ## @param readinessProbe.enabled Enable readiness probe
+  enabled: true
+  ## @param readinessProbe.initialDelaySeconds Initial delay before starting probes
+  initialDelaySeconds: 5
+  ## @param readinessProbe.periodSeconds How often to perform the probe
+  periodSeconds: 10
+  ## @param readinessProbe.timeoutSeconds Timeout for each probe attempt
+  timeoutSeconds: 5
+  ## @param readinessProbe.failureThreshold Number of failures before pod is marked unready
+  failureThreshold: 6
+  ## @param readinessProbe.successThreshold Number of successes to mark probe as successful
+  successThreshold: 1
+
+## @param extraEnv Additional environment variables to set
+extraEnv:
+# - name: EXTRA_VAR
+#   value: "extra_value"
+
+## @param extraVolumes Additional volumes to add to the pod
+extraVolumes: []
+
+## @param extraVolumeMounts Additional volume mounts to add to the MongoDB container
+extraVolumeMounts: []

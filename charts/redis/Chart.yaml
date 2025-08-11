@@ -1,0 +1,19 @@
+apiVersion: v2
+name: redis
+description: A Helm chart for Redis - an open source, in-memory data structure store
+type: application
+version: 0.1.0
+appVersion: "8.2.0"
+keywords:
+  - redis
+  - database
+  - cache
+  - in-memory
+  - key-value
+home: https://redis.io
+sources:
+  - https://github.com/redis/redis
+  - https://hub.docker.com/_/redis
+maintainers:
+  - name: CloudPirates GmbH & Co. KG
+    email: hello@cloudpirates.io

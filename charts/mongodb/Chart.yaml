@@ -1,0 +1,16 @@
+apiVersion: v2
+name: mongodb
+description: A Helm chart for MongoDB using the official mongo container image
+type: application
+version: 0.1.0
+appVersion: "8.0.12"
+keywords:
+  - mongodb
+  - database
+  - nosql
+home: https://www.mongodb.com/
+sources:
+  - https://github.com/mongodb/mongo
+maintainers:
+  - name: CloudPirates GmbH & Co. KG
+    email: hello@cloudpirates.io

@@ -1,0 +1,243 @@
+# MongoDB Helm Chart
+
+A production-ready Helm chart for deploying MongoDB on Kubernetes using the official MongoDB Docker image.
+
+## Description
+
+This Helm chart provides a complete MongoDB deployment solution with persistent storage, authentication, health checks, and security configurations. It uses the official `mongo` Docker image and supports various deployment scenarios from development to production environments.
+
+## Features
+
+- **Official MongoDB Image**: Uses the official `mongo` Docker image from Docker Hub
+- **Authentication**: Configurable MongoDB authentication with root user credentials
+- **Persistent Storage**: Optional persistent volume support with configurable storage class and size
+- **Security**: Non-root container execution with proper security contexts
+- **Health Checks**: Liveness and readiness probes using mongosh
+- **Flexible Configuration**: Comprehensive configuration options for various deployment needs
+- **Service Account**: RBAC-ready with configurable service account
+- **Resource Management**: Configurable CPU and memory limits/requests
+
+## Installing the Chart
+
+To install the chart with the release name `my-mongodb`:
+
+```bash
+helm install my-mongodb ./mongodb
+```
+
+To install with custom values:
+
+```bash
+helm install my-mongodb ./mongodb -f my-values.yaml
+```
+
+## Uninstalling the Chart
+
+To uninstall/delete the `my-mongodb` deployment:
+
+```bash
+helm delete my-mongodb
+```
+
+## Configuration
+
+The following table lists the configurable parameters of the MongoDB chart and their default values.
+
+### Global Parameters
+
+| Parameter | Description | Default |
+|-----------|-------------|---------|
+| `replicaCount` | Number of MongoDB replicas to deploy | `1` |
+| `nameOverride` | String to partially override mongodb.fullname | `""` |
+| `fullnameOverride` | String to fully override mongodb.fullname | `""` |
+
+### Image Parameters
+
+| Parameter | Description | Default |
+|-----------|-------------|---------|
+| `image.repository` | MongoDB Docker image repository | `mongo` |
+| `image.tag` | MongoDB Docker image tag | `"8.0.12"` |
+| `image.digest` | MongoDB Docker image digest | `"sha256:a6bda40d00e56682aeaa1bfc88e024b7dd755782c575c02760104fe02010f94f"` |
+| `image.pullPolicy` | MongoDB image pull policy | `IfNotPresent` |
+
+### Service Parameters
+
+| Parameter | Description | Default |
+|-----------|-------------|---------|
+| `service.type` | Kubernetes service type | `ClusterIP` |
+| `service.port` | MongoDB service port | `27017` |
+
+### MongoDB Configuration Parameters
+
+| Parameter | Description | Default |
+|-----------|-------------|---------|
+| `auth.enabled` | Enable MongoDB authentication | `true` |
+| `auth.rootUsername` | MongoDB root username | `admin` |
+| `auth.rootPassword` | MongoDB root password (if empty, random password will be generated) | `""` |
+| `auth.existingSecret` | Name of existing secret containing MongoDB password | `""` |
+| `auth.existingSecretPasswordKey` | Key in existing secret containing MongoDB password | `""` |
+| `databases` | Array of additional databases to create | `[]` |
+| `config` | MongoDB configuration options | `{}` |
+
+### Persistence Parameters
+
+| Parameter | Description | Default |
+|-----------|-------------|---------|
+| `persistence.enabled` | Enable persistent storage | `true` |
+| `persistence.storageClass` | Storage class to use for persistent volume | `""` |
+| `persistence.accessMode` | Access mode for persistent volume | `ReadWriteOnce` |
+| `persistence.size` | Size of persistent volume | `10Gi` |
+| `persistence.mountPath` | Mount path for MongoDB data | `/data/db` |
+
+### Resource Parameters
+
+| Parameter | Description | Default |
+|-----------|-------------|---------|
+| `resources` | Resource limits and requests for MongoDB pod | `{}` |
+| `nodeSelector` | Node selector for pod assignment | `{}` |
+| `tolerations` | Tolerations for pod assignment | `[]` |
+| `affinity` | Affinity rules for pod assignment | `{}` |
+
+### Security Parameters
+
+| Parameter | Description | Default |
+|-----------|-------------|---------|
+| `securityContext.fsGroup` | Group ID for filesystem ownership | `999` |
+| `securityContext.runAsUser` | User ID to run the container | `999` |
+| `securityContext.runAsNonRoot` | Run as non-root user | `true` |
+| `podSecurityContext` | Security context for the pod | `{}` |
+
+### Service Account Parameters
+
+| Parameter | Description | Default |
+|-----------|-------------|---------|
+| `serviceAccount.create` | Create a service account | `true` |
+| `serviceAccount.annotations` | Annotations to add to the service account | `{}` |
+| `serviceAccount.name` | Name of the service account (if empty, uses generated name) | `""` |
+
+### Health Check Parameters
+
+| Parameter | Description | Default |
+|-----------|-------------|---------|
+| `livenessProbe.enabled` | Enable liveness probe | `true` |
+| `livenessProbe.initialDelaySeconds` | Initial delay before starting probes | `30` |
+| `livenessProbe.periodSeconds` | How often to perform the probe | `10` |
+| `livenessProbe.timeoutSeconds` | Timeout for each probe attempt | `5` |
+| `livenessProbe.failureThreshold` | Number of failures before pod is restarted | `6` |
+| `livenessProbe.successThreshold` | Number of successes to mark probe as successful | `1` |
+| `readinessProbe.enabled` | Enable readiness probe | `true` |
+| `readinessProbe.initialDelaySeconds` | Initial delay before starting probes | `5` |
+| `readinessProbe.periodSeconds` | How often to perform the probe | `10` |
+| `readinessProbe.timeoutSeconds` | Timeout for each probe attempt | `5` |
+| `readinessProbe.failureThreshold` | Number of failures before pod is marked unready | `6` |
+| `readinessProbe.successThreshold` | Number of successes to mark probe as successful | `1` |
+
+### Additional Parameters
+
+| Parameter | Description | Default |
+|-----------|-------------|---------|
+| `extraEnv` | Additional environment variables to set | `[]` |
+| `extraVolumes` | Additional volumes to add to the pod | `[]` |
+| `extraVolumeMounts` | Additional volume mounts to add to the MongoDB container | `[]` |
+
+## Example Values
+
+### Basic Installation with Authentication
+
+```yaml
+mongodb:
+  auth:
+    enabled: true
+    rootUsername: admin
+    rootPassword: "mySecretPassword"
+
+persistence:
+  enabled: true
+  size: 20Gi
+```
+
+### Production Setup with Resources
+
+```yaml
+replicaCount: 1
+
+resources:
+  limits:
+    cpu: 2000m
+    memory: 4Gi
+  requests:
+    cpu: 1000m
+    memory: 2Gi
+
+persistence:
+  enabled: true
+  storageClass: "default"
+  size: 100Gi
+
+mongodb:
+  auth:
+    enabled: true
+    rootUsername: admin
+    existingSecret: mongodb-credentials
+    existingSecretPasswordKey: password
+```
+
+### Development Setup (No Persistence)
+
+```yaml
+persistence:
+  enabled: false
+
+mongodb:
+  auth:
+    enabled: false
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+```
+
+## Accessing MongoDB
+
+### Get Connection Information
+
+Once the chart is deployed, you can get the MongoDB connection details:
+
+```bash
+# Get the MongoDB password (if auto-generated)
+kubectl get secret --namespace default my-mongodb -o jsonpath="{.data.mongodb-root-password}" | base64 --decode
+
+# Connect to MongoDB
+kubectl run --namespace default my-mongodb-client --rm --tty -i --restart='Never' --image mongo:7.0 --command -- mongosh admin --host my-mongodb --authenticationDatabase admin -u admin -p [PASSWORD]
+```
+
+### Port Forward (for local access)
+
+```bash
+kubectl port-forward --namespace default svc/my-mongodb 27017:27017
+```
+
+Then connect using:
+```bash
+mongosh --host 127.0.0.1 --port 27017 --authenticationDatabase admin -u admin -p [PASSWORD]
+```
+
+## Upgrading
+
+To upgrade the MongoDB deployment:
+
+```bash
+helm upgrade my-mongodb ./mongodb -f my-values.yaml
+```
+
+## Contributing
+
+Please feel free to submit issues, fork the repository and send pull requests!
+
+## License
+
+This chart is licensed under the MIT License.

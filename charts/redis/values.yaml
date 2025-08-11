@@ -1,0 +1,328 @@
+## @section Global parameters
+global:
+  ## @param global.imageRegistry Global Docker Image registry
+  imageRegistry: ""
+  ## @param global.imagePullSecrets Global Docker registry secret names as an array
+  imagePullSecrets: []
+  ## @param global.storageClass Global StorageClass for Persistent Volume(s)
+  storageClass: ""
+
+## @section Common parameters
+## @param kubeVersion Override Kubernetes version
+kubeVersion: ""
+## @param nameOverride String to partially override redis.fullname
+nameOverride: ""
+## @param fullnameOverride String to fully override redis.fullname
+fullnameOverride: "redis"
+## @param namespaceOverride String to fully override common.names.namespace
+namespaceOverride: ""
+## @param commonLabels Labels to add to all deployed objects
+commonLabels:
+  foo: bar
+## @param commonAnnotations Annotations to add to all deployed objects
+commonAnnotations: {}
+
+## @section Redis Image parameters
+image:
+  ## @param image.registry Redis image registry
+  registry: docker.io
+  ## @param image.repository Redis image repository
+  repository: redis
+  ## @param image.tag Redis image tag (immutable tags are recommended)
+  tag: "8.2.0"
+  ## @param image.digest Redis image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  digest: ""
+  ## @param image.pullPolicy Redis image pull policy
+  pullPolicy: IfNotPresent
+  ## @param image.pullSecrets Redis image pull secrets
+  pullSecrets: []
+
+## @section Redis Configuration parameters
+## @param auth.enabled Enable password authentication
+auth:
+  ## @param auth.enabled Enable password authentication
+  enabled: true
+  ## @param auth.password Redis password
+  password: ""
+  ## @param auth.existingSecret The name of an existing secret with Redis credentials
+  existingSecret: ""
+  ## @param auth.existingSecretPasswordKey Password key to be retrieved from existing secret
+  existingSecretPasswordKey: ""
+  ## @param auth.usePasswordFiles Mount credentials as files instead of using an environment variable
+  usePasswordFiles: false
+
+## @section Redis Common configuration parameters
+## @param commonConfiguration Redis common configuration to be added into the ConfigMap
+commonConfiguration: |-
+  # Enable AOF https://redis.io/topics/persistence#append-only-file
+  appendonly yes
+  # Disable RDB persistence, AOF persistence already enabled.
+  save ""
+
+## @section Redis master configuration parameters
+master:
+  ## @param master.count Number of Redis master instances to deploy (experimental, most use cases should use `master.count=1`)
+  count: 1
+  ## @param master.configuration Configuration for Redis master nodes
+  configuration: ""
+  ## @param master.disableCommands Array with Redis commands to disable on master nodes
+  disableCommands:
+    - FLUSHDB
+    - FLUSHALL
+  ## @param master.command Override default container command (useful when using custom images)
+  command: []
+  ## @param master.args Override default container args (useful when using custom images)
+  args: []
+  ## @param master.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  enableServiceLinks: true
+  ## @param master.preExecCmds Additional commands to run prior to starting Redis master
+  preExecCmds: []
+  ## @param master.extraFlags Array with additional command line flags for Redis master
+  extraFlags: []
+  ## @param master.extraEnvVars Array with extra environment variables to add to Redis master nodes
+  extraEnvVars: []
+  ## @param master.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Redis master nodes
+  extraEnvVarsCM: ""
+  ## @param master.extraEnvVarsSecret Name of existing Secret containing extra env vars for Redis master nodes
+  extraEnvVarsSecret: ""
+  ## @param master.containerPorts.redis Container port to open on Redis master nodes
+  containerPorts:
+    redis: 6379
+  ## @param master.startupProbe.enabled Enable startupProbe on Redis master nodes
+  ## @param master.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param master.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param master.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param master.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param master.startupProbe.successThreshold Success threshold for startupProbe
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 20
+    periodSeconds: 5
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param master.livenessProbe.enabled Enable livenessProbe on Redis master nodes
+  ## @param master.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param master.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param master.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param master.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param master.livenessProbe.successThreshold Success threshold for livenessProbe
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 20
+    periodSeconds: 5
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param master.readinessProbe.enabled Enable readinessProbe on Redis master nodes
+  ## @param master.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param master.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param master.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param master.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param master.readinessProbe.successThreshold Success threshold for readinessProbe
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    timeoutSeconds: 1
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param master.customStartupProbe Custom startupProbe that overrides the default one
+  customStartupProbe: {}
+  ## @param master.customLivenessProbe Custom livenessProbe that overrides the default one
+  customLivenessProbe: {}
+  ## @param master.customReadinessProbe Custom readinessProbe that overrides the default one
+  customReadinessProbe: {}
+  ## Redis master resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param master.resources.limits The resources limits for the Redis master containers
+  ## @param master.resources.requests The requested resources for the Redis master containers
+  resources:
+    limits:
+      memory: 300Mi
+    requests:
+      memory: 300Mi
+      cpu: 100m
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param master.podSecurityContext.enabled Enabled Redis master pods' Security Context
+  ## @param master.podSecurityContext.fsGroup Set Redis master pod's Security Context fsGroup
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param master.containerSecurityContext.enabled Enabled Redis master containers' Security Context
+  ## @param master.containerSecurityContext.runAsUser Set Redis master containers' Security Context runAsUser
+  ## @param master.containerSecurityContext.runAsNonRoot Set Redis master containers' Security Context runAsNonRoot
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+  ## @param master.kind Use either Deployment or StatefulSet (default)
+  kind: StatefulSet
+  ## @param master.schedulerName Alternate scheduler for Redis master pods
+  schedulerName: ""
+  ## @param master.updateStrategy.type Redis master statefulset strategy type
+  updateStrategy:
+    ## StrategyType
+    ## Can be set to RollingUpdate or OnDelete
+    type: RollingUpdate
+  ## @param master.priorityClassName Redis master pods' priorityClassName
+  priorityClassName: ""
+  ## @param master.hostAliases Redis master pods host aliases
+  hostAliases: []
+  ## @param master.podLabels Extra labels for Redis master pods
+  podLabels: {}
+  ## @param master.podAnnotations Annotations for Redis master pods
+  podAnnotations: {}
+  ## @param master.shareProcessNamespace Share a single process namespace between all of the containers in Redis master pods
+  shareProcessNamespace: false
+  ## @param master.podAffinityPreset Pod affinity preset. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`
+  podAffinityPreset: ""
+  ## @param master.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`
+  podAntiAffinityPreset: soft
+  ## @param master.nodeAffinityPreset.type Node affinity preset type. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`
+  ## @param master.nodeAffinityPreset.key Node label key to match. Ignored if `master.affinity` is set
+  ## @param master.nodeAffinityPreset.values Node label values to match. Ignored if `master.affinity` is set
+  nodeAffinityPreset:
+    type: ""
+    key: ""
+    values: []
+  ## @param master.affinity Affinity for Redis master pods assignment
+  affinity: {}
+  ## @param master.nodeSelector Node labels for Redis master pods assignment
+  nodeSelector: {}
+  ## @param master.tolerations Tolerations for Redis master pods assignment
+  tolerations: []
+  ## @param master.topologySpreadConstraints Spread Constraints for Redis master pod assignment
+  topologySpreadConstraints: []
+  ## @param master.dnsPolicy DNS Policy for Redis master pod
+  dnsPolicy: ""
+  ## @param master.dnsConfig DNS Configuration for Redis master pod
+  dnsConfig: {}
+  ## @param master.lifecycleHooks for the Redis master container(s) to automate configuration before or after startup
+  lifecycleHooks: {}
+  ## @param master.extraVolumes Optionally specify extra list of additional volumes for the Redis master pod(s)
+  extraVolumes: []
+  ## @param master.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Redis master container(s)
+  extraVolumeMounts: []
+  ## @param master.sidecars Add additional sidecar containers to the Redis master pod(s)
+  sidecars: []
+  ## @param master.initContainers Add additional init containers to the Redis master pod(s)
+  initContainers: []
+  ## Persistence configuration
+  persistence:
+    ## @param master.persistence.enabled Enable persistence on Redis master nodes using Persistent Volume Claims
+    enabled: true
+    ## @param master.persistence.medium Provide a medium for `emptyDir` volumes.
+    medium: ""
+    ## @param master.persistence.sizeLimit Set this to enable a size limit for `emptyDir` volumes.
+    sizeLimit: ""
+    ## @param master.persistence.path The path the volume will be mounted at on Redis master containers
+    path: /data
+    ## @param master.persistence.subPath The subdirectory of the volume to mount on Redis master containers
+    subPath: ""
+    ## @param master.persistence.subPathExpr Used to construct the subPath subdirectory of the volume to mount on Redis master containers
+    subPathExpr: ""
+    ## @param master.persistence.storageClass Persistent Volume storage class
+    storageClass: ""
+    ## @param master.persistence.accessModes Persistent Volume access modes
+    accessModes:
+      - ReadWriteOnce
+    ## @param master.persistence.size Persistent Volume size
+    size: 8Gi
+    ## @param master.persistence.annotations Additional custom annotations for the PVC
+    annotations: {}
+    ## @param master.persistence.selector Additional labels to match for the PVC
+    selector: {}
+    ## @param master.persistence.dataSource Custom PVC data source
+    dataSource: {}
+    ## @param master.persistence.existingClaim Use a existing PVC which must be created manually before bound
+    existingClaim: ""
+
+## @section Service Account
+serviceAccount:
+  ## @param serviceAccount.create Specifies whether a ServiceAccount should be created
+  create: false
+  ## @param serviceAccount.name The name of the ServiceAccount to use.
+  name: ""
+  ## @param serviceAccount.automountServiceAccountToken Whether to auto mount the service account token
+  automountServiceAccountToken: true
+  ## @param serviceAccount.annotations Additional custom annotations for the ServiceAccount
+  annotations: {}
+
+## @section Redis Service parameters
+service:
+  ## @param service.type Redis service type
+  type: ClusterIP
+  ## @param service.ports.redis Redis service port
+  ports:
+    redis: 6379
+  ## @param service.nodePorts.redis Node port for Redis
+  nodePorts:
+    redis: ""
+  ## @param service.externalTrafficPolicy Redis service external traffic policy
+  externalTrafficPolicy: Cluster
+  ## @param service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+  extraPorts: []
+  ## @param service.internalTrafficPolicy Redis service internal traffic policy (requires Kubernetes v1.22 or greater to be usable)
+  internalTrafficPolicy: Cluster
+  ## @param service.clusterIP Redis service Cluster IP
+  clusterIP: ""
+  ## @param service.loadBalancerIP Redis service Load Balancer IP
+  loadBalancerIP: ""
+  ## @param service.loadBalancerSourceRanges Redis service Load Balancer sources
+  loadBalancerSourceRanges: []
+  ## @param service.annotations Additional custom annotations for Redis service
+  annotations: {}
+  ## @param service.sessionAffinity Control where client requests go, to the same pod or round-robin
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  sessionAffinityConfig: {}
+
+## @section Network Policy parameters
+networkPolicy:
+  ## @param networkPolicy.enabled Enable creation of NetworkPolicy resources
+  enabled: false
+  ## @param networkPolicy.allowExternal The Policy model to apply
+  allowExternal: true
+  ## @param networkPolicy.extraIngress Add extra ingress rules to the NetworkPolicy
+  extraIngress: []
+  ## @param networkPolicy.extraEgress Add extra ingress rules to the NetworkPolicy
+  extraEgress: []
+  ## @param networkPolicy.ingressNSMatchLabels Labels to match to allow traffic from other namespaces
+  ingressNSMatchLabels: {}
+  ## @param networkPolicy.ingressNSPodMatchLabels Pod labels to match to allow traffic from other namespaces
+  ingressNSPodMatchLabels: {}
+
+## @section Redis Ingress parameters
+ingress:
+  ## @param ingress.enabled Enable ingress record generation for Redis
+  enabled: false
+  ## @param ingress.pathType Ingress path type
+  pathType: ImplementationSpecific
+  ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
+  apiVersion: ""
+  ## @param ingress.hostname Default host for the ingress record
+  hostname: redis.local
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ingressClassName: ""
+  ## @param ingress.path Default path for the ingress record
+  path: /
+  ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+  annotations: {}
+  ## @param ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
+  tls: false
+  ## @param ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+  selfSigned: false
+  ## @param ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+  extraHosts: []
+  ## @param ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+  extraPaths: []
+  ## @param ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+  extraTls: []
+  ## @param ingress.secrets Custom TLS certificates as secrets
+  secrets: []
+  ## @param ingress.extraRules Additional rules to be covered with this ingress record
+  extraRules: []
