@@ -65,31 +65,27 @@ Create the name of the service account to use
 {{- end }}
 
 {{/*
-Return the proper MariaDB image name
+Return the proper MinIO image name
 */}}
 {{- define "mariadb.image" -}}
-{{- if not .Values.image.digest }}
-{{- printf "%s:%s" .Values.image.repository .Values.image.tag -}}
-{{- else }}
-{{- printf "%s:%s@%s" .Values.image.repository .Values.image.tag .Values.image.digest -}}
-{{- end }}
-{{- end }}
-
-{{/*
-Return the proper metrics image name
-*/}}
-{{- define "mariadb.metrics.image" -}}
-{{- $registryName := .Values.metrics.image.registry -}}
-{{- $repositoryName := .Values.metrics.image.repository -}}
-{{- $tag := .Values.metrics.image.tag | toString -}}
-{{- if .Values.global.imageRegistry }}
-    {{- $registryName = .Values.global.imageRegistry -}}
+{{- $registryName := .Values.image.registry -}}
+{{- $repositoryName := .Values.image.repository -}}
+{{- $separator := ":" -}}
+{{- $termination := .Values.image.tag | toString -}}
+{{- if .Values.global }}
+    {{- if .Values.global.imageRegistry }}
+        {{- $registryName = .Values.global.imageRegistry -}}
+    {{- end -}}
+{{- end -}}
+{{- if .Values.image.digest }}
+    {{- $separator = "@" -}}
+    {{- $termination = .Values.image.digest | toString -}}
 {{- end -}}
 {{- if $registryName }}
-{{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- else }}
-{{- printf "%s:%s" $repositoryName $tag -}}
-{{- end }}
+    {{- printf "%s/%s%s%s" $registryName $repositoryName $separator $termination -}}
+{{- else -}}
+    {{- printf "%s%s%s" $repositoryName $separator $termination -}}
+{{- end -}}
 {{- end }}
 
 {{/*

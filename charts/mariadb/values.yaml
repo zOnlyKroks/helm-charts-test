@@ -1,7 +1,7 @@
 ## @section Global parameters
 global:
   ## @param global.imageRegistry Global Docker Image registry
-  imageRegistry: "docker.io"
+  imageRegistry: ""
   ## @param global.imagePullSecrets Global Docker registry secret names as an array
   imagePullSecrets: []
 
