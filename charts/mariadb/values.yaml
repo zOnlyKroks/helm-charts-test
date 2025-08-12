@@ -4,7 +4,6 @@ global:
   imageRegistry: "docker.io"
   ## @param global.imagePullSecrets Global Docker registry secret names as an array
   imagePullSecrets: []
-  .
 
 ## @section Common parameters
 ## @param nameOverride String to partially override mariadb.fullname
