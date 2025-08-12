@@ -43,6 +43,7 @@ data:
     # Security
     {{- if .Values.auth.enabled }}
     protected-mode yes
+    requirepass ${VALKEY_PASSWORD}
     {{- else }}
     protected-mode no
     {{- end }}
