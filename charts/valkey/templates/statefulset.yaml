@@ -36,7 +36,6 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "valkey.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -48,7 +47,11 @@ spec:
           command:
             - valkey-server
           args:
-            - {{ include "valkey.configDir" . }}/valkey.conf
+            - {{ include "valkey.configDir" . }}/valkey.conf 
+            {{- if .Values.auth.enabled }}
+            - --requirepass
+            - "$${VALKEY_PASSWORD}"
+            {{- end }}
           env:
             {{- if .Values.auth.enabled }}
             - name: VALKEY_PASSWORD
