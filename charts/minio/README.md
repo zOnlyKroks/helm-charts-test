@@ -13,8 +13,14 @@ A Helm chart for MinIO - High Performance Object Storage compatible with Amazon 
 To install the chart with the release name `my-minio`:
 
 ```bash
-$ helm repo add cloudpirates https://charts.cloudpirates.io
+$ helm repo add cloudpirates oci://registry-1.docker.io/cloudpirates
 $ helm install my-minio cloudpirates/minio
+```
+
+To install with custom values:
+
+```bash
+helm install my-minio cloudpirates/minio -f my-values.yaml
 ```
 
 Or install directly from the local chart:

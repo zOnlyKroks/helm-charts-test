@@ -22,13 +22,14 @@ This Helm chart provides a complete MongoDB deployment solution with persistent 
 To install the chart with the release name `my-mongodb`:
 
 ```bash
-helm install my-mongodb ./mongodb
+$ helm repo add cloudpirates oci://registry-1.docker.io/cloudpirates
+$ helm install my-mongodb cloudpirates/mongodb
 ```
 
 To install with custom values:
 
 ```bash
-helm install my-mongodb ./mongodb -f my-values.yaml
+helm install my-mongodb cloudpirates/mongodb -f my-values.yaml
 ```
 
 ## Uninstalling the Chart
@@ -233,11 +234,3 @@ To upgrade the MongoDB deployment:
 ```bash
 helm upgrade my-mongodb ./mongodb -f my-values.yaml
 ```
-
-## Contributing
-
-Please feel free to submit issues, fork the repository and send pull requests!
-
-## License
-
-This chart is licensed under the MIT License.

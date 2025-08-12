@@ -4,7 +4,7 @@ A Helm chart for Valkey - High performance in-memory data structure store, fork 
 
 ## Prerequisites
 
-- Kubernetes 1.19+
+- Kubernetes 1.24+
 - Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure (if persistence is enabled)
 
@@ -13,8 +13,14 @@ A Helm chart for Valkey - High performance in-memory data structure store, fork 
 To install the chart with the release name `my-valkey`:
 
 ```bash
-$ helm repo add cloudpirates https://harbor.cloudpirates.io/charts
+$ helm repo add cloudpirates oci://registry-1.docker.io/cloudpirates
 $ helm install my-valkey cloudpirates/valkey
+```
+
+To install with custom values:
+
+```bash
+helm install my-valkey cloudpirates/valkey -f my-values.yaml
 ```
 
 Or install directly from the local chart:
