@@ -18,7 +18,7 @@ image:
   ## @param image.pullPolicy Valkey image pull policy
   pullPolicy: IfNotPresent
 
-## @section Deployment configuration
+## @section StatefulSet configuration
 ## @param replicaCount Number of Valkey replicas to deploy
 replicaCount: 1
 
@@ -157,8 +157,6 @@ persistence:
   ## @param persistence.accessModes Persistent Volume access modes
   accessModes:
     - ReadWriteOnce
-  ## @param persistence.existingClaim The name of an existing PVC to use for persistence
-  existingClaim: ""
 
 ## @section Liveness and readiness probes
 livenessProbe:
