@@ -1,0 +1,93 @@
+stages:
+  - Publish
+  - Sign
+
+variables:
+  CHART_REPO: helm-charts
+  CI_REGISTRY: $HARBOR_REGISTRY
+  CI_REGISTRY_USER: $HARBOR_USER
+  CI_REGISTRY_PASSWORD: $HARBOR_PASSWORD
+
+publish:helm-chart:
+  stage: Publish
+  image: alpine/helm:latest
+  before_script:
+    - apk add --no-cache git
+    - helm registry login --username ${CI_REGISTRY_USER} --password ${CI_REGISTRY_PASSWORD} https://${CI_REGISTRY}
+  script:
+    - cd charts/
+    - |
+      # Get the previous tag to compare against
+      PREVIOUS_TAG=$(git tag --sort=-version:refname | head -2 | tail -1)
+      if [ -z "$PREVIOUS_TAG" ]; then
+        echo "No previous tag found, publishing all charts"
+        PREVIOUS_TAG="HEAD~1"
+      fi
+      echo "Comparing against previous tag: $PREVIOUS_TAG"
+
+      CHANGED_CHARTS=""
+
+      for chart in */; do
+        if [ -f "${chart}Chart.yaml" ]; then
+          chart_name=$(basename "$chart")
+          echo "Checking for changes in chart: $chart_name"
+
+          # Check if there are changes in this chart directory since the previous tag
+          if git diff --name-only $PREVIOUS_TAG..HEAD -- "$chart" | grep -q .; then
+            echo "Changes detected in chart: $chart_name"
+            CHANGED_CHARTS="$CHANGED_CHARTS $chart_name"
+
+            cd "$chart"
+            CHART_NAME=$(helm show chart . | grep '^name:' | awk '{print $2}')
+            helm package . --version=$CI_COMMIT_TAG
+            helm push ${CHART_NAME}-${CI_COMMIT_TAG}.tgz oci://${CI_REGISTRY}/${CHART_REPO} &> $CI_PROJECT_DIR/${CHART_NAME}-output.log
+            echo "${CHART_NAME}_DIGEST=$(cat $CI_PROJECT_DIR/${CHART_NAME}-output.log | awk -F '[, ]+' '/Digest/{print $NF}')" >> $CI_PROJECT_DIR/digest.env
+            cd ..
+          else
+            echo "No changes detected in chart: $chart_name, skipping"
+          fi
+        fi
+      done
+
+      if [ -z "$CHANGED_CHARTS" ]; then
+        echo "No charts have changes, nothing to publish"
+        echo "CHANGED_CHARTS=" > $CI_PROJECT_DIR/digest.env
+      else
+        echo "CHANGED_CHARTS=$CHANGED_CHARTS" >> $CI_PROJECT_DIR/digest.env
+        echo "Published charts: $CHANGED_CHARTS"
+      fi
+  artifacts:
+    expire_in: 24h
+    reports: 
+      dotenv: digest.env
+  only:
+    - tags
+
+sign:helm-chart:
+  stage: Sign
+  image:
+    name: harbor.cloudpirates.io/public/cosign:v2.2.4
+  variables:
+    GIT_STRATEGY: none
+  before_script:
+    - mkdir -p ~/.docker
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > ~/.docker/config.json
+  script:
+    - |
+      if [ -z "$CHANGED_CHARTS" ]; then
+        echo "No charts were published, nothing to sign"
+        exit 0
+      fi
+      echo "Signing charts: $CHANGED_CHARTS"
+      for chart_name in $CHANGED_CHARTS; do
+        DIGEST_VAR="${chart_name}_DIGEST"
+        DIGEST=$(eval echo \$$DIGEST_VAR)
+        if [ -n "$DIGEST" ]; then
+          echo "Signing chart: $chart_name with digest: $DIGEST"
+          cosign sign --key env://COSIGN_KEY --tlog-upload=false ${CI_REGISTRY}/${CHART_REPO}/${chart_name}:${CI_COMMIT_TAG}@$DIGEST
+        else
+          echo "No digest found for chart: $chart_name"
+        fi
+      done
+  only:
+    - tags
