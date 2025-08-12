@@ -63,14 +63,14 @@ The following table lists the configurable parameters of the MinIO chart and the
 | `auth.rootUser` | MinIO root username | `"admin"` |
 | `auth.rootPassword` | MinIO root password. If not set, a random password will be generated | `""` |
 | `auth.existingSecret` | Name of existing secret containing MinIO credentials | `""` |
-| `auth.existingSecretUserKey` | Key in existing secret containing username | `"username"` |
+| `auth.existingSecretUserKey` | Key in existing secret containing username | `"user"` |
 | `auth.existingSecretPasswordKey` | Key in existing secret containing password | `"password"` |
 
 ### MinIO configuration
 
 | Parameter | Description | Default |
 |-----------|-------------|---------|
-| `config.region` | MinIO server default region | `"us-east-1"` |
+| `config.region` | MinIO server default region | `""` |
 | `config.browserEnabled` | Enable MinIO web browser | `true` |
 | `config.domain` | MinIO server domain | `""` |
 | `config.serverUrl` | MinIO server URL for console | `""` |
@@ -265,12 +265,6 @@ helm install my-minio ./charts/minio -f values-production.yaml
 # values-ha.yaml
 replicaCount: 3
 
-autoscaling:
-  enabled: true
-  minReplicas: 3
-  maxReplicas: 10
-  targetCPUUtilizationPercentage: 70
-
 affinity:
   podAntiAffinity:
     preferredDuringSchedulingIgnoredDuringExecution:
@@ -290,7 +284,6 @@ resources:
     cpu: "1000m"
   limits:
     memory: "4Gi"
-    cpu: "2000m"
 ```
 
 ### Using Existing Secret for Credentials
@@ -358,7 +351,3 @@ For issues related to this Helm chart, please check:
 - [MinIO Documentation](https://docs.min.io/)
 - [Kubernetes Documentation](https://kubernetes.io/docs/)
 - Chart repository issues
-
-## License
-
-This chart is licensed under the Apache License 2.0.
