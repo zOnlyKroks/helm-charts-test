@@ -1,0 +1,214 @@
+## @section Global parameters
+global:
+  ## @param global.imageRegistry Global Docker Image registry
+  imageRegistry: ""
+  ## @param global.imagePullSecrets Global Docker registry secret names as an array
+  imagePullSecrets: []
+
+## @section Valkey image configuration
+image:
+  ## @param image.registry Valkey image registry
+  registry: docker.io
+  ## @param image.repository Valkey image repository
+  repository: valkey/valkey
+  ## @param image.tag Valkey image tag (immutable tags are recommended)
+  tag: "8.0.1"
+  ## @param image.digest Valkey image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  digest: ""
+  ## @param image.pullPolicy Valkey image pull policy
+  pullPolicy: IfNotPresent
+
+## @section Deployment configuration
+## @param replicaCount Number of Valkey replicas to deploy
+replicaCount: 1
+
+## @param nameOverride String to partially override valkey.fullname
+nameOverride: ""
+
+## @param fullnameOverride String to fully override valkey.fullname
+fullnameOverride: ""
+
+## @param commonLabels Labels to add to all deployed objects
+commonLabels: {}
+
+## @param commonAnnotations Annotations to add to all deployed objects
+commonAnnotations: {}
+
+## @section Service Account
+serviceAccount:
+  ## @param serviceAccount.create Specifies whether a service account should be created
+  create: true
+  ## @param serviceAccount.automount Automatically mount a ServiceAccount's API credentials
+  automount: true
+  ## @param serviceAccount.annotations Annotations to add to the service account
+  annotations: {}
+  ## @param serviceAccount.name The name of the service account to use
+  name: ""
+
+## @section Pod annotations and labels
+## @param podAnnotations Map of annotations to add to the pods
+podAnnotations: {}
+## @param podLabels Map of labels to add to the pods
+podLabels: {}
+
+## @section Security Context
+podSecurityContext:
+  ## @param podSecurityContext.fsGroup Group ID for the volumes of the pod
+  fsGroup: 1000
+
+securityContext:
+  ## @param securityContext.allowPrivilegeEscalation Enable container privilege escalation
+  allowPrivilegeEscalation: false
+  ## @param securityContext.runAsNonRoot Configure the container to run as a non-root user
+  runAsNonRoot: true
+  ## @param securityContext.runAsUser User ID for the Valkey container
+  runAsUser: 999
+  ## @param securityContext.runAsGroup Group ID for the Valkey container
+  runAsGroup: 1000
+  ## @param securityContext.readOnlyRootFilesystem Mount container root filesystem as read-only
+  readOnlyRootFilesystem: true
+  ## @param securityContext.capabilities.drop Linux capabilities to be dropped
+  capabilities:
+    drop:
+      - ALL
+
+## @section Valkey Authentication
+auth:
+  ## @param auth.enabled Enable password authentication
+  enabled: true
+  ## @param auth.password Valkey password
+  password: ""
+  ## @param auth.existingSecret The name of an existing secret with Valkey credentials
+  existingSecret: ""
+  ## @param auth.existingSecretPasswordKey Password key to be retrieved from existing secret
+  existingSecretPasswordKey: "password"
+
+## @section Valkey Configuration
+config:
+  ## @param config.maxMemory Maximum memory usage for Valkey (e.g., 256mb, 1gb)
+  maxMemory: ""
+  ## @param config.maxMemoryPolicy Memory eviction policy when maxmemory is reached
+  maxMemoryPolicy: "allkeys-lru"
+  ## @param config.save Valkey save configuration (e.g., "900 1 300 10 60 10000")
+  save: "900 1 300 10 60 10000"
+  ## @param config.extraConfig Additional Valkey configuration parameters
+  extraConfig: []
+  ## @param config.existingConfigmap Name of existing ConfigMap with Valkey configuration
+  existingConfigmap: ""
+
+## @section Service configuration
+service:
+  ## @param service.type Valkey service type
+  type: ClusterIP
+  ## @param service.port Valkey service port
+  port: 6379
+  ## @param service.targetPort Valkey container port
+  targetPort: 6379
+  ## @param service.annotations Service annotations
+  annotations: {}
+
+## @section Ingress configuration
+ingress:
+  ## @param ingress.enabled Enable ingress record generation for Valkey
+  enabled: false
+  ## @param ingress.className IngressClass that will be used to implement the Ingress
+  className: ""
+  ## @param ingress.annotations Additional annotations for the Ingress resource
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  ## @param ingress.hosts[0].host Hostname for Valkey ingress
+  ## @param ingress.hosts[0].paths[0].path Path for Valkey ingress
+  ## @param ingress.hosts[0].paths[0].pathType Path type for Valkey ingress
+  hosts:
+    - host: valkey.local
+      paths:
+        - path: /
+          pathType: Prefix
+  ## @param ingress.tls TLS configuration for Valkey ingress
+  tls: []
+  #  - secretName: valkey-tls
+  #    hosts:
+  #      - valkey.local
+
+## @section Resources
+resources: {}
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+## @section Persistence
+persistence:
+  ## @param persistence.enabled Enable persistence using Persistent Volume Claims
+  enabled: true
+  ## @param persistence.storageClass Persistent Volume storage class
+  storageClass: ""
+  ## @param persistence.annotations Persistent Volume Claim annotations
+  annotations: {}
+  ## @param persistence.size Persistent Volume size
+  size: 8Gi
+  ## @param persistence.accessModes Persistent Volume access modes
+  accessModes:
+    - ReadWriteOnce
+  ## @param persistence.existingClaim The name of an existing PVC to use for persistence
+  existingClaim: ""
+
+## @section Liveness and readiness probes
+livenessProbe:
+  ## @param livenessProbe.enabled Enable livenessProbe on Valkey containers
+  enabled: true
+  ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  initialDelaySeconds: 20
+  ## @param livenessProbe.periodSeconds Period seconds for livenessProbe
+  periodSeconds: 10
+  ## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  timeoutSeconds: 5
+  ## @param livenessProbe.failureThreshold Failure threshold for livenessProbe
+  failureThreshold: 3
+  ## @param livenessProbe.successThreshold Success threshold for livenessProbe
+  successThreshold: 1
+
+readinessProbe:
+  ## @param readinessProbe.enabled Enable readinessProbe on Valkey containers
+  enabled: true
+  ## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  initialDelaySeconds: 5
+  ## @param readinessProbe.periodSeconds Period seconds for readinessProbe
+  periodSeconds: 5
+  ## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  timeoutSeconds: 1
+  ## @param readinessProbe.failureThreshold Failure threshold for readinessProbe
+  failureThreshold: 3
+  ## @param readinessProbe.successThreshold Success threshold for readinessProbe
+  successThreshold: 1
+
+startupProbe:
+  ## @param startupProbe.enabled Enable startupProbe on Valkey containers
+  enabled: false
+  ## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  initialDelaySeconds: 20
+  ## @param startupProbe.periodSeconds Period seconds for startupProbe
+  periodSeconds: 5
+  ## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  timeoutSeconds: 1
+  ## @param startupProbe.failureThreshold Failure threshold for startupProbe
+  failureThreshold: 30
+  ## @param startupProbe.successThreshold Success threshold for startupProbe
+  successThreshold: 1
+
+## @section Node Selection
+## @param nodeSelector Node labels for pod assignment
+nodeSelector: {}
+
+## @param tolerations Toleration labels for pod assignment
+tolerations: []
+
+## @param affinity Affinity settings for pod assignment
+affinity: {}

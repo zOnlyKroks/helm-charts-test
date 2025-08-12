@@ -1,0 +1,20 @@
+apiVersion: v2
+name: valkey
+description: A Helm chart for Valkey - High performance in-memory data structure store, fork of Redis
+type: application
+version: 0.1.0
+appVersion: "8.0.1"
+home: https://valkey.io
+sources:
+  - https://github.com/valkey-io/valkey
+keywords:
+  - valkey
+  - redis
+  - cache
+  - database
+  - keyvalue
+  - inmemory
+  - nosql
+maintainers:
+  - name: CloudPirates GmbH & Co. KG
+    email: hello@cloudpirates.io
