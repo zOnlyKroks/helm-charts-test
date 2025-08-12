@@ -23,7 +23,7 @@ auth:
   ## @param auth.rootUser MinIO root username
   rootUser: "admin"
   ## @param auth.rootPassword MinIO root password. If not set, a random password will be generated
-  rootPassword: "strongpassword"
+  rootPassword: ""
   ## @param auth.existingSecret Name of existing secret containing MinIO credentials
   existingSecret: ""
   ## @param auth.existingSecretUserKey Key in existing secret containing username
@@ -34,7 +34,7 @@ auth:
 ## @section MinIO configuration
 config:
   ## @param config.region MinIO server default region
-  region: "us-east-1"
+  region: ""
   ## @param config.browserEnabled Enable MinIO web browser
   browserEnabled: true
   ## @param config.domain MinIO server domain
@@ -51,14 +51,13 @@ replicaCount: 1
 nameOverride: ""
 
 ## @param fullnameOverride String to fully override minio.fullname
-fullnameOverride: "minio"
+fullnameOverride: ""
 
 ## @param commonLabels Labels to add to all deployed objects
 commonLabels: {}
 
 ## @param commonAnnotations Annotations to add to all deployed objects
-commonAnnotations:
-  test: foo
+commonAnnotations: {}
 
 ## @section Service Account
 serviceAccount:
@@ -155,12 +154,7 @@ consoleIngress:
   tls: []
 
 ## @section Resources
-resources:
-  limits:
-    memory: 300Mi
-  requests:
-    memory: 300Mi
-    cpu: 50m
+resources: {}
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -175,13 +169,13 @@ resources:
 ## @section Persistence
 persistence:
   ## @param persistence.enabled Enable persistence using Persistent Volume Claims
-  enabled: false
+  enabled: true
   ## @param persistence.storageClass Persistent Volume storage class
   storageClass: ""
   ## @param persistence.annotations Persistent Volume Claim annotations
   annotations: {}
   ## @param persistence.size Persistent Volume size
-  size: 10Gi
+  size: 8Gi
   ## @param persistence.accessModes Persistent Volume access modes
   accessModes:
     - ReadWriteOnce
