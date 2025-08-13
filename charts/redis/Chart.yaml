@@ -2,7 +2,7 @@ apiVersion: v2
 name: redis
 description: An open source, in-memory data structure store used as a database, cache, and message broker.
 type: application
-version: 0.1.0
+version: 0.1.1
 appVersion: "8.2.0"
 keywords:
   - redis
@@ -13,7 +13,7 @@ keywords:
   - nosql
 home: https://www.cloudpirates.io
 sources:
-  - https://github.com/CloudPirates-io/helm-charts/charts/redis
+  - https://github.com/CloudPirates-io/helm-charts/tree/main/charts/redis
 annotations:
   category: Database
   license: Apache-2.0

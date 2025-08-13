@@ -3,7 +3,7 @@ name: clusterpirate
 description: Client agent for the CloudPirates Managed Observability Platform to connect your Kubernetes cluster to our infrastructure
 type: application
 
-version: 1.0.0
+version: 1.0.1
 appVersion: "1.0.0"
 
 keywords:

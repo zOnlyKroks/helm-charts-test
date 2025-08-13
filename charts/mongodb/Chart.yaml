@@ -2,7 +2,7 @@ apiVersion: v2
 name: mongodb
 description: MongoDB a flexible NoSQL database for scalable, real-time data management
 type: application
-version: 0.1.0
+version: 0.1.1
 appVersion: "8.0.12"
 keywords:
   - mongodb
@@ -10,7 +10,7 @@ keywords:
   - nosql
 home: https://www.cloudpirates.io
 sources:
-  - https://github.com/CloudPirates-io/helm-charts/charts/mongodb
+  - https://github.com/CloudPirates-io/helm-charts/tree/main/charts/mongodb
 maintainers:
   - name: CloudPirates GmbH & Co. KG
     url: https://www.cloudpirates.io

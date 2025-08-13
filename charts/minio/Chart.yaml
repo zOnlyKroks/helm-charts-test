@@ -2,7 +2,7 @@ apiVersion: v2
 name: minio
 description: High Performance Object Storage compatible with Amazon S3 APIs
 type: application
-version: 0.1.0
+version: 0.1.1
 appVersion: "2024.8.17"
 keywords:
   - minio
@@ -12,7 +12,7 @@ keywords:
   - cloud-native
 home: https://www.cloudpirates.io
 sources:
-  - https://github.com/CloudPirates-io/helm-charts/charts/minio
+  - https://github.com/CloudPirates-io/helm-charts/tree/main/charts/minio
 maintainers:
   - name: CloudPirates GmbH & Co. KG
     url: https://www.cloudpirates.io

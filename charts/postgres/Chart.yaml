@@ -2,7 +2,7 @@ apiVersion: v2
 name: postgres
 description: The World's Most Advanced Open Source Relational Database
 type: application
-version: 0.1.0
+version: 0.1.1
 appVersion: "17.2"
 keywords:
   - postgres
@@ -12,7 +12,7 @@ keywords:
   - relational
 home: https://www.cloudpirates.io
 sources:
-  - https://github.com/CloudPirates-io/helm-charts/charts/postgres
+  - https://github.com/CloudPirates-io/helm-charts/tree/main/charts/postgres
 maintainers:
   - name: CloudPirates GmbH & Co. KG
     url: https://www.cloudpirates.io

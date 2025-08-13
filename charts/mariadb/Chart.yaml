@@ -2,7 +2,7 @@ apiVersion: v2
 name: mariadb
 description: MariaDB is a high-performance, open-source relational database server that is a drop-in replacement for MySQL
 type: application
-version: 0.1.0
+version: 0.1.1
 appVersion: "11.8.2"
 keywords:
   - mariadb
@@ -13,7 +13,7 @@ keywords:
 home: https://www.cloudpirates.io
 
 sources:
-  - https://github.com/CloudPirates-io/helm-charts/charts/mariadb
+  - https://github.com/CloudPirates-io/helm-charts/tree/main/charts/mariadb
 
 maintainers:
   - name: CloudPirates GmbH & Co. KG
