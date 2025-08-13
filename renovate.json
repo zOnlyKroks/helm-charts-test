@@ -19,8 +19,7 @@
       "fileMatch": ["^charts/.+/values\\.ya?ml$"],
       "matchStrings": [
         "(?m)^\\s*repository:\\s*[\"']?(?<depName>[^\\s\"'\\n]+)[\"']?\\s*$[\\s\\S]*?^\\s*tag:\\s*[\"']?(?<currentValue>[^\\s\"'\\n]+)[\"']?\\s*$(?:[\\s\\S]*?^\\s*digest:\\s*[\"']?(?<currentDigest>sha256:[a-f0-9]+)[\"']?\\s*$)?",
-        "(?m)^\\s*registry:\\s*[\"']?(?<registry>[^\\s\"'\\n]+)[\"']?\\s*$[\\s\\S]*?^\\s*repository:\\s*[\"']?(?<packageName>[^\\s\"'\\n]+)[\"']?\\s*$[\\s\\S]*?^\\s*tag:\\s*[\"']?(?<currentValue>[^\\s\"'\\n]+)[\"']?\\s*$(?:[\\s\\S]*?^\\s*digest:\\s*[\"']?(?<currentDigest>sha256:[a-f0-9]+)[\"']?\\s*$)?",
-        "(?m)^\\s*registry:\\s*[\"']?(?<registry>[^\\s\"'\\n]+)[\"']?\\s*$[\\s\\S]*?^\\s*repository:\\s*[\"']?(?<packageName>[^\\s\"'\\n]+)[\"']?\\s*$[\\s\\S]*?^\\s*pullPolicy:\\s*[^\\n]*$[\\s\\S]*?^\\s*tag:\\s*[\"']?(?<currentValue>[^\\s\"'\\n]+)[\"']?\\s*$"
+        "(?m)^\\s*registry:\\s*[\"']?(?<registry>[^\\s\"'\\n]+)[\"']?\\s*$[\\s\\S]*?^\\s*repository:\\s*[\"']?(?<packageName>[^\\s\"'\\n]+)[\"']?\\s*$[\\s\\S]*?^\\s*tag:\\s*[\"']?(?<currentValue>[^\\s\"'\\n]+)[\"']?\\s*$(?:[\\s\\S]*?^\\s*digest:\\s*[\"']?(?<currentDigest>sha256:[a-f0-9]+)[\"']?\\s*$)?"
       ],
       "datasourceTemplate": "docker",
       "versioningTemplate": "docker",

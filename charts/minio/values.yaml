@@ -12,9 +12,9 @@ image:
   ## @param image.repository MinIO image repository
   repository: minio/minio
   ## @param image.tag MinIO image tag (immutable tags are recommended)
-  tag: "latest"
-  ## @param image.digest MinIO image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-  digest: ""
+  tag: "RELEASE.2025-07-23T15-54-02Z"
+  ## @param image.digest MinIO image digest
+  digest: "sha256:d249d1fb6966de4d8ad26c04754b545205ff15a62e4fd19ebd0f26fa5baacbc0"
   ## @param image.pullPolicy MinIO image pull policy
   pullPolicy: IfNotPresent
 

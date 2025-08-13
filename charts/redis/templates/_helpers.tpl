@@ -54,10 +54,30 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
-Return the proper Redis image name
+Return the proper Redis image name with both tag and digest when available
 */}}
 {{- define "redis.image" -}}
-{{- include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
+{{- $registryName := .Values.image.registry -}}
+{{- $repositoryName := .Values.image.repository -}}
+{{- $tag := .Values.image.tag | toString -}}
+{{- $digest := .Values.image.digest -}}
+{{- if .Values.global }}
+    {{- if .Values.global.imageRegistry }}
+        {{- $registryName = .Values.global.imageRegistry -}}
+    {{- end -}}
+{{- end -}}
+{{- if $registryName }}
+    {{- $repositoryName = printf "%s/%s" $registryName $repositoryName -}}
+{{- end -}}
+{{- if and $digest (ne $digest "") }}
+    {{- if and $tag (ne $tag "") }}
+        {{- printf "%s:%s@%s" $repositoryName $tag $digest -}}
+    {{- else -}}
+        {{- printf "%s@%s" $repositoryName $digest -}}
+    {{- end -}}
+{{- else -}}
+    {{- printf "%s:%s" $repositoryName $tag -}}
+{{- end -}}
 {{- end }}
 
 {{/*

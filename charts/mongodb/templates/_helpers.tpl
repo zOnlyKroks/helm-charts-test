@@ -71,10 +71,20 @@ Get the secret key for MongoDB root password
 {{- end }}
 {{- end }}
 
+{{/*
+Return the proper MongoDB image name with both tag and digest when available
+*/}}
 {{- define "mongodb.image" -}}
-{{- if not .Values.image.digest }}
-{{- printf "%s:%s" .Values.image.repository .Values.image.tag -}}
-{{- else }}
-{{- printf "%s:%s@%s" .Values.image.repository .Values.image.tag .Values.image.digest -}}
-{{- end }}
+{{- $repository := .Values.image.repository -}}
+{{- $tag := .Values.image.tag | toString -}}
+{{- $digest := .Values.image.digest -}}
+{{- if and $digest (ne $digest "") }}
+    {{- if and $tag (ne $tag "") }}
+        {{- printf "%s:%s@%s" $repository $tag $digest -}}
+    {{- else -}}
+        {{- printf "%s@%s" $repository $digest -}}
+    {{- end -}}
+{{- else -}}
+    {{- printf "%s:%s" $repository $tag -}}
+{{- end -}}
 {{- end }}

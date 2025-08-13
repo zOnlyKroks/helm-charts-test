@@ -28,39 +28,44 @@
         "type": "string"
       }
     },
+    "image": {
+      "type": "object",
+      "title": "ClusterPirate Image Configuration",
+      "description": "Container image settings for ClusterPirate",
+      "properties": {
+        "registry": {
+          "type": "string",
+          "title": "Image Registry",
+          "description": "ClusterPirate image registry"
+        },
+        "repository": {
+          "type": "string",
+          "title": "Image Repository",
+          "description": "ClusterPirate image repository"
+        },
+        "tag": {
+          "type": "string",
+          "title": "Image Tag",
+          "description": "ClusterPirate image tag (immutable tags are recommended)"
+        },
+        "digest": {
+          "type": "string",
+          "title": "Image Digest",
+          "description": "ClusterPirate image digest"
+        },
+        "pullPolicy": {
+          "type": "string",
+          "title": "Image Pull Policy",
+          "description": "ClusterPirate image pull policy",
+          "enum": ["Always", "Never", "IfNotPresent"]
+        }
+      }
+    },
     "deployment": {
       "type": "object",
       "title": "Deployment Configuration",
       "description": "Configuration for the ClusterPirate deployment",
       "properties": {
-        "image": {
-          "type": "object",
-          "title": "Container Image Configuration",
-          "description": "Container image settings",
-          "properties": {
-            "registry": {
-              "type": "string",
-              "title": "Image Registry",
-              "description": "Container image registry"
-            },
-            "repository": {
-              "type": "string",
-              "title": "Image Repository",
-              "description": "Container image repository"
-            },
-            "pullPolicy": {
-              "type": "string",
-              "title": "Image Pull Policy",
-              "description": "Image pull policy",
-              "enum": ["Always", "Never", "IfNotPresent"]
-            },
-            "tag": {
-              "type": "string",
-              "title": "Image Tag",
-              "description": "Container image tag"
-            }
-          }
-        },
         "resources": {
           "type": "object",
           "title": "Pod Resource Configuration",

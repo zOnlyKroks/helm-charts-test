@@ -31,8 +31,8 @@ spec:
       serviceAccountName: {{ include "clusterpirate.serviceAccountName" . }}
       containers:
       - name: {{ include "clusterpirate.fullname" . }}
-        image: "{{ .Values.deployment.image.registry }}/{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}"
-        imagePullPolicy: {{.Values.deployment.image.pullPolicy}}
+        image: {{ include "clusterpirate.image" . }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
         resources:
 {{ toYaml .Values.deployment.resources | indent 10 }}
         {{- if .Values.deployment.probes.livenessProbe.enabled }}

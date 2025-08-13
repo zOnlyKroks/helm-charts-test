@@ -30,8 +30,8 @@ image:
   repository: redis
   ## @param image.tag Redis image tag (immutable tags are recommended)
   tag: "8.2.0"
-  ## @param image.digest Redis image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-  digest: ""
+  ## @param image.digest Redis image digest
+  digest: "sha256:e7d6b261beaa22b1dc001f438b677f1c691ac7805607d8979bae65fe0615c2e6"
   ## @param image.pullPolicy Redis image pull policy
   pullPolicy: IfNotPresent
   ## @param image.pullSecrets Redis image pull secrets

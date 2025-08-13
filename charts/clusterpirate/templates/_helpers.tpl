@@ -58,3 +58,25 @@ release: {{ .Release.Name }}
         {{- default "default" (print .Values.serviceAccount.name) -}}
     {{- end -}}
 {{- end -}}
+
+{{/*
+Return the proper ClusterPirate image name with both tag and digest when available
+*/}}
+{{- define "clusterpirate.image" -}}
+{{- $registryName := .Values.image.registry -}}
+{{- $repositoryName := .Values.image.repository -}}
+{{- $tag := .Values.image.tag | toString -}}
+{{- $digest := .Values.image.digest -}}
+{{- if $registryName }}
+    {{- $repositoryName = printf "%s/%s" $registryName $repositoryName -}}
+{{- end -}}
+{{- if and $digest (ne $digest "") }}
+    {{- if and $tag (ne $tag "") }}
+        {{- printf "%s:%s@%s" $repositoryName $tag $digest -}}
+    {{- else -}}
+        {{- printf "%s@%s" $repositoryName $digest -}}
+    {{- end -}}
+{{- else -}}
+    {{- printf "%s:%s" $repositoryName $tag -}}
+{{- end -}}
+{{- end }}

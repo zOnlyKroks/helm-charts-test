@@ -63,26 +63,29 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
-Return the proper PostgreSQL image name
+Return the proper PostgreSQL image name with both tag and digest when available
 */}}
 {{- define "postgres.image" -}}
 {{- $registryName := .Values.image.registry -}}
 {{- $repositoryName := .Values.image.repository -}}
-{{- $separator := ":" -}}
-{{- $termination := .Values.image.tag | toString -}}
+{{- $tag := .Values.image.tag | toString -}}
+{{- $digest := .Values.image.digest -}}
 {{- if .Values.global }}
     {{- if .Values.global.imageRegistry }}
         {{- $registryName = .Values.global.imageRegistry -}}
     {{- end -}}
 {{- end -}}
-{{- if .Values.image.digest }}
-    {{- $separator = "@" -}}
-    {{- $termination = .Values.image.digest | toString -}}
-{{- end -}}
 {{- if $registryName }}
-    {{- printf "%s/%s%s%s" $registryName $repositoryName $separator $termination -}}
+    {{- $repositoryName = printf "%s/%s" $registryName $repositoryName -}}
+{{- end -}}
+{{- if and $digest (ne $digest "") }}
+    {{- if and $tag (ne $tag "") }}
+        {{- printf "%s:%s@%s" $repositoryName $tag $digest -}}
+    {{- else -}}
+        {{- printf "%s@%s" $repositoryName $digest -}}
+    {{- end -}}
 {{- else -}}
-    {{- printf "%s%s%s" $repositoryName $separator $termination -}}
+    {{- printf "%s:%s" $repositoryName $tag -}}
 {{- end -}}
 {{- end }}
 

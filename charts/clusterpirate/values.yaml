@@ -18,16 +18,27 @@ commonAnnotations: {}
 imagePullSecrets: {}
 
 # -----------------------------------------------------------------------------
+# ClusterPirate Image Configuration
+# -----------------------------------------------------------------------------
+
+## @section ClusterPirate image configuration
+image:
+  ## @param image.registry ClusterPirate image registry
+  registry: harbor.cloudpirates.io
+  ## @param image.repository ClusterPirate image repository
+  repository: koperator-internal/services/clusterpirate
+  ## @param image.tag ClusterPirate image tag (immutable tags are recommended)
+  tag: "1bb0f11d"
+  ## @param image.digest ClusterPirate image digest
+  digest: "sha256:d74db517b4cc2ff91d5915e9325748d79844c7cc983b86d78277b9081eaac075"
+  ## @param image.pullPolicy ClusterPirate image pull policy
+  pullPolicy: Always
+
+# -----------------------------------------------------------------------------
 # Deployment Configuration
 # -----------------------------------------------------------------------------
 
 deployment:
-  # Container image configuration
-  image:
-    registry: harbor.cloudpirates.io
-    repository: koperator-internal/services/clusterpirate
-    pullPolicy: Always
-    tag: latest
 
   # Pod resource limits and requests
   resources:
