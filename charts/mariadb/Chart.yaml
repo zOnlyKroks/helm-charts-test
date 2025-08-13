@@ -11,6 +11,7 @@ keywords:
   - sql
   - relational
 home: https://www.cloudpirates.io
+
 sources:
   - https://github.com/CloudPirates-io/helm-charts/charts/mariadb
 

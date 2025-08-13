@@ -58,7 +58,7 @@ release-charts:
           helm package . --version=$CHART_VERSION --app-version=$APP_VERSION
           
           # Push the chart to dynamic repository
-          CHART_REPO="${CHART_REPO_PREFIX}/${chart_name}"
+          CHART_REPO="${CHART_REPO_PREFIX}"
           echo "Pushing Helm chart $chart_name-$CHART_VERSION.tgz to oci://$REGISTRY/$CHART_REPO"
           
           if helm push ${chart_name}-${CHART_VERSION}.tgz oci://${REGISTRY}/${CHART_REPO} 2>&1 | tee $CI_PROJECT_DIR/${chart_name}-output.log; then
@@ -119,7 +119,7 @@ sign-charts:
         DIGEST=$(eval echo \$$DIGEST_VAR)
         
         if [[ -n "$DIGEST" && -n "$CHART_VERSION" ]]; then
-          CHART_REPO="${CHART_REPO_PREFIX}/${chart_name}"
+          CHART_REPO="${CHART_REPO_PREFIX}"
           echo "Signing chart: $chart_name:$CHART_VERSION with digest: $DIGEST"
           cosign sign --key env://COSIGN_KEY --tlog-upload=false ${REGISTRY}/${CHART_REPO}/${chart_name}:${CHART_VERSION}@$DIGEST
         else
