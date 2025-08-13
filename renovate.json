@@ -18,8 +18,8 @@
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": [
-        "^charts/.+/values\\.ya?ml$"
+      "managerFilePatterns": [
+        "/^charts/.+/values\\.ya?ml$/"
       ],
       "matchStrings": [
         "(?m)^\\s*repository:\\s*[\"']?(?<depName>[^\\s\"'\\n]+)[\"']?\\s*$[\\s\\S]*?^\\s*tag:\\s*[\"']?(?<currentValue>[^\\s\"'\\n]+)[\"']?\\s*$(?:[\\s\\S]*?^\\s*digest:\\s*[\"']?(?<currentDigest>sha256:[a-f0-9]+)[\"']?\\s*$)?",
@@ -28,29 +28,17 @@
       "datasourceTemplate": "docker",
       "versioningTemplate": "docker",
       "depNameTemplate": "{{#if registry}}{{registry}}/{{packageName}}{{else}}{{depName}}{{/if}}"
-    },
-    {
-      "customType": "regex",
-      "fileMatch": [
-        "^charts/.+/Chart\\.ya?ml$"
-      ],
-      "matchStrings": [
-        "(?m)^appVersion:\\s*[\"']?(?<currentValue>[^\\s\"'\\n]+)[\"']?\\s*$"
-      ],
-      "datasourceTemplate": "docker",
-      "versioningTemplate": "docker",
-      "depNameTemplate": "{{#if (contains 'mariadb' packageFileDir)}}mariadb{{else if (contains 'minio' packageFileDir)}}minio/minio{{else if (contains 'mongodb' packageFileDir)}}mongo{{else if (contains 'postgres' packageFileDir)}}postgres{{else if (contains 'redis' packageFileDir)}}redis{{else if (contains 'valkey' packageFileDir)}}valkey/valkey{{else if (contains 'clusterpirate' packageFileDir)}}harbor.cloudpirates.io/koperator-internal/services/clusterpirate{{else}}unknown{{/if}}",
-      "autoReplaceStringTemplate": "appVersion: \"{{newValue}}\""
     }
   ],
   "packageRules": [
     {
-      "description": "All Helm chart updates with unified uppercase handling",
+      "description": "All Helm chart updates with unified handling",
       "matchFileNames": ["charts/*/values.yaml", "charts/*/Chart.yaml"],
       "matchManagers": ["custom.regex", "helmv3"],
       "automerge": false,
-      "commitMessagePrefix": "",
-      "commitMessage": "Update {{depName}} to {{newValue}}{{#if isMajor}} (major){{/if}}",
+      "commitMessageAction": "Update",
+      "commitMessageTopic": "{{depName}}",
+      "commitMessageExtra": "to {{newValue}}",
       "branchTopic": "{{depNameSanitized}}-{{newMajor}}.x{{#if isPatch}}.{{newMinor}}{{/if}}"
     }
   ],
