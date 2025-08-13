@@ -11,7 +11,7 @@ keywords:
   - in-memory
   - key-value
   - nosql
-home: https://cloudpirates.io
+home: https://www.cloudpirates.io
 sources:
   - https://github.com/CloudPirates-io/helm-charts/charts/redis
 annotations:

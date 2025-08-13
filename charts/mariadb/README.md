@@ -7,14 +7,13 @@ MariaDB is a high-performance, open-source relational database server that is a 
 To install the chart with the release name `my-mariadb`:
 
 ```bash
-$ helm repo add cloudpirates oci://registry-1.docker.io/cloudpirates
-helm install my-mariadb cloudpirates/mariadb
+helm install my-mariadb oci://registry-1.docker.io/cloudpirates/mariadb
 ```
 
 To install with custom values:
 
 ```bash
-helm install my-mariadb cloudpirates/mariadb -f my-values.yaml
+helm install my-mariadb oci://registry-1.docker.io/cloudpirates/mariadb -f my-values.yaml
 ```
 
 ## Uninstalling the Chart

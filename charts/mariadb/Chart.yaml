@@ -10,7 +10,7 @@ keywords:
   - database
   - sql
   - relational
-home: https://cloudpirates.io
+home: https://www.cloudpirates.io
 sources:
   - https://github.com/CloudPirates-io/helm-charts/charts/mariadb
 maintainers:

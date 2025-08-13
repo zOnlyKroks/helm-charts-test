@@ -13,8 +13,7 @@ A Helm chart for PostgreSQL - The World's Most Advanced Open Source Relational D
 To install the chart with the release name `my-postgres`:
 
 ```bash
-$ helm repo add cloudpirates https://harbor.cloudpirates.io/charts
-$ helm install my-postgres cloudpirates/postgres
+$ helm install my-postgres oci://registry-1.docker.io/cloudpirates/postgres
 ```
 
 Or install directly from the local chart:
