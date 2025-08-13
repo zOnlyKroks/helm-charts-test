@@ -2,7 +2,19 @@
 
 > ⚠️ **Important**: This chart requires an access token. You must obtain a token from our [Customer Portal](https://portal.cloudpirates.io) before installing this chart. For complete installation instructions and setup guide, please refer to our [Developer Portal](https://developer.cloudpirates.io).
 
-A Helm chart for ClusterPirate - Kubernetes cluster monitoring and metrics collection service. ClusterPirate provides comprehensive monitoring of Kubernetes cluster resources, metrics collection, and integration with the CloudPirates API and backend systems.
+A Helm chart for ClusterPirate - the client agent for CloudPirates Managed Observability Platform. This chart deploys the necessary components to connect your Kubernetes cluster to the CloudPirates managed observability service, enabling centralized monitoring, metrics collection, log aggregation, and cluster insights through our SaaS platform.
+
+## What is ClusterPirate?
+
+ClusterPirate is a lightweight client agent that runs in your Kubernetes cluster and acts as the bridge between your infrastructure and the CloudPirates Managed Observability Platform. It provides:
+
+- **Automated Cluster Discovery**: Registers your cluster with the managed platform
+- **Metrics Collection**: Gathers resource usage, performance metrics, and cluster health data
+- **Event Monitoring**: Tracks Kubernetes events and system activities
+- **Secure Data Transmission**: Encrypts and securely transmits observability data to the platform
+- **Local Caching**: Uses Valkey for efficient data buffering and resilience
+
+The collected data is processed and visualized through the CloudPirates web console, providing you with comprehensive insights into your cluster's health, performance, and resource utilization without the overhead of managing your own observability infrastructure.
 
 ## Prerequisites
 
