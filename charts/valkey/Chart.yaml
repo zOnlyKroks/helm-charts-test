@@ -1,6 +1,6 @@
 apiVersion: v2
 name: valkey
-description: A Helm chart for Valkey - High performance in-memory data structure store, fork of Redis
+description: High performance in-memory data structure store, fork of Redis. Valkey is an open-source, high-performance key/value datastore that supports a variety of workloads such as caching, message queues, and can act as a primary database.
 type: application
 version: 0.1.0
 appVersion: "8.1.3"

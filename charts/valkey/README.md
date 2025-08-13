@@ -1,6 +1,6 @@
-# Valkey Helm Chart
+# Valkey
 
-A Helm chart for Valkey - High performance in-memory data structure store, fork of Redis. Valkey is an open-source, high-performance key/value datastore that supports a variety of workloads such as caching, message queues, and can act as a primary database.
+High performance in-memory data structure store, fork of Redis. Valkey is an open-source, high-performance key/value datastore that supports a variety of workloads such as caching, message queues, and can act as a primary database.
 
 ## Prerequisites
 
