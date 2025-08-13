@@ -1,0 +1,211 @@
+# =============================================================================
+# ClusterPirate Helm Chart Configuration
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Global Settings
+# -----------------------------------------------------------------------------
+
+# Common labels applied to all resources
+# Example: app identification, environment, team ownership
+commonLabels: {}
+
+# Common annotations applied to all resources
+# Example annotations for monitoring, ownership, or deployment information
+commonAnnotations: {}
+
+# Image pull secrets for accessing the private registries
+imagePullSecrets: {}
+
+# -----------------------------------------------------------------------------
+# Deployment Configuration
+# -----------------------------------------------------------------------------
+
+deployment:
+  # Container image configuration
+  image:
+    registry: harbor.cloudpirates.io
+    repository: koperator-internal/services/clusterpirate
+    pullPolicy: Always
+    tag: latest
+
+  # Pod resource limits and requests
+  resources:
+    limits: 
+      memory: 256Mi
+    requests:
+      memory: 256Mi
+      cpu: 10m
+
+  # Additional environment variables (optional)
+  # Example:
+  # extraEnvVars:
+  #   - name: CUSTOM_VAR
+  #     value: "custom-value"
+  #   - name: SECRET_VAR
+  #     valueFrom:
+  #       secretKeyRef:
+  #         name: my-secret
+  #         key: secret-key
+  extraEnvVars: []
+
+  # Health probe configuration
+  probes:
+    # Liveness probe configuration
+    # Determines if the container needs to be restarted
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 3
+      successThreshold: 1
+    
+    # Readiness probe configuration  
+    # Determines if the container is ready to receive traffic
+    readinessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 5
+      timeoutSeconds: 3
+      failureThreshold: 3
+      successThreshold: 1
+
+# -----------------------------------------------------------------------------
+# ClusterPirate Application Configuration
+# -----------------------------------------------------------------------------
+
+clusterPirate:
+  # Application logging level
+  # Options: debug, info, warn, error, fatal
+  logLevel: info
+
+  # Health check server port
+  # The service exposes health endpoints on this port
+  healthPort: 3000
+
+  # Metrics collection configuration
+  metrics:
+    # Enable/disable metrics collection
+    # When enabled: Grants access to metrics.k8s.io API for node and pod resource usage
+    enabled: true
+    
+    # Interval in seconds for metrics updates
+    # How often the service collects and reports metrics
+    updateIntervalSeconds: 60
+    
+    # Metrics caching configuration using Valkey
+    cache:
+      # Valkey server hostname or IP address
+      # When using the dependency chart, this will default to the subchart service name
+      # Format: <release-name>-valkey
+      host: ""
+      
+      # Valkey server port
+      port: 6379
+      
+      # Valkey authentication password (optional)
+      # Leave empty if no authentication is required
+      password: ""
+      
+      # Time-to-live for cached metrics in seconds
+      # Default: 86400 seconds (24 hours)
+      ttl: 86400
+
+  # Kubernetes resource monitoring configuration
+  monitoring:
+    # Enable monitoring of Kubernetes resources
+    # When enabled: Grants list/watch permissions for pods, deployments, services, etc.
+    # Resources monitored: pods, deployments, statefulsets, daemonsets, jobs, services, namespaces, cronjobs
+    resourceEventsEnabled: true
+    
+    # Enable monitoring of Kubernetes system events
+    # When enabled: Grants access to /api/v1/events for cluster event monitoring
+    # Monitors internal Kubernetes events (pod failures, scaling events, etc.)
+    systemEventsEnabled: true
+
+# -----------------------------------------------------------------------------
+# CloudPirates API Configuration
+# -----------------------------------------------------------------------------
+
+cloudpiratesApi:
+  # API endpoint for cluster registration
+  registerEndpoint: https://api.cloudpirates.io/v1/clusterpirate/register
+
+# -----------------------------------------------------------------------------
+# Authentication Configuration
+# -----------------------------------------------------------------------------
+
+auth:
+  # Option 1: Use inline access token (managed by this chart)
+  # Set the access token directly in values
+  # Example: accessToken: "your-secret-token-here"
+  accessToken: ""
+
+  # Option 2: Use existing Kubernetes Secret (recommended for production)
+  # Reference an existing secret containing the access token
+  # Example:
+  # existingSecret: "clusterpirate-secrets"
+  # existingSecretAccessTokenKey: "api-token"
+  
+  # Name of existing secret containing the access token
+  existingSecret: ""
+  
+  # Key within the existing secret that contains the access token
+  # Defaults to "accessToken" if not specified
+  existingSecretAccessTokenKey: "accessToken"
+
+# -----------------------------------------------------------------------------
+# RBAC Configuration
+# -----------------------------------------------------------------------------
+
+rbac:
+  # Whether to create RBAC resources (ClusterRole and ClusterRoleBinding)
+  # Set to false if you want to manage RBAC externally
+  create: true
+
+# -----------------------------------------------------------------------------
+# Service Account Configuration
+# -----------------------------------------------------------------------------
+
+serviceAccount:
+  # Whether to create a service account
+  # Set to false to use an existing service account
+  create: true
+  
+  # Name of the service account to create or use
+  # If empty and create is true, a name is generated using the fullname template
+  # If empty and create is false, uses "default" service account
+  name: ""
+
+# -----------------------------------------------------------------------------
+# Valkey Configuration (Dependency)
+# -----------------------------------------------------------------------------
+
+valkey:
+  # Enable/disable Valkey installation as a dependency
+  # When enabled, Valkey will be installed in the same namespace
+  enabled: true
+  
+  # Valkey configuration overrides
+  # These values will be passed to the Valkey subchart
+  # For full configuration options, see: https://github.com/CloudPirates-io/helm-charts/tree/main/charts/valkey
+  
+  # Authentication configuration
+  auth:
+    # Enable/disable password authentication for Valkey
+    enabled: true
+    
+    # Option 1: Auto-generate password (default when using dependency)
+    # Leave empty to auto-generate a secure password
+    # Option 2: Set password directly (not recommended for production)
+    # Example: password: "your-secure-password"
+    password: ""
+    
+    # Option 3: Use existing Kubernetes Secret (recommended for production)
+    # Name of existing secret containing the Valkey password
+    existingSecret: ""
+    
+    # Key within the existing secret that contains the password
+    # Defaults to "password" if not specified
+    existingSecretPasswordKey: "password"

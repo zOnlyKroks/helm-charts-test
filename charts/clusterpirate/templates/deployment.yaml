@@ -1,0 +1,147 @@
+{{- /* Validation: If Valkey is disabled, hostname must be provided */ -}}
+{{- if and (not .Values.valkey.enabled) (not .Values.clusterPirate.metrics.cache.host) }}
+{{- fail "ERROR: When Valkey dependency is disabled, you must provide clusterPirate.metrics.cache.host. Either set valkey.enabled=true or provide a custom hostname." }}
+{{- end }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "clusterpirate.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  {{- if .Values.commonAnnotations }}
+  annotations:
+{{- include "clusterpirate.annotations" . | indent 4 }}
+  {{- end }}
+  {{- if .Values.commonLabels }}
+  labels:
+{{- include "clusterpirate.labels" . | indent 4 }}
+  {{- end }}
+spec:
+  selector:
+    matchLabels:
+{{- include "clusterpirate.matchLabels" . | indent 6 }}
+  template:
+    metadata:
+      labels:
+{{- include "clusterpirate.matchLabels" . | indent 8 }}
+    spec:
+      {{- if .Values.imagePullSecrets  }}
+      imagePullSecrets:
+{{ toYaml .Values.imagePullSecrets | indent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "clusterpirate.serviceAccountName" . }}
+      containers:
+      - name: {{ include "clusterpirate.fullname" . }}
+        image: "{{ .Values.deployment.image.registry }}/{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}"
+        imagePullPolicy: {{.Values.deployment.image.pullPolicy}}
+        resources:
+{{ toYaml .Values.deployment.resources | indent 10 }}
+        {{- if .Values.deployment.probes.livenessProbe.enabled }}
+        livenessProbe:
+          httpGet:
+            path: /livez
+            port: {{ .Values.clusterPirate.healthPort }}
+          initialDelaySeconds: {{ .Values.deployment.probes.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.deployment.probes.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.deployment.probes.livenessProbe.timeoutSeconds }}
+          failureThreshold: {{ .Values.deployment.probes.livenessProbe.failureThreshold }}
+          successThreshold: {{ .Values.deployment.probes.livenessProbe.successThreshold }}
+        {{- end }}
+        {{- if .Values.deployment.probes.readinessProbe.enabled }}
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: {{ .Values.clusterPirate.healthPort }}
+          initialDelaySeconds: {{ .Values.deployment.probes.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.deployment.probes.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.deployment.probes.readinessProbe.timeoutSeconds }}
+          failureThreshold: {{ .Values.deployment.probes.readinessProbe.failureThreshold }}
+          successThreshold: {{ .Values.deployment.probes.readinessProbe.successThreshold }}
+        {{- end }}
+        env:
+          - name: LOG_LEVEL
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "clusterpirate.fullname" . }}
+                key: logLevel
+          - name: HEALTH_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "clusterpirate.fullname" . }}
+                key: healthPort
+          - name: KUBERNETES_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: METRICS_ENABLED
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "clusterpirate.fullname" . }}
+                key: metricsEnabled
+          - name: METRICS_UPDATE_INTERVAL_SECONDS
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "clusterpirate.fullname" . }}
+                key: metricsUpdateIntervalSeconds
+          - name: VALKEY_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "clusterpirate.fullname" . }}
+                key: valkeyHost
+          - name: VALKEY_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "clusterpirate.fullname" . }}
+                key: valkeyPort
+          - name: VALKEY_TTL
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "clusterpirate.fullname" . }}
+                key: valkeyTtl
+          - name: VALKEY_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                {{- if and .Values.valkey.enabled (not .Values.valkey.auth.existingSecret) }}
+                # Use auto-generated password from Valkey subchart
+                name: {{ include "clusterpirate.fullname" . }}-valkey
+                key: password
+                {{- else if .Values.valkey.auth.existingSecret }}
+                # Use existing secret specified for Valkey
+                name: {{ .Values.valkey.auth.existingSecret }}
+                key: {{ .Values.valkey.auth.existingSecretPasswordKey | default "password" }}
+                {{- else if .Values.clusterPirate.metrics.cache.password }}
+                # Use password from ClusterPirate cache config (external Valkey)
+                name: {{ include "clusterpirate.fullname" . }}
+                key: valkeyPassword
+                {{- end }}
+          - name: MONITORING_RESOURCE_EVENTS_ENABLED
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "clusterpirate.fullname" . }}
+                key: monitoringResourceEventsEnabled
+          - name: MONITORING_SYSTEM_EVENTS_ENABLED
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "clusterpirate.fullname" . }}
+                key: monitoringSystemEventsEnabled
+          - name: CLOUDPIRATES_API_REGISTER_ENDPOINT
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "clusterpirate.fullname" . }}
+                key: cloudpiratesApiRegisterEndpoint
+          - name: CLOUDPIRATES_API_ACCESS_TOKEN
+            valueFrom:
+              secretKeyRef:
+                {{- if .Values.auth.existingSecret }}
+                name: {{ .Values.auth.existingSecret }}
+                key: {{ .Values.auth.existingSecretAccessTokenKey | default "accessToken" }}
+                {{- else }}
+                name: {{ include "clusterpirate.fullname" . }}
+                key: accessToken
+                {{- end }}
+          {{- if .Values.deployment.extraEnvVars }}
+{{- toYaml .Values.deployment.extraEnvVars | nindent 10 }}
+          {{- end }}

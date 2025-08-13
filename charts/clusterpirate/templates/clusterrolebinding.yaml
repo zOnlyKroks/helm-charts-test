@@ -1,0 +1,23 @@
+{{- if .Values.rbac.create }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "clusterpirate.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  {{- if .Values.commonAnnotations }}
+  annotations:
+{{- include "clusterpirate.annotations" . | indent 4 }}
+  {{- end }}
+  {{- if .Values.commonLabels }}
+  labels:
+{{- include "clusterpirate.labels" . | indent 4 }}
+  {{- end }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ include "clusterpirate.fullname" . }}
+subjects:
+- kind: ServiceAccount
+  name: {{ include "clusterpirate.serviceAccountName" . }}
+  namespace: {{ .Release.Namespace }}
+{{- end }}
