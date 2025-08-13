@@ -37,6 +37,7 @@ A curated collection of production-ready Helm charts for open-source cloud-nativ
 All charts in this repository provide:
 
 ### 🔒 **Security First**
+- **Cryptographically Signed**: All charts are signed with [Cosign](COSIGN.md) for supply chain security
 - Non-root containers by default
 - Read-only root filesystems where possible
 - Dropped Linux capabilities
