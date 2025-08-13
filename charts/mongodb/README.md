@@ -108,14 +108,6 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `securityContext.runAsNonRoot` | Run as non-root user | `true` |
 | `podSecurityContext` | Security context for the pod | `{}` |
 
-### Service Account Parameters
-
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `serviceAccount.create` | Create a service account | `true` |
-| `serviceAccount.annotations` | Annotations to add to the service account | `{}` |
-| `serviceAccount.name` | Name of the service account (if empty, uses generated name) | `""` |
-
 ### Health Check Parameters
 
 | Parameter | Description | Default |

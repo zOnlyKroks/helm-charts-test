@@ -172,14 +172,6 @@ The following table lists the configurable parameters of the MariaDB chart and t
 | `startupProbe.failureThreshold` | Failure threshold for startupProbe | `15` |
 | `startupProbe.successThreshold` | Success threshold for startupProbe | `1` |
 
-### Service Account Parameters
-
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `serviceAccount.create` | Specifies whether a ServiceAccount should be created | `true` |
-| `serviceAccount.name` | The name of the ServiceAccount to use | `""` |
-| `serviceAccount.annotations` | Additional Service Account annotations | `{}` |
-
 ### Pod Disruption Budget Parameters
 
 | Parameter | Description | Default |

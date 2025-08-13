@@ -90,15 +90,6 @@ The following table lists the configurable parameters of the MinIO chart and the
 | `nameOverride` | String to partially override minio.fullname | `""` |
 | `fullnameOverride` | String to fully override minio.fullname | `""` |
 
-### Service Account
-
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `serviceAccount.create` | Specifies whether a service account should be created | `true` |
-| `serviceAccount.automount` | Automatically mount a ServiceAccount's API credentials | `true` |
-| `serviceAccount.annotations` | Annotations to add to the service account | `{}` |
-| `serviceAccount.name` | The name of the service account to use | `""` |
-
 ### Pod annotations and labels
 
 | Parameter | Description | Default |

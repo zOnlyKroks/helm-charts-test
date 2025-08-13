@@ -165,15 +165,6 @@ The following table lists the configurable parameters of the Redis chart and the
 | `master.persistence.dataSource` | Custom PVC data source | `{}` |
 | `master.persistence.existingClaim` | Use a existing PVC which must be created manually before bound | `""` |
 
-### Service Account
-
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `serviceAccount.create` | Specifies whether a ServiceAccount should be created | `true` |
-| `serviceAccount.name` | The name of the ServiceAccount to use | `""` |
-| `serviceAccount.automountServiceAccountToken` | Whether to auto mount the service account token | `true` |
-| `serviceAccount.annotations` | Additional custom annotations for the ServiceAccount | `{}` |
-
 ### Service parameters
 
 | Parameter | Description | Default |

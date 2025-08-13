@@ -63,17 +63,6 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
-Create the name of the service account to use
-*/}}
-{{- define "valkey.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create }}
-{{- default (include "valkey.fullname" .) .Values.serviceAccount.name }}
-{{- else }}
-{{- default "default" .Values.serviceAccount.name }}
-{{- end }}
-{{- end }}
-
-{{/*
 Return the proper Valkey image name
 */}}
 {{- define "valkey.image" -}}

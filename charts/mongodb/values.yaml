@@ -85,14 +85,6 @@ securityContext:
 ## @param podSecurityContext Security context for the pod
 podSecurityContext: {}
 
-serviceAccount:
-  ## @param serviceAccount.create Create a service account
-  create: true
-  ## @param serviceAccount.annotations Annotations to add to the service account
-  annotations: {}
-  ## @param serviceAccount.name Name of the service account (if empty, uses generated name)
-  name: ""
-
 livenessProbe:
   ## @param livenessProbe.enabled Enable liveness probe
   enabled: true

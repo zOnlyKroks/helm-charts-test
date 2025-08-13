@@ -15,9 +15,6 @@ spec:
       labels:
         {{- include "mongodb.selectorLabels" . | nindent 8 }}
     spec:
-      {{- if .Values.serviceAccount.create }}
-      serviceAccountName: {{ include "mongodb.serviceAccountName" . }}
-      {{- end }}
       securityContext:
         {{- toYaml .Values.securityContext | nindent 8 }}
       containers:

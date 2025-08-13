@@ -54,17 +54,6 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
-Create the name of the service account to use
-*/}}
-{{- define "mariadb.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create }}
-{{- default (include "mariadb.fullname" .) .Values.serviceAccount.name }}
-{{- else }}
-{{- default "default" .Values.serviceAccount.name }}
-{{- end }}
-{{- end }}
-
-{{/*
 Return the proper MinIO image name
 */}}
 {{- define "mariadb.image" -}}

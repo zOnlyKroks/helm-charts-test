@@ -29,7 +29,6 @@ spec:
       {{- end }}
     spec:
       {{- include "mariadb.imagePullSecrets" . | nindent 6 }}
-      serviceAccountName: {{ include "mariadb.serviceAccountName" . }}
       {{- if .Values.podSecurityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.podSecurityContext.fsGroup }}

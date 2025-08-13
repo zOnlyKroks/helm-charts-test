@@ -49,8 +49,6 @@ spec:
       {{- if .Values.master.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.master.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "redis.serviceAccountName" . }}
-      automountServiceAccountToken: {{ .Values.serviceAccount.automountServiceAccountToken }}
       {{- with .Values.master.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
