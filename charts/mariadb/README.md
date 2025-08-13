@@ -1,4 +1,4 @@
-# MariaDB Helm Chart
+# MariaDB
 
 MariaDB is a high-performance, open-source relational database server that is a drop-in replacement for MySQL. This Helm chart deploys MariaDB as a StatefulSet on Kubernetes with comprehensive configuration options for development and production environments, providing stable network identities and persistent storage.
 
