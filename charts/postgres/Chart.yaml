@@ -1,0 +1,18 @@
+apiVersion: v2
+name: postgres
+description: A Helm chart for PostgreSQL - The World's Most Advanced Open Source Relational Database
+type: application
+version: 0.1.0
+appVersion: "17.2"
+home: https://www.postgresql.org
+sources:
+  - https://github.com/postgres/postgres
+keywords:
+  - postgres
+  - postgresql
+  - database
+  - sql
+  - relational
+maintainers:
+  - name: CloudPirates GmbH & Co. KG
+    email: hello@cloudpirates.io
