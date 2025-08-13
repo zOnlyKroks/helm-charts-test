@@ -11,6 +11,13 @@
   "prConcurrentLimit": 5,
   "packageRules": [
     {
+      "description": "Helm values Docker images - ensure proper tag and digest handling",
+      "matchManagers": ["helm-values"],
+      "matchDatasources": ["docker"],
+      "versioning": "docker",
+      "separateMinorPatch": true
+    },
+    {
       "description": "MariaDB chart Docker image updates",
       "matchFileNames": [
         "charts/mariadb/values.yaml"
@@ -19,8 +26,7 @@
       "automerge": false,
       "commitMessagePrefix": "",
       "commitMessage": "[MARIADB] Update {{depName}} to {{newValue}}{{#if isMajor}} (major){{/if}}",
-      "branchTopic": "mariadb-{{depNameSanitized}}-{{newMajor}}.x{{#if isPatch}}.{{newMinor}}{{/if}}",
-      "pinDigests": true
+      "branchTopic": "mariadb-{{depNameSanitized}}-{{newMajor}}.x{{#if isPatch}}.{{newMinor}}{{/if}}"
     },
     {
       "description": "MinIO chart Docker image updates",
@@ -31,8 +37,7 @@
       "automerge": false,
       "commitMessagePrefix": "",
       "commitMessage": "[MINIO] Update {{depName}} to {{newValue}}{{#if isMajor}} (major){{/if}}",
-      "branchTopic": "minio-{{depNameSanitized}}-{{newMajor}}.x{{#if isPatch}}.{{newMinor}}{{/if}}",
-      "pinDigests": true
+      "branchTopic": "minio-{{depNameSanitized}}-{{newMajor}}.x{{#if isPatch}}.{{newMinor}}{{/if}}"
     },
     {
       "description": "MongoDB chart Docker image updates",
@@ -43,8 +48,7 @@
       "automerge": false,
       "commitMessagePrefix": "",
       "commitMessage": "[MONGODB] Update {{depName}} to {{newValue}}{{#if isMajor}} (major){{/if}}",
-      "branchTopic": "mongodb-{{depNameSanitized}}-{{newMajor}}.x{{#if isPatch}}.{{newMinor}}{{/if}}",
-      "pinDigests": true
+      "branchTopic": "mongodb-{{depNameSanitized}}-{{newMajor}}.x{{#if isPatch}}.{{newMinor}}{{/if}}"
     },
     {
       "description": "PostgreSQL chart Docker image updates",
@@ -55,8 +59,7 @@
       "automerge": false,
       "commitMessagePrefix": "",
       "commitMessage": "[POSTGRES] Update {{depName}} to {{newValue}}{{#if isMajor}} (major){{/if}}",
-      "branchTopic": "postgres-{{depNameSanitized}}-{{newMajor}}.x{{#if isPatch}}.{{newMinor}}{{/if}}",
-      "pinDigests": true
+      "branchTopic": "postgres-{{depNameSanitized}}-{{newMajor}}.x{{#if isPatch}}.{{newMinor}}{{/if}}"
     },
     {
       "description": "Redis chart Docker image updates",
@@ -67,8 +70,7 @@
       "automerge": false,
       "commitMessagePrefix": "",
       "commitMessage": "[REDIS] Update {{depName}} to {{newValue}}{{#if isMajor}} (major){{/if}}",
-      "branchTopic": "redis-{{depNameSanitized}}-{{newMajor}}.x{{#if isPatch}}.{{newMinor}}{{/if}}",
-      "pinDigests": true
+      "branchTopic": "redis-{{depNameSanitized}}-{{newMajor}}.x{{#if isPatch}}.{{newMinor}}{{/if}}"
     },
     {
       "description": "Valkey chart Docker image updates",
@@ -79,8 +81,7 @@
       "automerge": false,
       "commitMessagePrefix": "",
       "commitMessage": "[VALKEY] Update {{depName}} to {{newValue}}{{#if isMajor}} (major){{/if}}",
-      "branchTopic": "valkey-{{depNameSanitized}}-{{newMajor}}.x{{#if isPatch}}.{{newMinor}}{{/if}}",
-      "pinDigests": true
+      "branchTopic": "valkey-{{depNameSanitized}}-{{newMajor}}.x{{#if isPatch}}.{{newMinor}}{{/if}}"
     },
     {
       "description": "ClusterPirate chart Docker image updates",
@@ -91,8 +92,7 @@
       "automerge": false,
       "commitMessagePrefix": "",
       "commitMessage": "[CLUSTERPIRATE] Update {{depName}} to {{newValue}}{{#if isMajor}} (major){{/if}}",
-      "branchTopic": "clusterpirate-{{depNameSanitized}}-{{newMajor}}.x{{#if isPatch}}.{{newMinor}}{{/if}}",
-      "pinDigests": true
+      "branchTopic": "clusterpirate-{{depNameSanitized}}-{{newMajor}}.x{{#if isPatch}}.{{newMinor}}{{/if}}"
     }
   ],
   "hostRules": [
