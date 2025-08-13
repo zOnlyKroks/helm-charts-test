@@ -1,0 +1,389 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "MongoDB Helm Chart Values Schema",
+  "description": "Schema for MongoDB Helm chart values",
+  "properties": {
+    "replicaCount": {
+      "type": "integer",
+      "title": "Replica Count",
+      "description": "Number of MongoDB replicas to deploy",
+      "minimum": 1
+    },
+    "image": {
+      "type": "object",
+      "title": "MongoDB Image Configuration",
+      "description": "MongoDB container image configuration",
+      "properties": {
+        "repository": {
+          "type": "string",
+          "title": "MongoDB Image Repository",
+          "description": "MongoDB Docker image repository"
+        },
+        "tag": {
+          "type": "string",
+          "title": "MongoDB Image Tag",
+          "description": "MongoDB Docker image tag"
+        },
+        "digest": {
+          "type": "string",
+          "title": "MongoDB Image Digest",
+          "description": "MongoDB Docker image digest"
+        },
+        "pullPolicy": {
+          "type": "string",
+          "title": "MongoDB Image Pull Policy",
+          "description": "MongoDB image pull policy",
+          "enum": ["Always", "Never", "IfNotPresent"]
+        }
+      }
+    },
+    "nameOverride": {
+      "type": "string",
+      "title": "Name Override",
+      "description": "String to partially override mongodb.fullname"
+    },
+    "fullnameOverride": {
+      "type": "string",
+      "title": "Full Name Override",
+      "description": "String to fully override mongodb.fullname"
+    },
+    "service": {
+      "type": "object",
+      "title": "Service Configuration",
+      "description": "Kubernetes service configuration",
+      "properties": {
+        "type": {
+          "type": "string",
+          "title": "Service Type",
+          "description": "Kubernetes service type",
+          "enum": ["ClusterIP", "NodePort", "LoadBalancer", "ExternalName"]
+        },
+        "port": {
+          "type": "integer",
+          "title": "Service Port",
+          "description": "MongoDB service port",
+          "minimum": 1,
+          "maximum": 65535
+        }
+      }
+    },
+    "auth": {
+      "type": "object",
+      "title": "MongoDB Authentication",
+      "description": "MongoDB authentication configuration",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enable Authentication",
+          "description": "Enable MongoDB authentication"
+        },
+        "rootUsername": {
+          "type": "string",
+          "title": "MongoDB Root Username",
+          "description": "MongoDB root username"
+        },
+        "rootPassword": {
+          "type": "string",
+          "title": "MongoDB Root Password",
+          "description": "MongoDB root password (if empty, random password will be generated)"
+        },
+        "existingSecret": {
+          "type": "string",
+          "title": "Existing Secret",
+          "description": "Name of existing secret containing MongoDB password"
+        },
+        "existingSecretPasswordKey": {
+          "type": "string",
+          "title": "Existing Secret Password Key",
+          "description": "Key in existing secret containing MongoDB password"
+        }
+      }
+    },
+    "databases": {
+      "type": "array",
+      "title": "Additional Databases",
+      "description": "Array of additional databases to create",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Database Name",
+            "description": "Name of the database"
+          },
+          "user": {
+            "type": "string",
+            "title": "Database User",
+            "description": "Username for the database"
+          },
+          "password": {
+            "type": "string",
+            "title": "Database Password",
+            "description": "Password for the database user"
+          }
+        },
+        "required": ["name"]
+      }
+    },
+    "config": {
+      "type": "object",
+      "title": "MongoDB Configuration",
+      "description": "MongoDB configuration options",
+      "additionalProperties": true
+    },
+    "persistence": {
+      "type": "object",
+      "title": "Persistence Configuration",
+      "description": "MongoDB persistence configuration",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enable Persistence",
+          "description": "Enable persistent storage"
+        },
+        "storageClass": {
+          "type": "string",
+          "title": "Storage Class",
+          "description": "Storage class to use for persistent volume"
+        },
+        "accessMode": {
+          "type": "string",
+          "title": "Access Mode",
+          "description": "Access mode for persistent volume",
+          "enum": ["ReadWriteOnce", "ReadOnlyMany", "ReadWriteMany", "ReadWriteOncePod"]
+        },
+        "size": {
+          "type": "string",
+          "title": "Storage Size",
+          "description": "Size of persistent volume",
+          "pattern": "^\\d+(Ei|Pi|Ti|Gi|Mi|Ki|E|P|T|G|M|K)?$"
+        },
+        "mountPath": {
+          "type": "string",
+          "title": "Mount Path",
+          "description": "Mount path for MongoDB data"
+        }
+      }
+    },
+    "resources": {
+      "type": "object",
+      "title": "Resource Configuration",
+      "description": "Resource limits and requests for MongoDB pod",
+      "properties": {
+        "limits": {
+          "type": "object",
+          "title": "Resource Limits",
+          "description": "Resource limits for the container",
+          "properties": {
+            "cpu": {
+              "oneOf": [
+                {"type": "string"},
+                {"type": "number"}
+              ],
+              "title": "CPU Limit",
+              "description": "CPU resource limit"
+            },
+            "memory": {
+              "type": "string",
+              "title": "Memory Limit",
+              "description": "Memory resource limit"
+            }
+          }
+        },
+        "requests": {
+          "type": "object",
+          "title": "Resource Requests",
+          "description": "Resource requests for the container",
+          "properties": {
+            "cpu": {
+              "oneOf": [
+                {"type": "string"},
+                {"type": "number"}
+              ],
+              "title": "CPU Request",
+              "description": "CPU resource request"
+            },
+            "memory": {
+              "type": "string",
+              "title": "Memory Request",
+              "description": "Memory resource request"
+            }
+          }
+        }
+      }
+    },
+    "nodeSelector": {
+      "type": "object",
+      "title": "Node Selector",
+      "description": "Node selector for pod assignment",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "tolerations": {
+      "type": "array",
+      "title": "Tolerations",
+      "description": "Tolerations for pod assignment",
+      "items": {
+        "type": "object"
+      }
+    },
+    "affinity": {
+      "type": "object",
+      "title": "Affinity Configuration",
+      "description": "Affinity rules for pod assignment"
+    },
+    "securityContext": {
+      "type": "object",
+      "title": "Security Context",
+      "description": "Security context configuration",
+      "properties": {
+        "fsGroup": {
+          "type": "integer",
+          "title": "FS Group",
+          "description": "Group ID for filesystem ownership",
+          "minimum": 0
+        },
+        "runAsUser": {
+          "type": "integer",
+          "title": "Run As User",
+          "description": "User ID to run the container",
+          "minimum": 0
+        },
+        "runAsNonRoot": {
+          "type": "boolean",
+          "title": "Run As Non-Root",
+          "description": "Run as non-root user"
+        }
+      }
+    },
+    "podSecurityContext": {
+      "type": "object",
+      "title": "Pod Security Context",
+      "description": "Security context for the pod",
+      "additionalProperties": true
+    },
+    "livenessProbe": {
+      "type": "object",
+      "title": "Liveness Probe Configuration",
+      "description": "MongoDB liveness probe configuration",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enable Liveness Probe",
+          "description": "Enable liveness probe"
+        },
+        "initialDelaySeconds": {
+          "type": "integer",
+          "title": "Initial Delay Seconds",
+          "description": "Initial delay before starting probes",
+          "minimum": 0
+        },
+        "periodSeconds": {
+          "type": "integer",
+          "title": "Period Seconds",
+          "description": "How often to perform the probe",
+          "minimum": 1
+        },
+        "timeoutSeconds": {
+          "type": "integer",
+          "title": "Timeout Seconds",
+          "description": "Timeout for each probe attempt",
+          "minimum": 1
+        },
+        "failureThreshold": {
+          "type": "integer",
+          "title": "Failure Threshold",
+          "description": "Number of failures before pod is restarted",
+          "minimum": 1
+        },
+        "successThreshold": {
+          "type": "integer",
+          "title": "Success Threshold",
+          "description": "Number of successes to mark probe as successful",
+          "minimum": 1
+        }
+      }
+    },
+    "readinessProbe": {
+      "type": "object",
+      "title": "Readiness Probe Configuration",
+      "description": "MongoDB readiness probe configuration",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enable Readiness Probe",
+          "description": "Enable readiness probe"
+        },
+        "initialDelaySeconds": {
+          "type": "integer",
+          "title": "Initial Delay Seconds",
+          "description": "Initial delay before starting probes",
+          "minimum": 0
+        },
+        "periodSeconds": {
+          "type": "integer",
+          "title": "Period Seconds",
+          "description": "How often to perform the probe",
+          "minimum": 1
+        },
+        "timeoutSeconds": {
+          "type": "integer",
+          "title": "Timeout Seconds",
+          "description": "Timeout for each probe attempt",
+          "minimum": 1
+        },
+        "failureThreshold": {
+          "type": "integer",
+          "title": "Failure Threshold",
+          "description": "Number of failures before pod is marked unready",
+          "minimum": 1
+        },
+        "successThreshold": {
+          "type": "integer",
+          "title": "Success Threshold",
+          "description": "Number of successes to mark probe as successful",
+          "minimum": 1
+        }
+      }
+    },
+    "extraEnv": {
+      "type": "array",
+      "title": "Extra Environment Variables",
+      "description": "Additional environment variables to set",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Variable Name",
+            "description": "Environment variable name"
+          },
+          "value": {
+            "type": "string",
+            "title": "Variable Value",
+            "description": "Environment variable value"
+          }
+        },
+        "required": ["name"]
+      }
+    },
+    "extraVolumes": {
+      "type": "array",
+      "title": "Extra Volumes",
+      "description": "Additional volumes to add to the pod",
+      "items": {
+        "type": "object"
+      }
+    },
+    "extraVolumeMounts": {
+      "type": "array",
+      "title": "Extra Volume Mounts",
+      "description": "Additional volume mounts to add to the MongoDB container",
+      "items": {
+        "type": "object"
+      }
+    }
+  }
+}
