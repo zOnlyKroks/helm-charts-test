@@ -1,0 +1,104 @@
+{
+  "extends": [
+    "config:recommended",
+    "docker:enableMajor",
+    ":dependencyDashboard"
+  ],
+  "timezone": "Europe/Berlin",
+  "labels": ["dependencies"],
+  "branchPrefix": "renovate/",
+  "prHourlyLimit": 10,
+  "prConcurrentLimit": 5,
+  "packageRules": [
+    {
+      "description": "MariaDB chart Docker image updates",
+      "matchFileNames": [
+        "charts/mariadb/values.yaml"
+      ],
+      "matchManagers": ["helm-values"],
+      "automerge": false,
+      "commitMessagePrefix": "",
+      "commitMessage": "[MARIADB] Update {{depName}} to {{newValue}}{{#if isMajor}} (major){{/if}}",
+      "branchTopic": "mariadb-{{depNameSanitized}}-{{newMajor}}.x{{#if isPatch}}.{{newMinor}}{{/if}}",
+      "pinDigests": true
+    },
+    {
+      "description": "MinIO chart Docker image updates",
+      "matchFileNames": [
+        "charts/minio/values.yaml"
+      ],
+      "matchManagers": ["helm-values"],
+      "automerge": false,
+      "commitMessagePrefix": "",
+      "commitMessage": "[MINIO] Update {{depName}} to {{newValue}}{{#if isMajor}} (major){{/if}}",
+      "branchTopic": "minio-{{depNameSanitized}}-{{newMajor}}.x{{#if isPatch}}.{{newMinor}}{{/if}}",
+      "pinDigests": true
+    },
+    {
+      "description": "MongoDB chart Docker image updates",
+      "matchFileNames": [
+        "charts/mongodb/values.yaml"
+      ],
+      "matchManagers": ["helm-values"],
+      "automerge": false,
+      "commitMessagePrefix": "",
+      "commitMessage": "[MONGODB] Update {{depName}} to {{newValue}}{{#if isMajor}} (major){{/if}}",
+      "branchTopic": "mongodb-{{depNameSanitized}}-{{newMajor}}.x{{#if isPatch}}.{{newMinor}}{{/if}}",
+      "pinDigests": true
+    },
+    {
+      "description": "PostgreSQL chart Docker image updates",
+      "matchFileNames": [
+        "charts/postgres/values.yaml"
+      ],
+      "matchManagers": ["helm-values"],
+      "automerge": false,
+      "commitMessagePrefix": "",
+      "commitMessage": "[POSTGRES] Update {{depName}} to {{newValue}}{{#if isMajor}} (major){{/if}}",
+      "branchTopic": "postgres-{{depNameSanitized}}-{{newMajor}}.x{{#if isPatch}}.{{newMinor}}{{/if}}",
+      "pinDigests": true
+    },
+    {
+      "description": "Redis chart Docker image updates",
+      "matchFileNames": [
+        "charts/redis/values.yaml"
+      ],
+      "matchManagers": ["helm-values"],
+      "automerge": false,
+      "commitMessagePrefix": "",
+      "commitMessage": "[REDIS] Update {{depName}} to {{newValue}}{{#if isMajor}} (major){{/if}}",
+      "branchTopic": "redis-{{depNameSanitized}}-{{newMajor}}.x{{#if isPatch}}.{{newMinor}}{{/if}}",
+      "pinDigests": true
+    },
+    {
+      "description": "Valkey chart Docker image updates",
+      "matchFileNames": [
+        "charts/valkey/values.yaml"
+      ],
+      "matchManagers": ["helm-values"],
+      "automerge": false,
+      "commitMessagePrefix": "",
+      "commitMessage": "[VALKEY] Update {{depName}} to {{newValue}}{{#if isMajor}} (major){{/if}}",
+      "branchTopic": "valkey-{{depNameSanitized}}-{{newMajor}}.x{{#if isPatch}}.{{newMinor}}{{/if}}",
+      "pinDigests": true
+    },
+    {
+      "description": "ClusterPirate chart Docker image updates",
+      "matchFileNames": [
+        "charts/clusterpirate/values.yaml"
+      ],
+      "matchManagers": ["helm-values"],
+      "automerge": false,
+      "commitMessagePrefix": "",
+      "commitMessage": "[CLUSTERPIRATE] Update {{depName}} to {{newValue}}{{#if isMajor}} (major){{/if}}",
+      "branchTopic": "clusterpirate-{{depNameSanitized}}-{{newMajor}}.x{{#if isPatch}}.{{newMinor}}{{/if}}",
+      "pinDigests": true
+    }
+  ],
+  "hostRules": [
+    {
+      "matchHost": "harbor.cloudpirates.io",
+      "description": "Private Harbor registry configuration"
+    }
+  ]
+}
