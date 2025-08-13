@@ -8,7 +8,9 @@
     "before 6am on monday"
   ],
   "timezone": "Europe/Berlin",
-  "labels": ["dependencies"],
+  "labels": [
+    "dependencies"
+  ],
   "branchPrefix": "renovate/",
   "prHourlyLimit": 10,
   "prConcurrentLimit": 5,
@@ -16,7 +18,9 @@
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": ["^charts/.+/values\\.ya?ml$"],
+      "fileMatch": [
+        "^charts/.+/values\\.ya?ml$"
+      ],
       "matchStrings": [
         "(?m)^\\s*repository:\\s*[\"']?(?<depName>[^\\s\"'\\n]+)[\"']?\\s*$[\\s\\S]*?^\\s*tag:\\s*[\"']?(?<currentValue>[^\\s\"'\\n]+)[\"']?\\s*$(?:[\\s\\S]*?^\\s*digest:\\s*[\"']?(?<currentDigest>sha256:[a-f0-9]+)[\"']?\\s*$)?",
         "(?m)^\\s*registry:\\s*[\"']?(?<registry>[^\\s\"'\\n]+)[\"']?\\s*$[\\s\\S]*?^\\s*repository:\\s*[\"']?(?<packageName>[^\\s\"'\\n]+)[\"']?\\s*$[\\s\\S]*?^\\s*tag:\\s*[\"']?(?<currentValue>[^\\s\"'\\n]+)[\"']?\\s*$(?:[\\s\\S]*?^\\s*digest:\\s*[\"']?(?<currentDigest>sha256:[a-f0-9]+)[\"']?\\s*$)?"
@@ -32,7 +36,9 @@
       "matchFileNames": [
         "charts/mariadb/values.yaml"
       ],
-      "matchManagers": ["regex"],
+      "matchManagers": [
+        "custom.regex"
+      ],
       "automerge": false,
       "commitMessagePrefix": "",
       "commitMessage": "[MARIADB] Update {{depName}} to {{newValue}}{{#if isMajor}} (major){{/if}}",
@@ -43,7 +49,9 @@
       "matchFileNames": [
         "charts/minio/values.yaml"
       ],
-      "matchManagers": ["regex"],
+      "matchManagers": [
+        "custom.regex"
+      ],
       "automerge": false,
       "commitMessagePrefix": "",
       "commitMessage": "[MINIO] Update {{depName}} to {{newValue}}{{#if isMajor}} (major){{/if}}",
@@ -54,7 +62,9 @@
       "matchFileNames": [
         "charts/mongodb/values.yaml"
       ],
-      "matchManagers": ["regex"],
+      "matchManagers": [
+        "custom.regex"
+      ],
       "automerge": false,
       "commitMessagePrefix": "",
       "commitMessage": "[MONGODB] Update {{depName}} to {{newValue}}{{#if isMajor}} (major){{/if}}",
@@ -65,7 +75,9 @@
       "matchFileNames": [
         "charts/postgres/values.yaml"
       ],
-      "matchManagers": ["regex"],
+      "matchManagers": [
+        "custom.regex"
+      ],
       "automerge": false,
       "commitMessagePrefix": "",
       "commitMessage": "[POSTGRES] Update {{depName}} to {{newValue}}{{#if isMajor}} (major){{/if}}",
@@ -76,7 +88,9 @@
       "matchFileNames": [
         "charts/redis/values.yaml"
       ],
-      "matchManagers": ["regex"],
+      "matchManagers": [
+        "custom.regex"
+      ],
       "automerge": false,
       "commitMessagePrefix": "",
       "commitMessage": "[REDIS] Update {{depName}} to {{newValue}}{{#if isMajor}} (major){{/if}}",
@@ -87,7 +101,9 @@
       "matchFileNames": [
         "charts/valkey/values.yaml"
       ],
-      "matchManagers": ["regex"],
+      "matchManagers": [
+        "custom.regex"
+      ],
       "automerge": false,
       "commitMessagePrefix": "",
       "commitMessage": "[VALKEY] Update {{depName}} to {{newValue}}{{#if isMajor}} (major){{/if}}",
@@ -98,7 +114,9 @@
       "matchFileNames": [
         "charts/clusterpirate/values.yaml"
       ],
-      "matchManagers": ["regex"],
+      "matchManagers": [
+        "custom.regex"
+      ],
       "automerge": false,
       "commitMessagePrefix": "",
       "commitMessage": "[CLUSTERPIRATE] Update {{depName}} to {{newValue}}{{#if isMajor}} (major){{/if}}",
