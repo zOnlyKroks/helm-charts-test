@@ -53,6 +53,12 @@ release-charts:
           
           echo "Chart: $chart_name, Version: $CHART_VERSION, App Version: $APP_VERSION"
           
+          # Update dependencies if Chart.yaml contains dependencies
+          if grep -q "dependencies:" Chart.yaml; then
+            echo "Updating dependencies for $chart_name"
+            helm dependency update
+          fi
+          
           # Package the chart
           echo "Packaging Helm chart $chart_name version $CHART_VERSION"
           helm package . --version=$CHART_VERSION --app-version=$APP_VERSION
