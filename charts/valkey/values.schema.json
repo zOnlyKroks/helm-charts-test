@@ -1,0 +1,650 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "Valkey Helm Chart Values Schema",
+  "description": "Schema for Valkey Helm chart values",
+  "properties": {
+    "global": {
+      "type": "object",
+      "title": "Global parameters",
+      "description": "Global Docker image parameters",
+      "properties": {
+        "imageRegistry": {
+          "type": "string",
+          "title": "Global Docker Image Registry",
+          "description": "Global Docker image registry"
+        },
+        "imagePullSecrets": {
+          "type": "array",
+          "title": "Global Image Pull Secrets",
+          "description": "Global Docker registry secret names as an array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "image": {
+      "type": "object",
+      "title": "Valkey image configuration",
+      "description": "Configuration for Valkey container image",
+      "properties": {
+        "registry": {
+          "type": "string",
+          "title": "Valkey Image Registry",
+          "description": "Valkey image registry"
+        },
+        "repository": {
+          "type": "string",
+          "title": "Valkey Image Repository",
+          "description": "Valkey image repository"
+        },
+        "tag": {
+          "type": "string",
+          "title": "Valkey Image Tag",
+          "description": "Valkey image tag (immutable tags are recommended)"
+        },
+        "digest": {
+          "type": "string",
+          "title": "Valkey Image Digest",
+          "description": "Valkey image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag"
+        },
+        "pullPolicy": {
+          "type": "string",
+          "title": "Valkey Image Pull Policy",
+          "description": "Valkey image pull policy",
+          "enum": ["Always", "Never", "IfNotPresent"]
+        }
+      }
+    },
+    "replicaCount": {
+      "type": "integer",
+      "title": "Replica Count",
+      "description": "Number of Valkey replicas to deploy",
+      "minimum": 1
+    },
+    "nameOverride": {
+      "type": "string",
+      "title": "Name Override",
+      "description": "String to partially override valkey.fullname"
+    },
+    "fullnameOverride": {
+      "type": "string",
+      "title": "Full Name Override",
+      "description": "String to fully override valkey.fullname"
+    },
+    "commonLabels": {
+      "type": "object",
+      "title": "Common Labels",
+      "description": "Labels to add to all deployed objects",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "commonAnnotations": {
+      "type": "object",
+      "title": "Common Annotations",
+      "description": "Annotations to add to all deployed objects",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "podAnnotations": {
+      "type": "object",
+      "title": "Pod Annotations",
+      "description": "Map of annotations to add to the pods",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "podLabels": {
+      "type": "object",
+      "title": "Pod Labels",
+      "description": "Map of labels to add to the pods",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "podSecurityContext": {
+      "type": "object",
+      "title": "Pod Security Context",
+      "description": "Security context for the pod",
+      "properties": {
+        "fsGroup": {
+          "type": "integer",
+          "title": "FS Group",
+          "description": "Group ID for the volumes of the pod",
+          "minimum": 0
+        }
+      }
+    },
+    "securityContext": {
+      "type": "object",
+      "title": "Security Context",
+      "description": "Security context for the container",
+      "properties": {
+        "allowPrivilegeEscalation": {
+          "type": "boolean",
+          "title": "Allow Privilege Escalation",
+          "description": "Enable container privilege escalation"
+        },
+        "runAsNonRoot": {
+          "type": "boolean",
+          "title": "Run As Non-Root",
+          "description": "Configure the container to run as a non-root user"
+        },
+        "runAsUser": {
+          "type": "integer",
+          "title": "Run As User",
+          "description": "User ID for the Valkey container",
+          "minimum": 0
+        },
+        "runAsGroup": {
+          "type": "integer",
+          "title": "Run As Group",
+          "description": "Group ID for the Valkey container",
+          "minimum": 0
+        },
+        "readOnlyRootFilesystem": {
+          "type": "boolean",
+          "title": "Read-Only Root Filesystem",
+          "description": "Mount container root filesystem as read-only"
+        },
+        "capabilities": {
+          "type": "object",
+          "title": "Capabilities",
+          "description": "Linux capabilities configuration",
+          "properties": {
+            "drop": {
+              "type": "array",
+              "title": "Drop Capabilities",
+              "description": "Linux capabilities to be dropped",
+              "items": {
+                "type": "string"
+              }
+            },
+            "add": {
+              "type": "array",
+              "title": "Add Capabilities",
+              "description": "Linux capabilities to be added",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "auth": {
+      "type": "object",
+      "title": "Valkey Authentication",
+      "description": "Authentication configuration for Valkey",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enable Authentication",
+          "description": "Enable password authentication"
+        },
+        "password": {
+          "type": "string",
+          "title": "Valkey Password",
+          "description": "Valkey password"
+        },
+        "existingSecret": {
+          "type": "string",
+          "title": "Existing Secret",
+          "description": "The name of an existing secret with Valkey credentials"
+        },
+        "existingSecretPasswordKey": {
+          "type": "string",
+          "title": "Existing Secret Password Key",
+          "description": "Password key to be retrieved from existing secret"
+        }
+      }
+    },
+    "config": {
+      "type": "object",
+      "title": "Valkey Configuration",
+      "description": "Configuration parameters for Valkey",
+      "properties": {
+        "maxMemory": {
+          "type": "string",
+          "title": "Max Memory",
+          "description": "Maximum memory usage for Valkey (e.g., 256mb, 1gb)",
+          "pattern": "^$|^(\\d+)(b|kb|mb|gb|tb)?$"
+        },
+        "maxMemoryPolicy": {
+          "type": "string",
+          "title": "Max Memory Policy",
+          "description": "Memory eviction policy when maxmemory is reached",
+          "enum": [
+            "noeviction",
+            "allkeys-lru",
+            "volatile-lru",
+            "allkeys-random",
+            "volatile-random",
+            "volatile-ttl",
+            "volatile-lfu",
+            "allkeys-lfu"
+          ]
+        },
+        "save": {
+          "type": "string",
+          "title": "Save Configuration",
+          "description": "Valkey save configuration (e.g., \"900 1 300 10 60 10000\")"
+        },
+        "extraConfig": {
+          "type": "array",
+          "title": "Extra Configuration",
+          "description": "Additional Valkey configuration parameters",
+          "items": {
+            "type": "string"
+          }
+        },
+        "existingConfigmap": {
+          "type": "string",
+          "title": "Existing ConfigMap",
+          "description": "Name of existing ConfigMap with Valkey configuration"
+        }
+      }
+    },
+    "service": {
+      "type": "object",
+      "title": "Service Configuration",
+      "description": "Kubernetes service configuration",
+      "properties": {
+        "type": {
+          "type": "string",
+          "title": "Service Type",
+          "description": "Valkey service type",
+          "enum": ["ClusterIP", "NodePort", "LoadBalancer", "ExternalName"]
+        },
+        "port": {
+          "type": "integer",
+          "title": "Service Port",
+          "description": "Valkey service port",
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "targetPort": {
+          "oneOf": [
+            {"type": "integer", "minimum": 1, "maximum": 65535},
+            {"type": "string"}
+          ],
+          "title": "Target Port",
+          "description": "Valkey container port"
+        },
+        "annotations": {
+          "type": "object",
+          "title": "Service Annotations",
+          "description": "Service annotations",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "ingress": {
+      "type": "object",
+      "title": "Ingress Configuration",
+      "description": "Ingress configuration for Valkey",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enable Ingress",
+          "description": "Enable ingress record generation for Valkey"
+        },
+        "className": {
+          "type": "string",
+          "title": "Ingress Class Name",
+          "description": "IngressClass that will be used to implement the Ingress"
+        },
+        "annotations": {
+          "type": "object",
+          "title": "Ingress Annotations",
+          "description": "Additional annotations for the Ingress resource",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "hosts": {
+          "type": "array",
+          "title": "Ingress Hosts",
+          "description": "Ingress hosts configuration",
+          "items": {
+            "type": "object",
+            "properties": {
+              "host": {
+                "type": "string",
+                "title": "Host",
+                "description": "Hostname for Valkey ingress"
+              },
+              "paths": {
+                "type": "array",
+                "title": "Paths",
+                "description": "Paths configuration for the host",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "string",
+                      "title": "Path",
+                      "description": "Path for Valkey ingress"
+                    },
+                    "pathType": {
+                      "type": "string",
+                      "title": "Path Type",
+                      "description": "Path type for Valkey ingress",
+                      "enum": ["Exact", "Prefix", "ImplementationSpecific"]
+                    }
+                  },
+                  "required": ["path", "pathType"]
+                }
+              }
+            },
+            "required": ["host", "paths"]
+          }
+        },
+        "tls": {
+          "type": "array",
+          "title": "TLS Configuration",
+          "description": "TLS configuration for Valkey ingress",
+          "items": {
+            "type": "object",
+            "properties": {
+              "secretName": {
+                "type": "string",
+                "title": "Secret Name",
+                "description": "Name of the TLS secret"
+              },
+              "hosts": {
+                "type": "array",
+                "title": "TLS Hosts",
+                "description": "Hosts covered by the TLS certificate",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "resources": {
+      "type": "object",
+      "title": "Resource Configuration",
+      "description": "The resources to allocate for the container",
+      "properties": {
+        "limits": {
+          "type": "object",
+          "title": "Resource Limits",
+          "description": "Resource limits for the container",
+          "properties": {
+            "cpu": {
+              "oneOf": [
+                {"type": "string"},
+                {"type": "number"}
+              ],
+              "title": "CPU Limit",
+              "description": "CPU resource limit"
+            },
+            "memory": {
+              "type": "string",
+              "title": "Memory Limit",
+              "description": "Memory resource limit"
+            }
+          }
+        },
+        "requests": {
+          "type": "object",
+          "title": "Resource Requests",
+          "description": "Resource requests for the container",
+          "properties": {
+            "cpu": {
+              "oneOf": [
+                {"type": "string"},
+                {"type": "number"}
+              ],
+              "title": "CPU Request",
+              "description": "CPU resource request"
+            },
+            "memory": {
+              "type": "string",
+              "title": "Memory Request",
+              "description": "Memory resource request"
+            }
+          }
+        }
+      }
+    },
+    "persistence": {
+      "type": "object",
+      "title": "Persistence Configuration",
+      "description": "Persistence configuration using Persistent Volume Claims",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enable Persistence",
+          "description": "Enable persistence using Persistent Volume Claims"
+        },
+        "storageClass": {
+          "type": "string",
+          "title": "Storage Class",
+          "description": "Persistent Volume storage class"
+        },
+        "annotations": {
+          "type": "object",
+          "title": "PVC Annotations",
+          "description": "Persistent Volume Claim annotations",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "size": {
+          "type": "string",
+          "title": "Storage Size",
+          "description": "Persistent Volume size",
+          "pattern": "^\\d+(Ei|Pi|Ti|Gi|Mi|Ki|E|P|T|G|M|K)?$"
+        },
+        "accessModes": {
+          "type": "array",
+          "title": "Access Modes",
+          "description": "Persistent Volume access modes",
+          "items": {
+            "type": "string",
+            "enum": ["ReadWriteOnce", "ReadOnlyMany", "ReadWriteMany", "ReadWriteOncePod"]
+          }
+        },
+        "existingClaim": {
+          "type": "string",
+          "title": "Existing Claim",
+          "description": "The name of an existing PVC to use for persistence"
+        }
+      }
+    },
+    "livenessProbe": {
+      "type": "object",
+      "title": "Liveness Probe Configuration",
+      "description": "Liveness probe configuration for Valkey container",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enable Liveness Probe",
+          "description": "Enable livenessProbe on Valkey containers"
+        },
+        "initialDelaySeconds": {
+          "type": "integer",
+          "title": "Initial Delay Seconds",
+          "description": "Initial delay seconds for livenessProbe",
+          "minimum": 0
+        },
+        "periodSeconds": {
+          "type": "integer",
+          "title": "Period Seconds",
+          "description": "Period seconds for livenessProbe",
+          "minimum": 1
+        },
+        "timeoutSeconds": {
+          "type": "integer",
+          "title": "Timeout Seconds",
+          "description": "Timeout seconds for livenessProbe",
+          "minimum": 1
+        },
+        "failureThreshold": {
+          "type": "integer",
+          "title": "Failure Threshold",
+          "description": "Failure threshold for livenessProbe",
+          "minimum": 1
+        },
+        "successThreshold": {
+          "type": "integer",
+          "title": "Success Threshold",
+          "description": "Success threshold for livenessProbe",
+          "minimum": 1
+        }
+      }
+    },
+    "readinessProbe": {
+      "type": "object",
+      "title": "Readiness Probe Configuration",
+      "description": "Readiness probe configuration for Valkey container",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enable Readiness Probe",
+          "description": "Enable readinessProbe on Valkey containers"
+        },
+        "initialDelaySeconds": {
+          "type": "integer",
+          "title": "Initial Delay Seconds",
+          "description": "Initial delay seconds for readinessProbe",
+          "minimum": 0
+        },
+        "periodSeconds": {
+          "type": "integer",
+          "title": "Period Seconds",
+          "description": "Period seconds for readinessProbe",
+          "minimum": 1
+        },
+        "timeoutSeconds": {
+          "type": "integer",
+          "title": "Timeout Seconds",
+          "description": "Timeout seconds for readinessProbe",
+          "minimum": 1
+        },
+        "failureThreshold": {
+          "type": "integer",
+          "title": "Failure Threshold",
+          "description": "Failure threshold for readinessProbe",
+          "minimum": 1
+        },
+        "successThreshold": {
+          "type": "integer",
+          "title": "Success Threshold",
+          "description": "Success threshold for readinessProbe",
+          "minimum": 1
+        }
+      }
+    },
+    "startupProbe": {
+      "type": "object",
+      "title": "Startup Probe Configuration",
+      "description": "Startup probe configuration for Valkey container (for slow-starting applications)",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enable Startup Probe",
+          "description": "Enable startupProbe on Valkey containers"
+        },
+        "initialDelaySeconds": {
+          "type": "integer",
+          "title": "Initial Delay Seconds",
+          "description": "Initial delay seconds for startupProbe",
+          "minimum": 0
+        },
+        "periodSeconds": {
+          "type": "integer",
+          "title": "Period Seconds",
+          "description": "Period seconds for startupProbe",
+          "minimum": 1
+        },
+        "timeoutSeconds": {
+          "type": "integer",
+          "title": "Timeout Seconds",
+          "description": "Timeout seconds for startupProbe",
+          "minimum": 1
+        },
+        "failureThreshold": {
+          "type": "integer",
+          "title": "Failure Threshold",
+          "description": "Failure threshold for startupProbe",
+          "minimum": 1
+        },
+        "successThreshold": {
+          "type": "integer",
+          "title": "Success Threshold",
+          "description": "Success threshold for startupProbe",
+          "minimum": 1
+        }
+      }
+    },
+    "nodeSelector": {
+      "type": "object",
+      "title": "Node Selector",
+      "description": "Node labels for pod assignment",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "tolerations": {
+      "type": "array",
+      "title": "Tolerations",
+      "description": "Toleration labels for pod assignment",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "operator": {
+            "type": "string",
+            "enum": ["Equal", "Exists"]
+          },
+          "value": {
+            "type": "string"
+          },
+          "effect": {
+            "type": "string",
+            "enum": ["NoSchedule", "PreferNoSchedule", "NoExecute"]
+          },
+          "tolerationSeconds": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "affinity": {
+      "type": "object",
+      "title": "Affinity Configuration",
+      "description": "Affinity settings for pod assignment",
+      "properties": {
+        "nodeAffinity": {
+          "type": "object",
+          "title": "Node Affinity",
+          "description": "Node affinity configuration"
+        },
+        "podAffinity": {
+          "type": "object",
+          "title": "Pod Affinity",
+          "description": "Pod affinity configuration"
+        },
+        "podAntiAffinity": {
+          "type": "object",
+          "title": "Pod Anti-Affinity",
+          "description": "Pod anti-affinity configuration"
+        }
+      }
+    }
+  }
+}
