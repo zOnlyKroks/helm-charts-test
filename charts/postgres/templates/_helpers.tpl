@@ -63,17 +63,6 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
-Create the name of the service account to use
-*/}}
-{{- define "postgres.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create }}
-{{- default (include "postgres.fullname" .) .Values.serviceAccount.name }}
-{{- else }}
-{{- default "default" .Values.serviceAccount.name }}
-{{- end }}
-{{- end }}
-
-{{/*
 Return the proper PostgreSQL image name
 */}}
 {{- define "postgres.image" -}}

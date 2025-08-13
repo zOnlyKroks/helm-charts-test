@@ -66,15 +66,6 @@ The following table lists the configurable parameters of the PostgreSQL chart an
 | `commonLabels` | Labels to add to all deployed objects | `{}` |
 | `commonAnnotations` | Annotations to add to all deployed objects | `{}` |
 
-### Service Account
-
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `serviceAccount.create` | Specifies whether a service account should be created | `true` |
-| `serviceAccount.automount` | Automatically mount a ServiceAccount's API credentials | `true` |
-| `serviceAccount.annotations` | Annotations to add to the service account | `{}` |
-| `serviceAccount.name` | The name of the service account to use | `""` |
-
 ### Pod annotations and labels
 
 | Parameter | Description | Default |
