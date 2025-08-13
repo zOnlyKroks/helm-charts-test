@@ -103,7 +103,7 @@ release-charts:
 
 sign-charts:
   stage: sign
-  image: harbor.cloudpirates.io/public/cosign:v2.2.4
+  image: harbor.cloudpirates.io/public/cosign:v2.4.2@sha256:4731b7f62d0a98236769dbb6f97543a66e25e46d5a35d46111248e7c0d628230
   variables:
     GIT_STRATEGY: none
   before_script:
