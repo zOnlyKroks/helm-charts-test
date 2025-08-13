@@ -28,99 +28,30 @@
       "datasourceTemplate": "docker",
       "versioningTemplate": "docker",
       "depNameTemplate": "{{#if registry}}{{registry}}/{{packageName}}{{else}}{{depName}}{{/if}}"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": [
+        "^charts/.+/Chart\\.ya?ml$"
+      ],
+      "matchStrings": [
+        "(?m)^appVersion:\\s*[\"']?(?<currentValue>[^\\s\"'\\n]+)[\"']?\\s*$"
+      ],
+      "datasourceTemplate": "docker",
+      "versioningTemplate": "docker",
+      "depNameTemplate": "{{#if (contains 'mariadb' packageFileDir)}}mariadb{{else if (contains 'minio' packageFileDir)}}minio/minio{{else if (contains 'mongodb' packageFileDir)}}mongo{{else if (contains 'postgres' packageFileDir)}}postgres{{else if (contains 'redis' packageFileDir)}}redis{{else if (contains 'valkey' packageFileDir)}}valkey/valkey{{else if (contains 'clusterpirate' packageFileDir)}}harbor.cloudpirates.io/koperator-internal/services/clusterpirate{{else}}unknown{{/if}}",
+      "autoReplaceStringTemplate": "appVersion: \"{{newValue}}\""
     }
   ],
   "packageRules": [
     {
-      "description": "MariaDB chart Docker image updates",
-      "matchFileNames": [
-        "charts/mariadb/values.yaml"
-      ],
-      "matchManagers": [
-        "custom.regex"
-      ],
+      "description": "All Helm chart updates with unified uppercase handling",
+      "matchFileNames": ["charts/*/values.yaml", "charts/*/Chart.yaml"],
+      "matchManagers": ["custom.regex", "helmv3"],
       "automerge": false,
       "commitMessagePrefix": "",
-      "commitMessage": "[MARIADB] Update {{depName}} to {{newValue}}{{#if isMajor}} (major){{/if}}",
-      "branchTopic": "mariadb-{{depNameSanitized}}-{{newMajor}}.x{{#if isPatch}}.{{newMinor}}{{/if}}"
-    },
-    {
-      "description": "MinIO chart Docker image updates",
-      "matchFileNames": [
-        "charts/minio/values.yaml"
-      ],
-      "matchManagers": [
-        "custom.regex"
-      ],
-      "automerge": false,
-      "commitMessagePrefix": "",
-      "commitMessage": "[MINIO] Update {{depName}} to {{newValue}}{{#if isMajor}} (major){{/if}}",
-      "branchTopic": "minio-{{depNameSanitized}}-{{newMajor}}.x{{#if isPatch}}.{{newMinor}}{{/if}}"
-    },
-    {
-      "description": "MongoDB chart Docker image updates",
-      "matchFileNames": [
-        "charts/mongodb/values.yaml"
-      ],
-      "matchManagers": [
-        "custom.regex"
-      ],
-      "automerge": false,
-      "commitMessagePrefix": "",
-      "commitMessage": "[MONGODB] Update {{depName}} to {{newValue}}{{#if isMajor}} (major){{/if}}",
-      "branchTopic": "mongodb-{{depNameSanitized}}-{{newMajor}}.x{{#if isPatch}}.{{newMinor}}{{/if}}"
-    },
-    {
-      "description": "PostgreSQL chart Docker image updates",
-      "matchFileNames": [
-        "charts/postgres/values.yaml"
-      ],
-      "matchManagers": [
-        "custom.regex"
-      ],
-      "automerge": false,
-      "commitMessagePrefix": "",
-      "commitMessage": "[POSTGRES] Update {{depName}} to {{newValue}}{{#if isMajor}} (major){{/if}}",
-      "branchTopic": "postgres-{{depNameSanitized}}-{{newMajor}}.x{{#if isPatch}}.{{newMinor}}{{/if}}"
-    },
-    {
-      "description": "Redis chart Docker image updates",
-      "matchFileNames": [
-        "charts/redis/values.yaml"
-      ],
-      "matchManagers": [
-        "custom.regex"
-      ],
-      "automerge": false,
-      "commitMessagePrefix": "",
-      "commitMessage": "[REDIS] Update {{depName}} to {{newValue}}{{#if isMajor}} (major){{/if}}",
-      "branchTopic": "redis-{{depNameSanitized}}-{{newMajor}}.x{{#if isPatch}}.{{newMinor}}{{/if}}"
-    },
-    {
-      "description": "Valkey chart Docker image updates",
-      "matchFileNames": [
-        "charts/valkey/values.yaml"
-      ],
-      "matchManagers": [
-        "custom.regex"
-      ],
-      "automerge": false,
-      "commitMessagePrefix": "",
-      "commitMessage": "[VALKEY] Update {{depName}} to {{newValue}}{{#if isMajor}} (major){{/if}}",
-      "branchTopic": "valkey-{{depNameSanitized}}-{{newMajor}}.x{{#if isPatch}}.{{newMinor}}{{/if}}"
-    },
-    {
-      "description": "ClusterPirate chart Docker image updates",
-      "matchFileNames": [
-        "charts/clusterpirate/values.yaml"
-      ],
-      "matchManagers": [
-        "custom.regex"
-      ],
-      "automerge": false,
-      "commitMessagePrefix": "",
-      "commitMessage": "[CLUSTERPIRATE] Update {{depName}} to {{newValue}}{{#if isMajor}} (major){{/if}}",
-      "branchTopic": "clusterpirate-{{depNameSanitized}}-{{newMajor}}.x{{#if isPatch}}.{{newMinor}}{{/if}}"
+      "commitMessage": "Update {{depName}} to {{newValue}}{{#if isMajor}} (major){{/if}}",
+      "branchTopic": "{{depNameSanitized}}-{{newMajor}}.x{{#if isPatch}}.{{newMinor}}{{/if}}"
     }
   ],
   "hostRules": [
