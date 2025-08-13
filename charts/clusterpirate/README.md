@@ -28,9 +28,8 @@ The collected data is processed and visualized through the CloudPirates web cons
 To install the chart with the release name `clusterpirate` in the `clusterpirate-system` namespace:
 
 ```bash
-$ helm repo add cloudpirates https://harbor.cloudpirates.io/charts
 $ kubectl create namespace clusterpirate-system
-$ helm install clusterpirate cloudpirates/clusterpirate --namespace clusterpirate-system
+$ helm install clusterpirate --namespace clusterpirate-system oci://registry-1.docker.io/cloudpirates/clusterpirate
 ```
 
 Or install directly from the local chart:
