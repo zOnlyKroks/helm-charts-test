@@ -12,12 +12,12 @@ keywords:
   - redis
   - cache
   - database
-  - keyvalue
-  - inmemory
+  - key-value
+  - in-memory
   - nosql
 annotations:
   category: Database
   license: Apache-2.0
 maintainers:
   - name: CloudPirates GmbH & Co. KG
-    url: https://cloudpirates.io
+    url: https://www.cloudpirates.io

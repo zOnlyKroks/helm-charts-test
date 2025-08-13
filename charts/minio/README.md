@@ -1,4 +1,4 @@
-# MinIO Helm Chart
+# MinIO
 
 A Helm chart for MinIO - High Performance Object Storage compatible with Amazon S3 APIs. MinIO is a high-performance, distributed object storage server designed for large-scale data infrastructure.
 

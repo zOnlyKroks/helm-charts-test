@@ -1,6 +1,6 @@
-# MongoDB Helm Chart
+# MongoDB
 
-A production-ready Helm chart for deploying MongoDB on Kubernetes using the official MongoDB Docker image.
+A flexible NoSQL database for scalable, real-time data management.
 
 ## Description
 
