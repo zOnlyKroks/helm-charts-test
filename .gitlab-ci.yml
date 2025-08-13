@@ -60,17 +60,22 @@ release-charts:
           # Push the chart to dynamic repository
           CHART_REPO="${CHART_REPO_PREFIX}/${chart_name}"
           echo "Pushing Helm chart $chart_name-$CHART_VERSION.tgz to oci://$REGISTRY/$CHART_REPO"
-          helm push ${chart_name}-${CHART_VERSION}.tgz oci://${REGISTRY}/${CHART_REPO} &> $CI_PROJECT_DIR/${chart_name}-output.log
           
-          # Extract digest for signing
-          DIGEST=$(cat $CI_PROJECT_DIR/${chart_name}-output.log | awk -F '[, ]+' '/Digest/{print $NF}')
-          echo "${chart_name}_VERSION=$CHART_VERSION" >> $CI_PROJECT_DIR/digest.env
-          echo "${chart_name}_DIGEST=$DIGEST" >> $CI_PROJECT_DIR/digest.env
-          
-          RELEASED_CHARTS="$RELEASED_CHARTS $chart_name"
+          if helm push ${chart_name}-${CHART_VERSION}.tgz oci://${REGISTRY}/${CHART_REPO} 2>&1 | tee $CI_PROJECT_DIR/${chart_name}-output.log; then
+            # Extract digest for signing
+            DIGEST=$(cat $CI_PROJECT_DIR/${chart_name}-output.log | awk -F '[, ]+' '/Digest/{print $NF}')
+            echo "${chart_name}_VERSION=$CHART_VERSION" >> $CI_PROJECT_DIR/digest.env
+            echo "${chart_name}_DIGEST=$DIGEST" >> $CI_PROJECT_DIR/digest.env
+            
+            RELEASED_CHARTS="$RELEASED_CHARTS $chart_name"
+            echo "Successfully released $chart_name:$CHART_VERSION"
+          else
+            echo "Failed to push $chart_name:$CHART_VERSION"
+            cat $CI_PROJECT_DIR/${chart_name}-output.log
+            exit 1
+          fi
           
           cd - > /dev/null
-          echo "Successfully released $chart_name:$CHART_VERSION"
         fi
       done
       

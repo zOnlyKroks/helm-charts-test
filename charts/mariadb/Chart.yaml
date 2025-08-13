@@ -13,6 +13,7 @@ keywords:
 home: https://www.cloudpirates.io
 sources:
   - https://github.com/CloudPirates-io/helm-charts/charts/mariadb
+
 maintainers:
   - name: CloudPirates GmbH & Co. KG
     url: https://www.cloudpirates.io
