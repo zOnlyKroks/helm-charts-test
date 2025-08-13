@@ -1,6 +1,8 @@
 # ClusterPirate Helm Chart
 
-> ⚠️ **Important**: This chart requires an access token. You must obtain a token from our [Customer Portal](https://portal.cloudpirates.io) before installing this chart. For complete installation instructions and setup guide, please refer to our [Developer Portal](https://developer.cloudpirates.io).
+> ⚠️ **Important**
+>
+> This chart requires an access token. You must obtain a token from our [Customer Portal](https://portal.cloudpirates.io) before installing this chart. For complete installation instructions and setup guide, please refer to our [Developer Portal](https://developer.cloudpirates.io).
 
 A Helm chart for ClusterPirate - the client agent for CloudPirates Managed Observability Platform. This chart deploys the necessary components to connect your Kubernetes cluster to the CloudPirates managed observability service, enabling centralized monitoring, metrics collection, log aggregation, and cluster insights through our SaaS platform.
 
