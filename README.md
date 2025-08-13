@@ -6,11 +6,13 @@ A curated collection of production-ready Helm charts for open-source cloud-nativ
 
 | Chart | Description | Version | App Version |
 |-------|-------------|---------|-------------|
-| [MariaDB](charts/mariadb/) | High-performance, open-source relational database server that is a drop-in replacement for MySQL | 1.0.0 | 11.8.2 |
+| [ClusterPirate](charts/clusterpirate/) | Client agent for the CloudPirates Managed Observability Platform to connect your Kubernetes cluster to our infrastructure | 1.0.0 | 1.0.0 |
+| [MariaDB](charts/mariadb/) | High-performance, open-source relational database server that is a drop-in replacement for MySQL | 0.1.0 | 11.8.2 |
 | [MinIO](charts/minio/) | High Performance Object Storage compatible with Amazon S3 APIs | 0.1.0 | 2024.8.17 |
-| [MongoDB](charts/mongodb/) | Popular document-oriented NoSQL database | - | 8.0.12 |
-| [Redis](charts/redis/) | In-memory data structure store, used as a database, cache, and message broker | - | 8.2.0 |
-| [Valkey](charts/valkey/) | A Helm chart for Valkey - High performance in-memory data structure store, fork of Redis | - | 8.1.3 |
+| [MongoDB](charts/mongodb/) | MongoDB a flexible NoSQL database for scalable, real-time data management | 0.1.0 | 8.0.12 |
+| [PostgreSQL](charts/postgres/) | The World's Most Advanced Open Source Relational Database | 0.1.0 | 17.2 |
+| [Redis](charts/redis/) | In-memory data structure store, used as a database, cache, and message broker | 0.1.0 | 8.2.0 |
+| [Valkey](charts/valkey/) | High performance in-memory data structure store, fork of Redis | 0.1.1 | 8.1.3 |
 
 ## Quick Start
 
@@ -22,22 +24,9 @@ A curated collection of production-ready Helm charts for open-source cloud-nativ
 
 ### Installing Charts
 
-1. **Add the repository**:
-   ```bash
-   helm repo add cloudpirates oci://registry-1.docker.io/cloudpirates
-   helm repo update
-   ```
-
-2. **Or clone and install locally**:
-   ```bash
-   git clone git@github.com:CloudPirates-io/helm-charts.git
-   cd helm-charts
-   ```
-
-3. **Install a chart**:
    ```bash
    # From repository
-   helm install my-release cloudpirates/<chart-name>
+   helm install my-release oci://registry-1.docker.io/cloudpirates/<chartname>
    
    # From local clone
    helm install my-release ./charts/<chart-name>
