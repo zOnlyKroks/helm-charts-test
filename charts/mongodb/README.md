@@ -22,14 +22,13 @@ This Helm chart provides a complete MongoDB deployment solution with persistent 
 To install the chart with the release name `my-mongodb`:
 
 ```bash
-$ helm repo add cloudpirates oci://registry-1.docker.io/cloudpirates
-$ helm install my-mongodb cloudpirates/mongodb
+$ helm install my-mongodb oci://registry-1.docker.io/cloudpirates/mongodb
 ```
 
 To install with custom values:
 
 ```bash
-helm install my-mongodb cloudpirates/mongodb -f my-values.yaml
+helm install my-mongodb oci://registry-1.docker.io/cloudpirates/mongodb -f my-values.yaml
 ```
 
 ## Uninstalling the Chart

@@ -7,8 +7,7 @@ A Helm chart for deploying Redis - an open source, in-memory data structure stor
 To install the chart with the release name `my-redis`:
 
 ```bash
-$ helm repo add cloudpirates oci://registry-1.docker.io/cloudpirates
-helm install my-redis cloudpirates/redis
+helm install my-redis oci://registry-1.docker.io/cloudpirates/redis
 ```
 
 The command deploys Redis on the Kubernetes cluster in the default configuration. The [Configuration](#configuration) section lists the parameters that can be configured during installation.

@@ -13,14 +13,13 @@ High performance in-memory data structure store, fork of Redis. Valkey is an ope
 To install the chart with the release name `my-valkey`:
 
 ```bash
-$ helm repo add cloudpirates oci://registry-1.docker.io/cloudpirates
-$ helm install my-valkey cloudpirates/valkey
+$ helm install my-valkey oci://registry-1.docker.io/cloudpirates/valkey
 ```
 
 To install with custom values:
 
 ```bash
-helm install my-valkey cloudpirates/valkey -f my-values.yaml
+helm install my-valkey oci://registry-1.docker.io/cloudpirates/valkey -f my-values.yaml
 ```
 
 Or install directly from the local chart:

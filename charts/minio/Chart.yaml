@@ -10,7 +10,7 @@ keywords:
   - s3
   - storage
   - cloud-native
-home: https://cloudpirates.io
+home: https://www.cloudpirates.io
 sources:
   - https://github.com/CloudPirates-io/helm-charts/charts/minio
 maintainers:
