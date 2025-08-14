@@ -17,9 +17,17 @@
         "imagePullSecrets": {
           "type": "array",
           "title": "Global Image Pull Secrets",
-          "description": "Global Docker registry secret names as an array",
+          "description": "Global Docker registry secret names as an array of objects",
           "items": {
-            "type": "string"
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "title": "Secret Name",
+                "description": "Name of the image pull secret"
+              }
+            },
+            "required": ["name"]
           }
         }
       }
@@ -81,7 +89,15 @@
           "title": "MariaDB Image Pull Secrets",
           "description": "MariaDB image pull secrets",
           "items": {
-            "type": "string"
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "title": "Secret Name",
+                "description": "Name of the image pull secret"
+              }
+            },
+            "required": ["name"]
           }
         }
       }

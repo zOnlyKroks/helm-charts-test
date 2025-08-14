@@ -16,7 +16,7 @@ image:
   ## @param image.digest MinIO image digest
   digest: "sha256:d249d1fb6966de4d8ad26c04754b545205ff15a62e4fd19ebd0f26fa5baacbc0"
   ## @param image.pullPolicy MinIO image pull policy
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
 
 ## @section MinIO Authentication
 auth:

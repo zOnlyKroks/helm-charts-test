@@ -9,7 +9,7 @@ image:
   ## @param image.digest MongoDB Docker image digest
   digest: "sha256:a6bda40d00e56682aeaa1bfc88e024b7dd755782c575c02760104fe02010f94f"
   ## @param image.pullPolicy MongoDB image pull policy
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
 
 ## @param nameOverride String to partially override mongodb.fullname
 nameOverride: ""

@@ -15,7 +15,7 @@ commonLabels: {}
 commonAnnotations: {}
 
 # Image pull secrets for accessing the private registries
-imagePullSecrets: {}
+imagePullSecrets: []
 
 # -----------------------------------------------------------------------------
 # ClusterPirate Image Configuration

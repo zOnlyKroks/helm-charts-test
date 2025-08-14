@@ -16,7 +16,7 @@ image:
   ## @param image.digest Valkey image digest
   digest: "sha256:5b8f8c333bef895c925f56629d6ba90aea95a4f7391f62411e625267c600b19c"
   ## @param image.pullPolicy Valkey image pull policy
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
 
 ## @section StatefulSet configuration
 ## @param replicaCount Number of Valkey replicas to deploy

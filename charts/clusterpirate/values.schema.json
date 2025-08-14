@@ -21,11 +21,19 @@
       }
     },
     "imagePullSecrets": {
-      "type": "object",
+      "type": "array",
       "title": "Image Pull Secrets",
-      "description": "Image pull secrets for accessing private registries",
-      "additionalProperties": {
-        "type": "string"
+      "description": "Registry secret names as an array of objects",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Secret Name",
+            "description": "Name of the image pull secret"
+          }
+        },
+        "required": ["name"]
       }
     },
     "image": {
@@ -57,7 +65,11 @@
           "type": "string",
           "title": "Image Pull Policy",
           "description": "ClusterPirate image pull policy",
-          "enum": ["Always", "Never", "IfNotPresent"]
+          "enum": [
+            "Always",
+            "Never",
+            "IfNotPresent"
+          ]
         }
       }
     },
@@ -78,8 +90,12 @@
               "properties": {
                 "cpu": {
                   "oneOf": [
-                    {"type": "string"},
-                    {"type": "number"}
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    }
                   ],
                   "title": "CPU Limit",
                   "description": "CPU resource limit"
@@ -98,8 +114,12 @@
               "properties": {
                 "cpu": {
                   "oneOf": [
-                    {"type": "string"},
-                    {"type": "number"}
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    }
                   ],
                   "title": "CPU Request",
                   "description": "CPU resource request"
@@ -136,7 +156,9 @@
                 "description": "Source for the environment variable value"
               }
             },
-            "required": ["name"]
+            "required": [
+              "name"
+            ]
           }
         },
         "probes": {
@@ -241,7 +263,13 @@
           "type": "string",
           "title": "Log Level",
           "description": "Application logging level",
-          "enum": ["debug", "info", "warn", "error", "fatal"]
+          "enum": [
+            "debug",
+            "info",
+            "warn",
+            "error",
+            "fatal"
+          ]
         },
         "healthPort": {
           "type": "integer",

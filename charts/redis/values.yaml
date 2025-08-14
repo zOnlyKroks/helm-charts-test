@@ -33,7 +33,7 @@ image:
   ## @param image.digest Redis image digest
   digest: "sha256:e7d6b261beaa22b1dc001f438b677f1c691ac7805607d8979bae65fe0615c2e6"
   ## @param image.pullPolicy Redis image pull policy
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   ## @param image.pullSecrets Redis image pull secrets
   pullSecrets: []
 

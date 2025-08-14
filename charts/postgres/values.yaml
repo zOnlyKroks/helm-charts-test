@@ -16,7 +16,7 @@ image:
   ## @param image.digest PostgreSQL image digest
   digest: "sha256:3267c505060a0052e5aa6e5175a7b41ab6b04da2f8c4540fc6e98a37210aa2d3"
   ## @param image.pullPolicy PostgreSQL image pull policy
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
 
 ## @section Deployment configuration
 ## @param replicaCount Number of PostgreSQL replicas to deploy (Note: PostgreSQL doesn't support multi-master replication by default)
