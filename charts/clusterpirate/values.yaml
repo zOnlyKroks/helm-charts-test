@@ -28,11 +28,12 @@ image:
   ## @param image.repository ClusterPirate image repository
   repository: koperator-internal/services/clusterpirate
   ## @param image.tag ClusterPirate image tag (immutable tags are recommended)
-  tag: "1bb0f11d"
+  tag: "a741419b"
   ## @param image.digest ClusterPirate image digest
-  digest: "sha256:d74db517b4cc2ff91d5915e9325748d79844c7cc983b86d78277b9081eaac075"
+  digest: "sha256:6ae8df57a26681329a1770e8df60e47c2996ea82e9a9173cec761707937ba524"
   ## @param image.pullPolicy ClusterPirate image pull policy
   pullPolicy: Always
+
 
 # -----------------------------------------------------------------------------
 # Deployment Configuration
@@ -197,6 +198,9 @@ valkey:
   # Enable/disable Valkey installation as a dependency
   # When enabled, Valkey will be installed in the same namespace
   enabled: true
+
+  persistence:
+    enabled: false
   
   # Valkey configuration overrides
   # These values will be passed to the Valkey subchart

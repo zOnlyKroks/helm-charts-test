@@ -413,11 +413,22 @@
       "type": "object",
       "title": "Valkey Configuration",
       "description": "Valkey dependency configuration",
+      "additionalProperties": true,
       "properties": {
         "enabled": {
           "type": "boolean",
           "title": "Enable Valkey",
           "description": "Enable/disable Valkey installation as a dependency"
+        },
+        "persistence": {
+          "type": "object",
+          "title": "Valkey persistence settings",
+          "properties": {
+              "enabled": {
+              "type": "boolean",
+              "title": "Enable persistence"
+            }
+          }
         },
         "auth": {
           "type": "object",

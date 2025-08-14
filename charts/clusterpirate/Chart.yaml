@@ -3,7 +3,7 @@ name: clusterpirate
 description: Client agent for the CloudPirates Managed Observability Platform to connect your Kubernetes cluster to our infrastructure
 type: application
 
-version: 1.0.2
+version: 1.0.3
 appVersion: "1.0.0"
 
 keywords:
@@ -21,7 +21,7 @@ maintainers:
 
 dependencies:
   - name: valkey
-    version: "0.1.0"
+    version: "0.1.4"
     repository: oci://registry-1.docker.io/cloudpirates
     condition: valkey.enabled
 
