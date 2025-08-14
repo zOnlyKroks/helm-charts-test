@@ -103,11 +103,13 @@ The following table lists the configurable parameters of the MariaDB chart and t
 
 | Parameter | Description | Default |
 |-----------|-------------|---------|
+| `auth.enabled` | MariaDB authentication enabled or disabled | `"true"` |
 | `auth.rootPassword` | MariaDB root password | `""` |
 | `auth.database` | MariaDB custom database | `""` |
 | `auth.username` | MariaDB custom user name | `""` |
 | `auth.password` | MariaDB custom user password | `""` |
 | `auth.existingSecret` | Name of existing secret to use for MariaDB credentials | `""` |
+| `auth.auth.allowEmptyRootPassword` | Allow the root user of MariaDB to have no password set | `""` |
 | `auth.secretKeys.rootPasswordKey` | Name of key in existing secret to use for root password | `mariadb-root-password` |
 | `auth.secretKeys.userPasswordKey` | Name of key in existing secret to use for user password | `mariadb-password` |
 

@@ -29,7 +29,7 @@ spec:
       {{- end }}
     spec:
 {{- with (include "mariadb.imagePullSecrets" .) }}
-{{ . | nindent 6 }}
+{{- . | nindent 6 }}
 {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
       securityContext:
@@ -45,7 +45,9 @@ spec:
             runAsNonRoot: {{ .Values.containerSecurityContext.runAsNonRoot }}
             allowPrivilegeEscalation: {{ .Values.containerSecurityContext.allowPrivilegeEscalation }}
           {{- end }}
+          {{- if or .Values.auth.enabled .Values.auth.database .Values.auth.username .Values.auth.allowEmptyRootPassword .Values.env }}
           env:
+            {{- if and .Values.auth.enabled }}
             - name: MARIADB_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -64,9 +66,15 @@ spec:
                   name: {{ include "mariadb.secretName" . }}
                   key: {{ .Values.auth.secretKeys.userPasswordKey }}
             {{- end }}
+            {{- end }}
+            {{- if .Values.auth.allowEmptyRootPassword }}
+            - name: MARIADB_ALLOW_EMPTY_ROOT_PASSWORD
+              value: "1"
+            {{- end }}
             {{- with .Values.env }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
+          {{- end }}
           ports:
             - name: mysql
               containerPort: 3306

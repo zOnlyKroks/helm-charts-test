@@ -1,6 +1,9 @@
 suite: test mariadb common parameters
 templates:
   - statefulset.yaml
+set:
+  image:
+    tag: 12.0.2@sha256:b30cc65b57a11a2e791ad5c06284e599fe9f1bf3fe9081a88d85bcf36389be4a
 tests:
   - it: should use default values when nothing is overridden
     asserts:
@@ -15,7 +18,7 @@ tests:
           value: RELEASE-NAME
       - equal:
           path: spec.template.spec.containers[0].image
-          value: docker.io/mariadb:11.8.2@sha256:2bcbaec92bd9d4f6591bc8103d3a8e6d0512ee2235506e47a2e129d190444405
+          value: docker.io/mariadb:12.0.2@sha256:b30cc65b57a11a2e791ad5c06284e599fe9f1bf3fe9081a88d85bcf36389be4a
       - equal:
           path: spec.template.spec.containers[0].imagePullPolicy
           value: Always
@@ -27,7 +30,7 @@ tests:
     asserts:
       - equal:
           path: spec.template.spec.containers[0].image
-          value: my-registry.com/mariadb:11.8.2@sha256:2bcbaec92bd9d4f6591bc8103d3a8e6d0512ee2235506e47a2e129d190444405
+          value: my-registry.com/mariadb:12.0.2@sha256:b30cc65b57a11a2e791ad5c06284e599fe9f1bf3fe9081a88d85bcf36389be4a
 
   - it: should respect global.imagePullSecrets
     set:
@@ -95,7 +98,7 @@ tests:
     asserts:
       - equal:
           path: spec.template.spec.containers[0].image
-          value: custom-registry.io/mariadb:11.8.2@sha256:2bcbaec92bd9d4f6591bc8103d3a8e6d0512ee2235506e47a2e129d190444405
+          value: custom-registry.io/mariadb:12.0.2@sha256:b30cc65b57a11a2e791ad5c06284e599fe9f1bf3fe9081a88d85bcf36389be4a
 
   - it: should respect image.repository override
     set:
@@ -104,7 +107,7 @@ tests:
     asserts:
       - equal:
           path: spec.template.spec.containers[0].image
-          value: docker.io/custom/mariadb:11.8.2@sha256:2bcbaec92bd9d4f6591bc8103d3a8e6d0512ee2235506e47a2e129d190444405
+          value: docker.io/custom/mariadb:12.0.2@sha256:b30cc65b57a11a2e791ad5c06284e599fe9f1bf3fe9081a88d85bcf36389be4a
 
   - it: should respect image.tag override
     set:
@@ -133,7 +136,7 @@ tests:
     asserts:
       - equal:
           path: spec.template.spec.containers[0].image
-          value: global-registry.com/mariadb:11.8.2@sha256:2bcbaec92bd9d4f6591bc8103d3a8e6d0512ee2235506e47a2e129d190444405
+          value: global-registry.com/mariadb:12.0.2@sha256:b30cc65b57a11a2e791ad5c06284e599fe9f1bf3fe9081a88d85bcf36389be4a
 
   - it: should combine all overrides correctly
     set:

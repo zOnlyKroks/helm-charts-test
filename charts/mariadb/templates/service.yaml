@@ -5,11 +5,9 @@ metadata:
   namespace: {{ .Release.Namespace | quote }}
   labels:
     {{- include "mariadb.labels" . | nindent 4 }}
-  {{- with .Values.service.annotations }}
+  {{- $annotations := merge .Values.service.annotations .Values.commonAnnotations }}
+  {{- with $annotations }}
   annotations:
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
-  {{- with .Values.commonAnnotations }}
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
