@@ -2,7 +2,7 @@
 Expand the name of the chart.
 */}}
 {{- define "clusterpirate.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- include "common.name" . -}}
 {{- end }}
 
 {{/*
@@ -11,40 +11,39 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 If release name contains chart name it will be used as a full name.
 */}}
 {{- define "clusterpirate.fullname" -}}
-{{- if .Values.fullnameOverride }}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- $name := default .Chart.Name .Values.nameOverride }}
-{{- if contains $name .Release.Name }}
-{{- .Release.Name | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
-{{- end }}
-{{- end }}
+{{- include "common.fullname" . -}}
 {{- end }}
 
 {{/*
-common.labels
+Common labels
 */}}
-{{- define "clusterpirate.labels" }}
-{{- $root := .}}
-{{- range $key, $value := .Values.commonLabels}}
-{{ $key }}: {{ toYaml $value | quote }}
-{{- end}}
-{{- end}}
+{{- define "clusterpirate.labels" -}}
+{{- include "common.labels" . }}
+{{- end }}
 
 {{/*
-common.annotations
+Common annotations
 */}}
-{{- define "clusterpirate.annotations" }}
-{{- $root := .}}
-{{- range $key, $value := .Values.commonAnnotations}}
-{{ $key }}: {{ toYaml $value | quote }}
-{{- end}}
-{{- end}}
+{{- define "clusterpirate.annotations" -}}
+{{- include "common.annotations" . }}
+{{- end }}
 
 {{/*
-common.matchLabels
+Return the proper Docker Image Registry Secret Names
+*/}}
+{{- define "clusterpirate.imagePullSecrets" -}}
+{{ include "common.images.renderPullSecrets" (dict "images" (list .Values.image) "context" .) }}
+{{- end -}}
+
+{{/*
+Selector labels
+*/}}
+{{- define "clusterpirate.selectorLabels" -}}
+{{- include "common.selectorLabels" . -}}
+{{- end }}
+
+{{/*
+common.matchLabels (legacy compatibility)
 */}}
 {{- define "clusterpirate.matchLabels"}}
 app: {{ template "clusterpirate.name" . }}
@@ -60,23 +59,8 @@ release: {{ .Release.Name }}
 {{- end -}}
 
 {{/*
-Return the proper ClusterPirate image name with both tag and digest when available
+Return the proper ClusterPirate image name
 */}}
 {{- define "clusterpirate.image" -}}
-{{- $registryName := .Values.image.registry -}}
-{{- $repositoryName := .Values.image.repository -}}
-{{- $tag := .Values.image.tag | toString -}}
-{{- $digest := .Values.image.digest -}}
-{{- if $registryName }}
-    {{- $repositoryName = printf "%s/%s" $registryName $repositoryName -}}
-{{- end -}}
-{{- if and $digest (ne $digest "") }}
-    {{- if and $tag (ne $tag "") }}
-        {{- printf "%s:%s@%s" $repositoryName $tag $digest -}}
-    {{- else -}}
-        {{- printf "%s@%s" $repositoryName $digest -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s:%s" $repositoryName $tag -}}
-{{- end -}}
+{{- include "common.image" (dict "image" .Values.image "global" .Values.global) -}}
 {{- end }}

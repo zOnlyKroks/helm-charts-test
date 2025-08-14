@@ -5,6 +5,16 @@ global:
   ## @param global.imagePullSecrets Global Docker registry secret names as an array
   imagePullSecrets: []
 
+## @section Common parameters
+## @param nameOverride String to partially override valkey.fullname
+nameOverride: ""
+## @param fullnameOverride String to fully override valkey.fullname
+fullnameOverride: ""
+## @param commonLabels Labels to add to all deployed objects
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+commonAnnotations: {}
+
 ## @section Valkey image configuration
 image:
   ## @param image.registry Valkey image registry
@@ -12,27 +22,13 @@ image:
   ## @param image.repository Valkey image repository
   repository: valkey/valkey
   ## @param image.tag Valkey image tag (immutable tags are recommended)
-  tag: "8.1.3"
-  ## @param image.digest Valkey image digest
-  digest: "sha256:5b8f8c333bef895c925f56629d6ba90aea95a4f7391f62411e625267c600b19c"
-  ## @param image.pullPolicy Valkey image pull policy
-  pullPolicy: Always
+  tag: "8.1.3@sha256:5b8f8c333bef895c925f56629d6ba90aea95a4f7391f62411e625267c600b19c"
+  ## @param image.imagePullPolicy Valkey image pull policy
+  imagePullPolicy: Always
 
 ## @section StatefulSet configuration
 ## @param replicaCount Number of Valkey replicas to deploy
 replicaCount: 1
-
-## @param nameOverride String to partially override valkey.fullname
-nameOverride: ""
-
-## @param fullnameOverride String to fully override valkey.fullname
-fullnameOverride: ""
-
-## @param commonLabels Labels to add to all deployed objects
-commonLabels: {}
-
-## @param commonAnnotations Annotations to add to all deployed objects
-commonAnnotations: {}
 
 ## @section Pod annotations and labels
 ## @param podAnnotations Map of annotations to add to the pods

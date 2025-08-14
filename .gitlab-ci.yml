@@ -1,4 +1,5 @@
 stages:
+  - test
   - release
   - sign
 
@@ -8,12 +9,81 @@ variables:
   REGISTRY_USER: $DOCKER_USER
   REGISTRY_PASSWORD: $DOCKER_PASSWORD
 
+test-charts:
+  stage: test
+  image: alpine/helm:latest
+  before_script:
+    - apk add --no-cache git
+    - helm plugin install https://github.com/helm-unittest/helm-unittest
+  script:
+    - |
+      echo "Discovering helm charts with tests..."
+      
+      FAILED_CHARTS=""
+      PASSED_CHARTS=""
+      TESTED_CHARTS=""
+      
+      # Find all chart directories with Chart.yaml and tests directory
+      for chart_dir in charts/*/; do
+        if [[ -f "${chart_dir}Chart.yaml" ]]; then
+          chart_name=$(basename "$chart_dir")
+          
+          # Check if chart has a tests directory
+          if [[ -d "${chart_dir}tests" ]]; then
+            echo "================================"
+            echo "Testing chart: $chart_name"
+            echo "Chart path: $chart_dir"
+            echo "Tests directory found: ${chart_dir}tests"
+            echo "================================"
+            
+            TESTED_CHARTS="$TESTED_CHARTS $chart_name"
+            
+            if helm unittest "$chart_dir" --strict; then
+              echo "$chart_name PASSED"
+              PASSED_CHARTS="$PASSED_CHARTS $chart_name"
+            else
+              echo "$chart_name FAILED"
+              FAILED_CHARTS="$FAILED_CHARTS $chart_name"
+            fi
+            echo ""
+          else
+            echo "Skipping $chart_name (no tests directory found)"
+          fi
+        fi
+      done
+      
+      echo "================================"
+      echo "TEST SUMMARY"
+      echo "================================"
+      echo "Charts with tests:$TESTED_CHARTS"
+      echo "Passed charts:$PASSED_CHARTS"
+      
+      if [[ -z "$TESTED_CHARTS" ]]; then
+        echo "No charts with tests found"
+        exit 0
+      elif [[ -n "$FAILED_CHARTS" ]]; then
+        echo "Failed charts:$FAILED_CHARTS"
+        echo "Some tests failed!"
+        exit 1
+      else
+        echo "All charts with tests passed!"
+      fi
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - charts/**/*
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+      changes:
+        - charts/**/*
+
 release-charts:
   stage: release
   image: alpine/helm:latest
   before_script:
     - apk add --no-cache git yq
     - helm registry login --username ${REGISTRY_USER} --password ${REGISTRY_PASSWORD} ${REGISTRY}
+  needs:
+    - test-charts
   script:
     - |
       echo "Detecting changed charts..."

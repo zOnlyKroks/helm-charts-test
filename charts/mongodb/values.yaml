@@ -5,23 +5,29 @@ global:
   ## @param global.imagePullSecrets Global Docker registry secret names as an array
   imagePullSecrets: []
 
-## @param replicaCount Number of MongoDB replicas to deploy
-replicaCount: 1
-
-image:
-  ## @param image.repository MongoDB Docker image repository
-  repository: mongo
-  ## @param image.tag MongoDB Docker image tag
-  tag: "8.0.12"
-  ## @param image.digest MongoDB Docker image digest
-  digest: "sha256:a6bda40d00e56682aeaa1bfc88e024b7dd755782c575c02760104fe02010f94f"
-  ## @param image.pullPolicy MongoDB image pull policy
-  pullPolicy: Always
-
+## @section Common parameters
 ## @param nameOverride String to partially override mongodb.fullname
 nameOverride: ""
 ## @param fullnameOverride String to fully override mongodb.fullname
-fullnameOverride: "mongodb"
+fullnameOverride: ""
+## @param commonLabels Labels to add to all deployed objects
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+commonAnnotations: {}
+
+## @section MongoDB image parameters
+image:
+  ## @param image.registry MongoDB image registry
+  registry: docker.io
+  ## @param image.repository MongoDB image repository
+  repository: mongo
+  ## @param image.tag MongoDB image tag
+  tag: "8.0.12@sha256:a6bda40d00e56682aeaa1bfc88e024b7dd755782c575c02760104fe02010f94f"
+  ## @param image.pullPolicy MongoDB image pull policy
+  pullPolicy: Always
+
+## @param replicaCount Number of MongoDB replicas to deploy
+replicaCount: 1
 
 service:
   ## @param service.type Kubernetes service type
@@ -121,7 +127,7 @@ readinessProbe:
   successThreshold: 1
 
 ## @param extraEnv Additional environment variables to set
-extraEnv:
+extraEnv: []
 # - name: EXTRA_VAR
 #   value: "extra_value"
 

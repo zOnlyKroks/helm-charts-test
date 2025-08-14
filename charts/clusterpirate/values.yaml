@@ -1,25 +1,19 @@
-# =============================================================================
-# ClusterPirate Helm Chart Configuration
-# =============================================================================
+## @section Global parameters
+global:
+  ## @param global.imageRegistry Global Docker Image registry
+  imageRegistry: ""
+  ## @param global.imagePullSecrets Global Docker registry secret names as an array
+  imagePullSecrets: []
 
-# -----------------------------------------------------------------------------
-# Global Settings
-# -----------------------------------------------------------------------------
-
-# Common labels applied to all resources
-# Example: app identification, environment, team ownership
+## @section Common parameters
+## @param nameOverride String to partially override clusterpirate.fullname
+nameOverride: ""
+## @param fullnameOverride String to fully override clusterpirate.fullname
+fullnameOverride: ""
+## @param commonLabels Labels to add to all deployed objects
 commonLabels: {}
-
-# Common annotations applied to all resources
-# Example annotations for monitoring, ownership, or deployment information
+## @param commonAnnotations Annotations to add to all deployed objects
 commonAnnotations: {}
-
-# Image pull secrets for accessing the private registries
-imagePullSecrets: []
-
-# -----------------------------------------------------------------------------
-# ClusterPirate Image Configuration
-# -----------------------------------------------------------------------------
 
 ## @section ClusterPirate image configuration
 image:
@@ -28,11 +22,9 @@ image:
   ## @param image.repository ClusterPirate image repository
   repository: koperator-internal/services/clusterpirate
   ## @param image.tag ClusterPirate image tag (immutable tags are recommended)
-  tag: "a741419b"
-  ## @param image.digest ClusterPirate image digest
-  digest: "sha256:6ae8df57a26681329a1770e8df60e47c2996ea82e9a9173cec761707937ba524"
-  ## @param image.pullPolicy ClusterPirate image pull policy
-  pullPolicy: Always
+  tag: "a741419b@sha256:6ae8df57a26681329a1770e8df60e47c2996ea82e9a9173cec761707937ba524"
+  ## @param image.imagePullPolicy ClusterPirate image pull policy
+  imagePullPolicy: Always
 
 
 # -----------------------------------------------------------------------------

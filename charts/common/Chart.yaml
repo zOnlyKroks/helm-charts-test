@@ -1,0 +1,15 @@
+apiVersion: v2
+name: common
+description: A library chart for common templates and helper functions
+type: library
+version: 1.0.0
+appVersion: "1.0.0"
+
+home: https://www.cloudpirates.io
+
+sources:
+  - https://github.com/CloudPirates-io/helm-charts/tree/main/charts/mariadb
+
+maintainers:
+  - name: CloudPirates GmbH & Co. KG
+    url: https://www.cloudpirates.io
