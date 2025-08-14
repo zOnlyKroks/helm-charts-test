@@ -8,17 +8,12 @@ global:
   storageClass: ""
 
 ## @section Common parameters
-## @param kubeVersion Override Kubernetes version
-kubeVersion: ""
 ## @param nameOverride String to partially override redis.fullname
 nameOverride: ""
 ## @param fullnameOverride String to fully override redis.fullname
-fullnameOverride: "redis"
-## @param namespaceOverride String to fully override common.names.namespace
-namespaceOverride: ""
+fullnameOverride: ""
 ## @param commonLabels Labels to add to all deployed objects
-commonLabels:
-  foo: bar
+commonLabels: {}
 ## @param commonAnnotations Annotations to add to all deployed objects
 commonAnnotations: {}
 
@@ -29,13 +24,9 @@ image:
   ## @param image.repository Redis image repository
   repository: redis
   ## @param image.tag Redis image tag (immutable tags are recommended)
-  tag: "8.2.0"
-  ## @param image.digest Redis image digest
-  digest: "sha256:e7d6b261beaa22b1dc001f438b677f1c691ac7805607d8979bae65fe0615c2e6"
-  ## @param image.pullPolicy Redis image pull policy
-  pullPolicy: Always
-  ## @param image.pullSecrets Redis image pull secrets
-  pullSecrets: []
+  tag: "8.2.0@sha256:e7d6b261beaa22b1dc001f438b677f1c691ac7805607d8979bae65fe0615c2e6"
+  ## @param image.imagePullPolicy Redis image pull policy
+  imagePullPolicy: Always
 
 ## @section Redis Configuration parameters
 ## @param auth.enabled Enable password authentication

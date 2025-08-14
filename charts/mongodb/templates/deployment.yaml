@@ -5,6 +5,10 @@ metadata:
   namespace: {{ .Release.Namespace | quote }}
   labels:
     {{- include "mongodb.labels" . | nindent 4 }}
+  {{- with (include "mongodb.annotations" .) }}
+  annotations:
+    {{- . | nindent 4 }}
+  {{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -15,17 +19,16 @@ spec:
       labels:
         {{- include "mongodb.selectorLabels" . | nindent 8 }}
     spec:
-      {{- with .Values.global.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+{{- with (include "mongodb.imagePullSecrets" .) }}
+{{ . | nindent 6 }}
+{{- end }}
       securityContext:
         {{- toYaml .Values.securityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext: {{- toYaml .Values.podSecurityContext | nindent 12 }}
           image: {{ include "mongodb.image" . | quote }}
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          imagePullPolicy: {{ include "common.imagePullPolicy" (dict "image" .Values.image) }}
           ports:
             - name: mongodb
               containerPort: 27017

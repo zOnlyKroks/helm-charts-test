@@ -5,6 +5,16 @@ global:
   ## @param global.imagePullSecrets Global Docker registry secret names as an array
   imagePullSecrets: []
 
+## @section Common parameters
+## @param nameOverride String to partially override postgres.fullname
+nameOverride: ""
+## @param fullnameOverride String to fully override postgres.fullname
+fullnameOverride: ""
+## @param commonLabels Labels to add to all deployed objects
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+commonAnnotations: {}
+
 ## @section PostgreSQL image configuration
 image:
   ## @param image.registry PostgreSQL image registry
@@ -12,27 +22,13 @@ image:
   ## @param image.repository PostgreSQL image repository
   repository: postgres
   ## @param image.tag PostgreSQL image tag (immutable tags are recommended)
-  tag: "17.2"
-  ## @param image.digest PostgreSQL image digest
-  digest: "sha256:3267c505060a0052e5aa6e5175a7b41ab6b04da2f8c4540fc6e98a37210aa2d3"
-  ## @param image.pullPolicy PostgreSQL image pull policy
-  pullPolicy: Always
+  tag: "17.2@sha256:3267c505060a0052e5aa6e5175a7b41ab6b04da2f8c4540fc6e98a37210aa2d3"
+  ## @param image.imagePullPolicy PostgreSQL image pull policy
+  imagePullPolicy: Always
 
 ## @section Deployment configuration
 ## @param replicaCount Number of PostgreSQL replicas to deploy (Note: PostgreSQL doesn't support multi-master replication by default)
 replicaCount: 1
-
-## @param nameOverride String to partially override postgres.fullname
-nameOverride: ""
-
-## @param fullnameOverride String to fully override postgres.fullname
-fullnameOverride: ""
-
-## @param commonLabels Labels to add to all deployed objects
-commonLabels: {}
-
-## @param commonAnnotations Annotations to add to all deployed objects
-commonAnnotations: {}
 
 ## @section Pod annotations and labels
 ## @param podAnnotations Map of annotations to add to the pods

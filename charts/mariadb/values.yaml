@@ -17,6 +17,8 @@ commonAnnotations: {}
 
 ## @section MariaDB image parameters
 image:
+  ## @param image.registry MariaDB image registry
+  registry: docker.io
   ## @param image.repository MariaDB image repository
   repository: mariadb
   ## @param image.tag MariaDB image tag (immutable tags are recommended)

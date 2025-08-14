@@ -28,10 +28,9 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
     spec:
-      {{- if .Values.global.imagePullSecrets  }}
-      imagePullSecrets:
-{{ toYaml .Values.global.imagePullSecrets | indent 8 }}
-      {{- end }}
+{{- with (include "mariadb.imagePullSecrets" .) }}
+{{ . | nindent 6 }}
+{{- end }}
       {{- if .Values.podSecurityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.podSecurityContext.fsGroup }}
@@ -39,6 +38,7 @@ spec:
       containers:
         - name: mariadb
           image: {{ include "mariadb.image" . }}
+          imagePullPolicy: {{ .Values.image.imagePullPolicy }}
           imagePullPolicy: {{ .Values.image.imagePullPolicy }}
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext:
