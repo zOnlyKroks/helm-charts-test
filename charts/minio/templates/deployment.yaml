@@ -16,11 +16,11 @@ spec:
       {{- include "minio.selectorLabels" . | nindent 6 }}
   template:
     metadata:
+      {{- $annotations := merge .Values.podAnnotations .Values.commonAnnotations }}
+      {{- with $annotations }}
       annotations:
-        {{- include "minio.annotations" . | nindent 8 }}
-        {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
-        {{- end }}
+      {{- end }}
       labels:
         {{- include "minio.labels" . | nindent 8 }}
         {{- with .Values.podLabels }}
@@ -128,7 +128,11 @@ spec:
         - name: data
           {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
+            {{- if .Values.persistence.existingClaim }}
+            claimName: {{ .Values.persistence.existingClaim }}
+            {{- else }}
             claimName: {{ include "minio.fullname" . }}
+            {{- end }}
           {{- else }}
           emptyDir: {}
           {{- end }}
