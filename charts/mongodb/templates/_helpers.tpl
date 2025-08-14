@@ -74,3 +74,11 @@ Return the proper Docker Image Registry Secret Names
 {{- define "mongodb.imagePullSecrets" -}}
 {{ include "common.images.renderPullSecrets" (dict "images" (list .Values.image) "context" .) }}
 {{- end -}}
+
+{{- define "mongodb.configFullName" -}}
+{{- if and .Values.config.existingConfigmapKey .Values.config.existingConfigmap }}
+{{- printf "%s/%s" .Values.config.mountPath .Values.config.existingConfigmapKey }}
+{{- else }}
+{{- printf "%s/mongod.conf" .Values.config.mountPath }}
+{{- end -}}
+{{- end -}}

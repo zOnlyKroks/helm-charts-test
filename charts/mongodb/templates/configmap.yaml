@@ -1,4 +1,4 @@
-{{- if .Values.config }}
+{{- if and .Values.config.content (not .Values.config.existingConfigmap)}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -8,7 +8,5 @@ metadata:
     {{- include "mongodb.labels" . | nindent 4 }}
 data:
   mongod.conf: |
-    {{- range $key, $value := .Values.config }}
-    {{ $key }}: {{ $value | quote }}
-    {{- end }}
+    {{- .Values.config.content | nindent 4 }}
 {{- end }}
