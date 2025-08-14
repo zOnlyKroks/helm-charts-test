@@ -38,6 +38,14 @@ test-charts:
             
             TESTED_CHARTS="$TESTED_CHARTS $chart_name"
             
+            # Update dependencies if Chart.yaml contains dependencies
+            cd "$chart_dir"
+            if grep -q "dependencies:" Chart.yaml; then
+              echo "Updating dependencies for $chart_name"
+              helm dependency update
+            fi
+            cd - > /dev/null
+            
             if helm unittest "$chart_dir" --strict; then
               echo "$chart_name PASSED"
               PASSED_CHARTS="$PASSED_CHARTS $chart_name"
