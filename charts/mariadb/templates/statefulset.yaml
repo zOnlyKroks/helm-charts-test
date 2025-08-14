@@ -29,7 +29,7 @@ spec:
       {{- end }}
     spec:
 {{- with (include "mariadb.imagePullSecrets" .) }}
-{{ . | nindent 6 }}
+{{- . | nindent 6 }}
 {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
       securityContext:
@@ -38,7 +38,6 @@ spec:
       containers:
         - name: mariadb
           image: {{ include "mariadb.image" . }}
-          imagePullPolicy: {{ .Values.image.imagePullPolicy }}
           imagePullPolicy: {{ .Values.image.imagePullPolicy }}
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext:

@@ -9,34 +9,7 @@
   "branchPrefix": "renovate/",
   "prHourlyLimit": 10,
   "prConcurrentLimit": 5,
-  "pinDigests": false,
-  "customManagers": [
-    {
-      "customType": "regex",
-      "managerFilePatterns": [
-        "/^charts/.+/values\\.ya?ml$/"
-      ],
-      "matchStrings": [
-        "(?m)^\\s*repository:\\s*[\"']?(?<depName>[^\\s\"'\\n]+)[\"']?\\s*$[\\s\\S]*?^\\s*tag:\\s*[\"']?(?<currentValue>[^\\s\"'\\n]+)[\"']?\\s*$(?:[\\s\\S]*?^\\s*digest:\\s*[\"']?(?<currentDigest>sha256:[a-f0-9]+)[\"']?\\s*$)?",
-        "(?m)^\\s*registry:\\s*[\"']?(?<registry>[^\\s\"'\\n]+)[\"']?\\s*$[\\s\\S]*?^\\s*repository:\\s*[\"']?(?<packageName>[^\\s\"'\\n]+)[\"']?\\s*$[\\s\\S]*?^\\s*tag:\\s*[\"']?(?<currentValue>[^\\s\"'\\n]+)[\"']?\\s*$(?:[\\s\\S]*?^\\s*digest:\\s*[\"']?(?<currentDigest>sha256:[a-f0-9]+)[\"']?\\s*$)?"
-      ],
-      "datasourceTemplate": "docker",
-      "versioningTemplate": "docker",
-      "depNameTemplate": "{{#if registry}}{{registry}}/{{packageName}}{{else}}{{depName}}{{/if}}"
-    }
-  ],
-  "packageRules": [
-    {
-      "description": "All Helm chart updates with unified handling",
-      "matchFileNames": ["charts/*/values.yaml", "charts/*/Chart.yaml"],
-      "matchManagers": ["custom.regex", "helmv3"],
-      "automerge": false,
-      "commitMessageAction": "Update",
-      "commitMessageTopic": "{{depName}}",
-      "commitMessageExtra": "to {{newValue}}",
-      "branchTopic": "{{depNameSanitized}}-{{newMajor}}.x{{#if isPatch}}.{{newMinor}}{{/if}}"
-    }
-  ],
+  "pinDigests": true,
   "hostRules": [
     {
       "matchHost": "harbor.cloudpirates.io",

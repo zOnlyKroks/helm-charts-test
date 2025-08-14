@@ -46,24 +46,8 @@ Return the proper MariaDB image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "mariadb.imagePullSecrets" -}}
-{{- $pullSecrets := list }}
-{{- if .Values.global.imagePullSecrets }}
-  {{- $pullSecrets = .Values.global.imagePullSecrets }}
-{{- end }}
-{{- if .Values.image.pullSecrets }}
-  {{- $pullSecrets = append $pullSecrets .Values.image.pullSecrets }}
-{{- end }}
-{{- if (not (empty $pullSecrets)) }}
-imagePullSecrets:
-{{- range $pullSecrets }}
-{{- if kindIs "map" . }}
-  - name: {{ .name }}
-{{- else }}
-  - name: {{ . }}
-{{- end }}
-{{- end }}
-{{- end }}
-{{- end }}
+{{ include "common.images.renderPullSecrets" (dict "images" (list .Values.image) "context" .) }}
+{{- end -}}
 
 {{/*
 Return the MariaDB Secret Name
