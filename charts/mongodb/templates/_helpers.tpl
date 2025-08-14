@@ -2,52 +2,42 @@
 Expand the name of the chart.
 */}}
 {{- define "mongodb.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- include "common.name" . -}}
 {{- end }}
 
 {{/*
 Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
 */}}
 {{- define "mongodb.fullname" -}}
-{{- if .Values.fullnameOverride }}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- $name := default .Chart.Name .Values.nameOverride }}
-{{- if contains $name .Release.Name }}
-{{- .Release.Name | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
-{{- end }}
-{{- end }}
+{{- include "common.fullname" . -}}
 {{- end }}
 
 {{/*
 Create chart name and version as used by the chart label.
 */}}
 {{- define "mongodb.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
+{{- include "common.chart" . -}}
 {{- end }}
 
 {{/*
 Common labels
 */}}
 {{- define "mongodb.labels" -}}
-helm.sh/chart: {{ include "mongodb.chart" . }}
-{{ include "mongodb.selectorLabels" . }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- include "common.labels" . }}
 {{- end }}
 
 {{/*
 Selector labels
 */}}
 {{- define "mongodb.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "mongodb.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
+{{- include "common.selectorLabels" . -}}
+{{- end }}
+
+{{/*
+Common annotations
+*/}}
+{{- define "mongodb.annotations" -}}
+{{- include "common.annotations" . -}}
 {{- end }}
 
 {{/*
@@ -72,19 +62,15 @@ Get the secret key for MongoDB root password
 {{- end }}
 
 {{/*
-Return the proper MongoDB image name with both tag and digest when available
+Return the proper MongoDB image name
 */}}
 {{- define "mongodb.image" -}}
-{{- $repository := .Values.image.repository -}}
-{{- $tag := .Values.image.tag | toString -}}
-{{- $digest := .Values.image.digest -}}
-{{- if and $digest (ne $digest "") }}
-    {{- if and $tag (ne $tag "") }}
-        {{- printf "%s:%s@%s" $repository $tag $digest -}}
-    {{- else -}}
-        {{- printf "%s@%s" $repository $digest -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s:%s" $repository $tag -}}
-{{- end -}}
+{{- include "common.image" (dict "image" .Values.image "global" .Values.global) -}}
 {{- end }}
+
+{{/*
+Return the proper Docker Image Registry Secret Names
+*/}}
+{{- define "mongodb.imagePullSecrets" -}}
+{{ include "common.images.renderPullSecrets" (dict "images" (list .Values.image) "context" .) }}
+{{- end -}}

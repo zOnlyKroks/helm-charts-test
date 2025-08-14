@@ -50,14 +50,9 @@
         "tag": {
           "type": "string",
           "title": "MinIO Image Tag",
-          "description": "MinIO image tag (immutable tags are recommended)"
+          "description": "MinIO image tag with digest"
         },
-        "digest": {
-          "type": "string",
-          "title": "MinIO Image Digest",
-          "description": "MinIO image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag"
-        },
-        "pullPolicy": {
+        "imagePullPolicy": {
           "type": "string",
           "title": "MinIO Image Pull Policy",
           "description": "MinIO image pull policy",

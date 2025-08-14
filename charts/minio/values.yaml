@@ -5,6 +5,16 @@ global:
   ## @param global.imagePullSecrets Global Docker registry secret names as an array
   imagePullSecrets: []
 
+## @section Common parameters
+## @param nameOverride String to partially override minio.fullname
+nameOverride: ""
+## @param fullnameOverride String to fully override minio.fullname
+fullnameOverride: ""
+## @param commonLabels Labels to add to all deployed objects
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+commonAnnotations: {}
+
 ## @section MinIO image configuration
 image:
   ## @param image.registry MinIO image registry
@@ -12,11 +22,9 @@ image:
   ## @param image.repository MinIO image repository
   repository: minio/minio
   ## @param image.tag MinIO image tag (immutable tags are recommended)
-  tag: "RELEASE.2025-07-23T15-54-02Z"
-  ## @param image.digest MinIO image digest
-  digest: "sha256:d249d1fb6966de4d8ad26c04754b545205ff15a62e4fd19ebd0f26fa5baacbc0"
-  ## @param image.pullPolicy MinIO image pull policy
-  pullPolicy: Always
+  tag: "RELEASE.2025-07-23T15-54-02Z@sha256:d249d1fb6966de4d8ad26c04754b545205ff15a62e4fd19ebd0f26fa5baacbc0"
+  ## @param image.imagePullPolicy MinIO image pull policy
+  imagePullPolicy: Always
 
 ## @section MinIO Authentication
 auth:
@@ -46,18 +54,6 @@ config:
 
 ## @section Deployment configuration
 replicaCount: 1
-
-## @param nameOverride String to partially override minio.fullname
-nameOverride: ""
-
-## @param fullnameOverride String to fully override minio.fullname
-fullnameOverride: ""
-
-## @param commonLabels Labels to add to all deployed objects
-commonLabels: {}
-
-## @param commonAnnotations Annotations to add to all deployed objects
-commonAnnotations: {}
 
 ## @section Pod annotations and labels
 podAnnotations: {}

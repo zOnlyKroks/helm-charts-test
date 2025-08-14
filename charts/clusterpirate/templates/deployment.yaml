@@ -7,13 +7,11 @@ kind: Deployment
 metadata:
   name: {{ include "clusterpirate.fullname" . }}
   namespace: {{ .Release.Namespace }}
-  {{- if .Values.commonAnnotations }}
-  annotations:
-{{- include "clusterpirate.annotations" . | indent 4 }}
-  {{- end }}
-  {{- if .Values.commonLabels }}
   labels:
-{{- include "clusterpirate.labels" . | indent 4 }}
+    {{- include "clusterpirate.labels" . | nindent 4 }}
+  {{- with (include "clusterpirate.annotations" .) }}
+  annotations:
+    {{- . | nindent 4 }}
   {{- end }}
 spec:
   selector:
@@ -24,15 +22,14 @@ spec:
       labels:
 {{- include "clusterpirate.matchLabels" . | indent 8 }}
     spec:
-      {{- if .Values.imagePullSecrets  }}
-      imagePullSecrets:
-{{ toYaml .Values.imagePullSecrets | indent 8 }}
-      {{- end }}
+{{- with (include "clusterpirate.imagePullSecrets" .) }}
+{{ . | nindent 6 }}
+{{- end }}
       serviceAccountName: {{ include "clusterpirate.serviceAccountName" . }}
       containers:
       - name: {{ include "clusterpirate.fullname" . }}
         image: {{ include "clusterpirate.image" . }}
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        imagePullPolicy: {{ include "common.imagePullPolicy" (dict "image" .Values.image) }}
         resources:
 {{ toYaml .Values.deployment.resources | indent 10 }}
         {{- if .Values.deployment.probes.livenessProbe.enabled }}

@@ -91,14 +91,9 @@
         "tag": {
           "type": "string",
           "title": "Redis Image Tag",
-          "description": "Redis image tag (immutable tags are recommended)"
+          "description": "Redis image tag with digest"
         },
-        "digest": {
-          "type": "string",
-          "title": "Redis Image Digest",
-          "description": "Redis image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag"
-        },
-        "pullPolicy": {
+        "imagePullPolicy": {
           "type": "string",
           "title": "Redis Image Pull Policy",
           "description": "Redis image pull policy",

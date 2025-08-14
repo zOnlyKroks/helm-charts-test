@@ -43,6 +43,11 @@
       "title": "MongoDB Image Configuration",
       "description": "MongoDB container image configuration",
       "properties": {
+        "registry": {
+          "type": "string",
+          "title": "MongoDB Image Registry",
+          "description": "MongoDB Docker image registry"
+        },
         "repository": {
           "type": "string",
           "title": "MongoDB Image Repository",
@@ -51,14 +56,9 @@
         "tag": {
           "type": "string",
           "title": "MongoDB Image Tag",
-          "description": "MongoDB Docker image tag"
+          "description": "MongoDB Docker image tag with digest"
         },
-        "digest": {
-          "type": "string",
-          "title": "MongoDB Image Digest",
-          "description": "MongoDB Docker image digest"
-        },
-        "pullPolicy": {
+        "imagePullPolicy": {
           "type": "string",
           "title": "MongoDB Image Pull Policy",
           "description": "MongoDB image pull policy",

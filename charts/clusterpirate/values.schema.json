@@ -54,14 +54,9 @@
         "tag": {
           "type": "string",
           "title": "Image Tag",
-          "description": "ClusterPirate image tag (immutable tags are recommended)"
+          "description": "ClusterPirate image tag with digest"
         },
-        "digest": {
-          "type": "string",
-          "title": "Image Digest",
-          "description": "ClusterPirate image digest"
-        },
-        "pullPolicy": {
+        "imagePullPolicy": {
           "type": "string",
           "title": "Image Pull Policy",
           "description": "ClusterPirate image pull policy",

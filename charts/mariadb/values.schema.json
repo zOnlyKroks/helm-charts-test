@@ -63,6 +63,11 @@
       "title": "MariaDB Image Configuration",
       "description": "MariaDB container image parameters",
       "properties": {
+        "registry": {
+          "type": "string",
+          "title": "MariaDB Image Registry",
+          "description": "MariaDB image registry"
+        },
         "repository": {
           "type": "string",
           "title": "MariaDB Image Repository",
@@ -71,14 +76,9 @@
         "tag": {
           "type": "string",
           "title": "MariaDB Image Tag",
-          "description": "MariaDB image tag (immutable tags are recommended)"
+          "description": "MariaDB image tag with digest"
         },
-        "digest": {
-          "type": "string",
-          "title": "MariaDB Image Digest",
-          "description": "MariaDB image digest"
-        },
-        "pullPolicy": {
+        "imagePullPolicy": {
           "type": "string",
           "title": "MariaDB Image Pull Policy",
           "description": "MariaDB image pull policy",

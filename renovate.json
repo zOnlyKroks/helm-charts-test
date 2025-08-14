@@ -1,7 +1,6 @@
 {
   "extends": [
     "config:recommended",
-    "docker:enableMajor",
     ":dependencyDashboard"
   ],
   "labels": [
@@ -41,7 +40,7 @@
   "hostRules": [
     {
       "matchHost": "harbor.cloudpirates.io",
-      "description": "Private Harbor registry configuration"
+      "enabled": false
     }
   ]
 }
