@@ -103,8 +103,8 @@ Return MinIO server URL args
 */}}
 {{- define "minio.serverUrl" -}}
 {{- if .Values.config.serverUrl -}}
-{{- printf "--console-address :9090 --address :9000" -}}
+{{- printf "--console-address :%d --address :%d" (int .Values.service.consoleTargetPort) (int .Values.service.targetPort) -}}
 {{- else -}}
-{{- printf "--console-address :9090 --address :9000" -}}
+{{- printf "--console-address :%d --address :%d" (int .Values.service.consoleTargetPort) (int .Values.service.targetPort) -}}
 {{- end -}}
 {{- end }}
