@@ -1,3 +1,10 @@
+## @section Global parameters
+global:
+  ## @param global.imageRegistry Global Docker Image registry
+  imageRegistry: ""
+  ## @param global.imagePullSecrets Global Docker registry secret names as an array
+  imagePullSecrets: []
+
 ## @param replicaCount Number of MongoDB replicas to deploy
 replicaCount: 1
 
