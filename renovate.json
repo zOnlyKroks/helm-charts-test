@@ -4,10 +4,6 @@
     "docker:enableMajor",
     ":dependencyDashboard"
   ],
-  "schedule": [
-    "before 6am on monday"
-  ],
-  "timezone": "Europe/Berlin",
   "labels": [
     "dependencies"
   ],
