@@ -20,16 +20,14 @@ image:
   ## @param image.repository MariaDB image repository
   repository: mariadb
   ## @param image.tag MariaDB image tag (immutable tags are recommended)
-  tag: "11.8.2"
-  ## @param image.digest MariaDB image digest
-  digest: "sha256:2bcbaec92bd9d4f6591bc8103d3a8e6d0512ee2235506e47a2e129d190444405"
+  tag: "12.0.2@sha256:b30cc65b57a11a2e791ad5c06284e599fe9f1bf3fe9081a88d85bcf36389be4a"
   ## @param image.pullPolicy MariaDB image pull policy
-  pullPolicy: Always
-  ## @param image.pullSecrets MariaDB image pull secrets
-  pullSecrets: []
+  imagePullPolicy: Always
 
 ## @section MariaDB Authentication parameters
 auth:
+  ## @param auth.enabled MariaDB authentication enabled or disabled
+  enabled : true
   ## @param auth.rootPassword MariaDB root password
   rootPassword: ""
   ## @param auth.database MariaDB custom database
@@ -40,6 +38,8 @@ auth:
   password: ""
   ## @param auth.existingSecret Name of existing secret to use for MariaDB credentials
   existingSecret: ""
+  ## @param auth.allowEmptyRootPassword Allow the root user of MariaDB to have no password set
+  allowEmptyRootPassword: ""
   ## @param auth.secretKeys.rootPasswordKey Name of key in existing secret to use for root password
   ## @param auth.secretKeys.userPasswordKey Name of key in existing secret to use for user password
   secretKeys:

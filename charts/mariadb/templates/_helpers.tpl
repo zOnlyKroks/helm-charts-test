@@ -60,7 +60,6 @@ Return the proper MariaDB image name with both tag and digest when available
 {{- $registryName := .Values.image.registry -}}
 {{- $repositoryName := .Values.image.repository -}}
 {{- $tag := .Values.image.tag | toString -}}
-{{- $digest := .Values.image.digest -}}
 {{- if .Values.global }}
     {{- if .Values.global.imageRegistry }}
         {{- $registryName = .Values.global.imageRegistry -}}
@@ -69,34 +68,7 @@ Return the proper MariaDB image name with both tag and digest when available
 {{- if $registryName }}
     {{- $repositoryName = printf "%s/%s" $registryName $repositoryName -}}
 {{- end -}}
-{{- if and $digest (ne $digest "") }}
-    {{- if and $tag (ne $tag "") }}
-        {{- printf "%s:%s@%s" $repositoryName $tag $digest -}}
-    {{- else -}}
-        {{- printf "%s@%s" $repositoryName $digest -}}
-    {{- end -}}
-{{- else -}}
-    {{- printf "%s:%s" $repositoryName $tag -}}
-{{- end -}}
-{{- end }}
-
-{{/*
-Return the proper Docker Image Registry Secret Names
-*/}}
-{{- define "mariadb.imagePullSecrets" -}}
-{{- $pullSecrets := list }}
-{{- if .Values.global.imagePullSecrets }}
-  {{- $pullSecrets = .Values.global.imagePullSecrets }}
-{{- end }}
-{{- if .Values.image.pullSecrets }}
-  {{- $pullSecrets = append $pullSecrets .Values.image.pullSecrets }}
-{{- end }}
-{{- if (not (empty $pullSecrets)) }}
-imagePullSecrets:
-{{- range $pullSecrets }}
-  - name: {{ . }}
-{{- end }}
-{{- end }}
+{{- printf "%s:%s" $repositoryName $tag -}}
 {{- end }}
 
 {{/*
@@ -125,6 +97,7 @@ Return the MariaDB ConfigMap Name
 Validate MariaDB required passwords are not empty
 */}}
 {{- define "mariadb.validateValues.auth" -}}
+{{- if .Values.auth.enabled }}
 {{- if not .Values.auth.existingSecret -}}
   {{- if not .Values.auth.rootPassword -}}
 mariadb: auth.rootPassword
@@ -136,5 +109,6 @@ mariadb: auth.password
     You must provide a password for the custom MariaDB user.
     Please set auth.password or use an existing secret.
   {{- end -}}
+{{- end -}}
 {{- end -}}
 {{- end -}}
