@@ -2,7 +2,7 @@ apiVersion: v2
 name: mariadb
 description: MariaDB is a high-performance, open-source relational database server that is a drop-in replacement for MySQL
 type: application
-version: 0.1.3
+version: 0.1.4
 appVersion: "11.8.2"
 keywords:
   - mariadb
