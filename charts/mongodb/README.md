@@ -4,13 +4,13 @@ A flexible NoSQL database for scalable, real-time data management.
 
 ## Description
 
-This Helm chart provides a complete MongoDB deployment solution with persistent storage, authentication, health checks, and security configurations. It uses the official `mongo` Docker image and supports various deployment scenarios from development to production environments.
+This Helm chart provides a complete MongoDB StatefulSet deployment solution with persistent storage, authentication, health checks, and security configurations. It uses the official `mongo` Docker image and supports various deployment scenarios from development to production environments.
 
 ## Features
 
 - **Official MongoDB Image**: Uses the official `mongo` Docker image from Docker Hub
 - **Authentication**: Configurable MongoDB authentication with root user credentials
-- **Persistent Storage**: Optional persistent volume support with configurable storage class and size
+- **Persistent Storage**: Automatic persistent volume management through StatefulSet volumeClaimTemplates
 - **Security**: Non-root container execution with proper security contexts
 - **Health Checks**: Liveness and readiness probes using mongosh
 - **Flexible Configuration**: Comprehensive configuration options for various deployment needs
@@ -94,7 +94,6 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `auth.rootPassword` | MongoDB root password (if empty, random password will be generated) | `""` |
 | `auth.existingSecret` | Name of existing secret containing MongoDB password | `""` |
 | `auth.existingSecretPasswordKey` | Key in existing secret containing MongoDB password | `""` |
-| `databases` | Array of additional databases to create | `[]` |
 | `config` | MongoDB configuration options | `{}` |
 
 ### Persistence Parameters
@@ -104,8 +103,9 @@ The following table lists the configurable parameters of the MongoDB chart and t
 | `persistence.enabled` | Enable persistent storage | `true` |
 | `persistence.storageClass` | Storage class to use for persistent volume | `""` |
 | `persistence.accessMode` | Access mode for persistent volume | `ReadWriteOnce` |
-| `persistence.size` | Size of persistent volume | `10Gi` |
+| `persistence.size` | Size of persistent volume | `8Gi` |
 | `persistence.mountPath` | Mount path for MongoDB data | `/data/db` |
+| `persistence.annotations` | Annotations for persistent volume claims | `{}` |
 
 ### Resource Parameters
 

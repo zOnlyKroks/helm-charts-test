@@ -43,20 +43,26 @@ auth:
   ## @param auth.rootPassword MongoDB root password (if empty, random password will be generated)
   rootPassword: ""
   ## @param auth.existingSecret Name of existing secret containing MongoDB password
-  # existingSecret: ""
+  existingSecret: ""
   ## @param auth.existingSecretPasswordKey Key in existing secret containing MongoDB password
-  # existingSecretPasswordKey: ""
+  existingSecretPasswordKey: ""
 
-## @param databases Array of additional databases to create
-databases: []
-# - name: myapp
-#   user: myappuser
-#   password: myapppass
+## @section config MongoDB configuration options
+config:
+  ## @param config.mountPath MongoDB configuration options
+  mountPath: /etc/mongo
+  ## @param config.content Include your custom MongoDB configurations here as string
+  content: |
+    systemLog:
+      quiet: false
+      verbosity: 0
+    net:
+      bindIpAll: true
+  ## param config.existingConfigmap Name of an existing Configmap to use instead of creating one
+  existingConfigmap: ""
+  ## param config.existingConfigmapKey Name of the key in the Configmap that should be used
+  existingConfigmapKey: ""
 
-## @param config MongoDB configuration options
-config: {}
-  # Set MongoDB configuration here
-  # Example: dbPath: /data/db
 
 persistence:
   ## @param persistence.enabled Enable persistent storage
@@ -69,6 +75,8 @@ persistence:
   size: 8Gi
   ## @param persistence.mountPath Mount path for MongoDB data
   mountPath: /data/db
+  ## @param persistence.annotations Annotations for persistent volume claims
+  annotations: {}
 
 ## @param resources Resource limits and requests for MongoDB pod
 resources:
@@ -87,16 +95,18 @@ tolerations: []
 ## @param affinity Affinity rules for pod assignment
 affinity: {}
 
-securityContext:
-  ## @param securityContext.fsGroup Group ID for filesystem ownership
-  fsGroup: 999
+containerSecurityContext:
   ## @param securityContext.runAsUser User ID to run the container
   runAsUser: 999
   ## @param securityContext.runAsNonRoot Run as non-root user
   runAsNonRoot: true
+  ## @param containerSecurityContext.allowPrivilegeEscalation Set MongoDB container's privilege escalation
+  allowPrivilegeEscalation: false
 
 ## @param podSecurityContext Security context for the pod
-podSecurityContext: {}
+podSecurityContext:
+  ## @param podSecurityContext.fsGroup Set MongoDB pod's Security Context fsGroup
+  fsGroup: 999
 
 livenessProbe:
   ## @param livenessProbe.enabled Enable liveness probe
