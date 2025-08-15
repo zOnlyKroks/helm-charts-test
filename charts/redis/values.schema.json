@@ -1,0 +1,474 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "Redis Helm Chart Values Schema",
+  "description": "Schema for Redis Helm chart values",
+  "properties": {
+    "global": {
+      "type": "object",
+      "title": "Global parameters",
+      "description": "Global Docker image parameters",
+      "properties": {
+        "imageRegistry": {
+          "type": "string",
+          "title": "Global Docker Image Registry",
+          "description": "Global Docker image registry"
+        },
+        "imagePullSecrets": {
+          "type": "array",
+          "title": "Global Image Pull Secrets",
+          "description": "Global Docker registry secret names as an array of objects",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "title": "Secret Name",
+                "description": "Name of the image pull secret"
+              }
+            },
+            "required": ["name"]
+          }
+        }
+      }
+    },
+    "nameOverride": {
+      "type": "string",
+      "title": "Name Override",
+      "description": "String to partially override redis.fullname"
+    },
+    "fullnameOverride": {
+      "type": "string",
+      "title": "Full Name Override",
+      "description": "String to fully override redis.fullname"
+    },
+    "commonLabels": {
+      "type": "object",
+      "title": "Common Labels",
+      "description": "Labels to add to all deployed objects",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "commonAnnotations": {
+      "type": "object",
+      "title": "Common Annotations",
+      "description": "Annotations to add to all deployed objects",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "image": {
+      "type": "object",
+      "title": "Redis Image Configuration",
+      "description": "Configuration for Redis container image",
+      "properties": {
+        "registry": {
+          "type": "string",
+          "title": "Redis Image Registry",
+          "description": "Redis image registry"
+        },
+        "repository": {
+          "type": "string",
+          "title": "Redis Image Repository",
+          "description": "Redis image repository"
+        },
+        "tag": {
+          "type": "string",
+          "title": "Redis Image Tag",
+          "description": "Redis image tag with digest"
+        },
+        "pullPolicy": {
+          "type": "string",
+          "title": "Redis Image Pull Policy",
+          "description": "Redis image pull policy",
+          "enum": ["Always", "Never", "IfNotPresent"]
+        }
+      }
+    },
+    "replicaCount": {
+      "type": "integer",
+      "title": "Replica Count",
+      "description": "Number of Redis replicas to deploy",
+      "minimum": 1
+    },
+    "service": {
+      "type": "object",
+      "title": "Service Configuration",
+      "description": "Kubernetes service configuration",
+      "properties": {
+        "type": {
+          "type": "string",
+          "title": "Service Type",
+          "description": "Kubernetes service type",
+          "enum": ["ClusterIP", "NodePort", "LoadBalancer", "ExternalName"]
+        },
+        "port": {
+          "type": "integer",
+          "title": "Service Port",
+          "description": "Redis service port",
+          "minimum": 1,
+          "maximum": 65535
+        }
+      }
+    },
+    "auth": {
+      "type": "object",
+      "title": "Redis Authentication",
+      "description": "Authentication configuration for Redis",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enable Authentication",
+          "description": "Enable Redis authentication"
+        },
+        "password": {
+          "type": "string",
+          "title": "Redis Password",
+          "description": "Redis password (if empty, random password will be generated)"
+        },
+        "existingSecret": {
+          "type": "string",
+          "title": "Existing Secret",
+          "description": "Name of existing secret containing Redis password"
+        },
+        "existingSecretPasswordKey": {
+          "type": "string",
+          "title": "Existing Secret Password Key",
+          "description": "Key in existing secret containing Redis password"
+        }
+      }
+    },
+    "config": {
+      "type": "object",
+      "title": "Redis Configuration",
+      "description": "Redis configuration options",
+      "properties": {
+        "mountPath": {
+          "type": "string",
+          "title": "Config Mount Path",
+          "description": "Redis configuration mount path"
+        },
+        "content": {
+          "type": "string",
+          "title": "Config Content",
+          "description": "Include your custom Redis configurations here as string"
+        },
+        "existingConfigmap": {
+          "type": "string",
+          "title": "Existing ConfigMap",
+          "description": "Name of an existing Configmap to use instead of creating one"
+        },
+        "existingConfigmapKey": {
+          "type": "string",
+          "title": "Existing ConfigMap Key",
+          "description": "Name of the key in the Configmap that should be used"
+        }
+      }
+    },
+    "persistence": {
+      "type": "object",
+      "title": "Persistence Configuration",
+      "description": "Persistence configuration using Persistent Volume Claims",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enable Persistence",
+          "description": "Enable persistent storage"
+        },
+        "storageClass": {
+          "type": "string",
+          "title": "Storage Class",
+          "description": "Storage class to use for persistent volume"
+        },
+        "accessMode": {
+          "type": "string",
+          "title": "Access Mode",
+          "description": "Access mode for persistent volume",
+          "enum": ["ReadWriteOnce", "ReadOnlyMany", "ReadWriteMany", "ReadWriteOncePod"]
+        },
+        "size": {
+          "type": "string",
+          "title": "Storage Size",
+          "description": "Size of persistent volume",
+          "pattern": "^\\d+(Ei|Pi|Ti|Gi|Mi|Ki|E|P|T|G|M|K)?$"
+        },
+        "mountPath": {
+          "type": "string",
+          "title": "Mount Path",
+          "description": "Mount path for Redis data"
+        },
+        "annotations": {
+          "type": "object",
+          "title": "PVC Annotations",
+          "description": "Annotations for persistent volume claims",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "resources": {
+      "type": "object",
+      "title": "Resource Configuration",
+      "description": "Resource limits and requests for Redis pod",
+      "properties": {
+        "limits": {
+          "type": "object",
+          "title": "Resource Limits",
+          "description": "Resource limits for the container",
+          "properties": {
+            "cpu": {
+              "oneOf": [
+                {"type": "string"},
+                {"type": "number"}
+              ],
+              "title": "CPU Limit",
+              "description": "CPU resource limit"
+            },
+            "memory": {
+              "type": "string",
+              "title": "Memory Limit",
+              "description": "Memory resource limit"
+            }
+          }
+        },
+        "requests": {
+          "type": "object",
+          "title": "Resource Requests",
+          "description": "Resource requests for the container",
+          "properties": {
+            "cpu": {
+              "oneOf": [
+                {"type": "string"},
+                {"type": "number"}
+              ],
+              "title": "CPU Request",
+              "description": "CPU resource request"
+            },
+            "memory": {
+              "type": "string",
+              "title": "Memory Request",
+              "description": "Memory resource request"
+            }
+          }
+        }
+      }
+    },
+    "nodeSelector": {
+      "type": "object",
+      "title": "Node Selector",
+      "description": "Node selector for pod assignment",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "tolerations": {
+      "type": "array",
+      "title": "Tolerations",
+      "description": "Tolerations for pod assignment",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "operator": {
+            "type": "string",
+            "enum": ["Equal", "Exists"]
+          },
+          "value": {
+            "type": "string"
+          },
+          "effect": {
+            "type": "string",
+            "enum": ["NoSchedule", "PreferNoSchedule", "NoExecute"]
+          },
+          "tolerationSeconds": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "affinity": {
+      "type": "object",
+      "title": "Affinity Configuration",
+      "description": "Affinity rules for pod assignment",
+      "properties": {
+        "nodeAffinity": {
+          "type": "object",
+          "title": "Node Affinity",
+          "description": "Node affinity configuration"
+        },
+        "podAffinity": {
+          "type": "object",
+          "title": "Pod Affinity",
+          "description": "Pod affinity configuration"
+        },
+        "podAntiAffinity": {
+          "type": "object",
+          "title": "Pod Anti-Affinity",
+          "description": "Pod anti-affinity configuration"
+        }
+      }
+    },
+    "containerSecurityContext": {
+      "type": "object",
+      "title": "Container Security Context",
+      "description": "Security context for the Redis container",
+      "properties": {
+        "runAsUser": {
+          "type": "integer",
+          "title": "Run As User",
+          "description": "User ID to run the container",
+          "minimum": 0
+        },
+        "runAsNonRoot": {
+          "type": "boolean",
+          "title": "Run As Non-Root",
+          "description": "Run as non-root user"
+        },
+        "allowPrivilegeEscalation": {
+          "type": "boolean",
+          "title": "Allow Privilege Escalation",
+          "description": "Set Redis container's privilege escalation"
+        }
+      }
+    },
+    "podSecurityContext": {
+      "type": "object",
+      "title": "Pod Security Context",
+      "description": "Security context for the pod",
+      "properties": {
+        "fsGroup": {
+          "type": "integer",
+          "title": "FS Group",
+          "description": "Set Redis pod's Security Context fsGroup",
+          "minimum": 0
+        }
+      }
+    },
+    "livenessProbe": {
+      "type": "object",
+      "title": "Liveness Probe Configuration",
+      "description": "Liveness probe configuration for Redis container",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enable Liveness Probe",
+          "description": "Enable liveness probe"
+        },
+        "initialDelaySeconds": {
+          "type": "integer",
+          "title": "Initial Delay Seconds",
+          "description": "Initial delay before starting probes",
+          "minimum": 0
+        },
+        "periodSeconds": {
+          "type": "integer",
+          "title": "Period Seconds",
+          "description": "How often to perform the probe",
+          "minimum": 1
+        },
+        "timeoutSeconds": {
+          "type": "integer",
+          "title": "Timeout Seconds",
+          "description": "Timeout for each probe attempt",
+          "minimum": 1
+        },
+        "failureThreshold": {
+          "type": "integer",
+          "title": "Failure Threshold",
+          "description": "Number of failures before pod is restarted",
+          "minimum": 1
+        },
+        "successThreshold": {
+          "type": "integer",
+          "title": "Success Threshold",
+          "description": "Number of successes to mark probe as successful",
+          "minimum": 1
+        }
+      }
+    },
+    "readinessProbe": {
+      "type": "object",
+      "title": "Readiness Probe Configuration",
+      "description": "Readiness probe configuration for Redis container",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enable Readiness Probe",
+          "description": "Enable readiness probe"
+        },
+        "initialDelaySeconds": {
+          "type": "integer",
+          "title": "Initial Delay Seconds",
+          "description": "Initial delay before starting probes",
+          "minimum": 0
+        },
+        "periodSeconds": {
+          "type": "integer",
+          "title": "Period Seconds",
+          "description": "How often to perform the probe",
+          "minimum": 1
+        },
+        "timeoutSeconds": {
+          "type": "integer",
+          "title": "Timeout Seconds",
+          "description": "Timeout for each probe attempt",
+          "minimum": 1
+        },
+        "failureThreshold": {
+          "type": "integer",
+          "title": "Failure Threshold",
+          "description": "Number of failures before pod is marked unready",
+          "minimum": 1
+        },
+        "successThreshold": {
+          "type": "integer",
+          "title": "Success Threshold",
+          "description": "Number of successes to mark probe as successful",
+          "minimum": 1
+        }
+      }
+    },
+    "extraEnv": {
+      "type": "array",
+      "title": "Extra Environment Variables",
+      "description": "Additional environment variables to set",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Variable Name",
+            "description": "Environment variable name"
+          },
+          "value": {
+            "type": "string",
+            "title": "Variable Value",
+            "description": "Environment variable value"
+          }
+        },
+        "required": ["name"]
+      }
+    },
+    "extraVolumes": {
+      "type": "array",
+      "title": "Extra Volumes",
+      "description": "Additional volumes to add to the pod",
+      "items": {
+        "type": "object"
+      }
+    },
+    "extraVolumeMounts": {
+      "type": "array",
+      "title": "Extra Volume Mounts",
+      "description": "Additional volume mounts to add to the Redis container",
+      "items": {
+        "type": "object"
+      }
+    }
+  }
+}
