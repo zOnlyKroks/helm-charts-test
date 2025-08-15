@@ -1,6 +1,9 @@
 suite: test mongodb common parameters
 templates:
-  - deployment.yaml
+  - statefulset.yaml
+set:
+  image:
+    tag: 8.0.12@sha256:a6bda40d00e56682aeaa1bfc88e024b7dd755782c575c02760104fe02010f94f
 tests:
   - it: should use default values when nothing is overridden
     asserts:
