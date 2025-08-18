@@ -1,6 +1,9 @@
 suite: test clusterpirate common parameters
 templates:
   - deployment.yaml
+set:
+  image:
+    tag: "a741419b@sha256:6ae8df57a26681329a1770e8df60e47c2996ea82e9a9173cec761707937ba524"
 tests:
   - it: should use default values when nothing is overridden
     asserts:
