@@ -33,7 +33,7 @@ Common annotations
 */}}
 {{- define "postgres.annotations" -}}
 {{- with .Values.commonAnnotations }}
-{{ toYaml . }}
+{{- toYaml . }}
 {{- end }}
 {{- end }}
 

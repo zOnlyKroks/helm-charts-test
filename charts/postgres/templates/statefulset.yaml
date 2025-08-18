@@ -19,11 +19,10 @@ spec:
       {{- include "postgres.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      annotations:
-        {{- include "postgres.annotations" . | nindent 8 }}
-        {{- with .Values.podAnnotations }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
+      {{- $annotations := merge .Values.podAnnotations .Values.commonAnnotations }}
+      {{- with $annotations }}
+      annotations: {{- toYaml . | nindent 8 }}
+      {{- end }}
       labels:
         {{- include "postgres.labels" . | nindent 8 }}
         {{- with .Values.podLabels }}
