@@ -22,10 +22,9 @@ image:
   ## @param image.repository ClusterPirate image repository
   repository: koperator-internal/services/clusterpirate
   ## @param image.tag ClusterPirate image tag (immutable tags are recommended)
-  tag: "a741419b@sha256:6ae8df57a26681329a1770e8df60e47c2996ea82e9a9173cec761707937ba524"
+  tag: 464e93ac@sha256:bd9e0a4e5b8465edd5a88e8ef9dcde8dd97fb6c5a9113304cb9871a2d4b89545
   ## @param image.imagePullPolicy ClusterPirate image pull policy
   imagePullPolicy: Always
-
 
 # -----------------------------------------------------------------------------
 # Deployment Configuration
