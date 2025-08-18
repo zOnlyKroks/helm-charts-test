@@ -1,6 +1,9 @@
 suite: test postgres common parameters
 templates:
   - statefulset.yaml
+set:
+  image:
+    tag: 17.2@sha256:3267c505060a0052e5aa6e5175a7b41ab6b04da2f8c4540fc6e98a37210aa2d3
 tests:
   - it: should use default values when nothing is overridden
     asserts:

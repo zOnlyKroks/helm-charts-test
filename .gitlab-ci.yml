@@ -177,7 +177,7 @@ release-charts:
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
       changes:
-        - charts/**/*
+        - charts/**/Chart.yaml
 
 sign-charts:
   stage: sign
@@ -215,4 +215,4 @@ sign-charts:
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
       changes:
-        - charts/**/*
+        - charts/**/Chart.yaml
