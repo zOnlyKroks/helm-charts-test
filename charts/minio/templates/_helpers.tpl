@@ -92,13 +92,6 @@ root-password
 {{- end }}
 
 {{/*
-Return MinIO data directory
-*/}}
-{{- define "minio.dataDir" -}}
-{{- printf "/data" -}}
-{{- end }}
-
-{{/*
 Return MinIO server URL args
 */}}
 {{- define "minio.serverUrl" -}}

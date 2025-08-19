@@ -42,8 +42,8 @@ spec:
           args:
             - -c
             - |
-              mkdir -p {{ include "minio.dataDir" . }}
-              exec minio server {{ include "minio.dataDir" . }} {{ include "minio.serverUrl" . }}
+              mkdir -p {{ .Values.persistence.mountPath }}
+              exec minio server {{ .Values.persistence.mountPath }} {{ include "minio.serverUrl" . }}
           env:
             - name: MINIO_ROOT_USER
               valueFrom:
@@ -121,7 +121,7 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
             - name: data
-              mountPath: {{ include "minio.dataDir" . }}
+              mountPath: {{ .Values.persistence.mountPath }}
             - name: tmp
               mountPath: /tmp
       volumes:
