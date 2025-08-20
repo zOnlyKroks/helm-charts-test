@@ -1,3 +1,7 @@
+<p align="center">
+    <a href="https://artifacthub.io/packages/search?repo=cloudpirates-mongodb"><img src="https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/cloudpirates-mongodb" /></a>
+</p>
+
 # MongoDB
 
 A flexible NoSQL database for scalable, real-time data management.

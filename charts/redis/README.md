@@ -1,3 +1,7 @@
+<p align="center">
+    <a href="https://artifacthub.io/packages/search?repo=cloudpirates-redis"><img src="https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/cloudpirates-redis" /></a>
+</p>
+
 # Redis Helm Chart
 
 An open source, in-memory data structure store used as a database, cache, and message broker.

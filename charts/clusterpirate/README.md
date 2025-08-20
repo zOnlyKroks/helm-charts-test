@@ -1,3 +1,7 @@
+<p align="center">
+    <a href="https://artifacthub.io/packages/search?repo=cloudpirates-clusterpirate"><img src="https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/cloudpirates-clusterpirate" /></a>
+</p>
+
 # ClusterPirate Helm Chart
 
 > ⚠️ **Important**

@@ -1,3 +1,7 @@
+<p align="center">
+    <a href="https://artifacthub.io/packages/search?repo=cloudpirates-valkey"><img src="https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/cloudpirates-valkey" /></a>
+</p>
+
 # Valkey
 
 High performance in-memory data structure store, fork of Redis. Valkey is an open-source, high-performance key/value datastore that supports a variety of workloads such as caching, message queues, and can act as a primary database.
