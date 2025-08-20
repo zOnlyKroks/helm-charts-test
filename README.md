@@ -4,21 +4,21 @@
 
 # CloudPirates Open Source Helm Charts
 
-A curated collection of production-ready Helm charts for open-source cloud-native applications. This repository provides secure, well-documented, and configurable Helm charts following cloud-native best practices. This project is called "nonami" ;-)
+A curated collection of production-ready Helm charts for open-source cloud-native applications. This repository provides secure, well-documented, and configurable Helm charts following cloud-native best practices (project name "nonami").
 
 ## Available Charts
 
-| Chart | Description | Version | App Version |
-|-------|-------------|---------|-------------|
-| [ClusterPirate](charts/clusterpirate/) | Client agent for the CloudPirates Managed Observability Platform to connect your Kubernetes cluster to our infrastructure | 1.0.5 | 1.0.0 |
-| [Common](charts/common/) | A library chart for common templates and helper functions | 1.0.0 |  |
-| [MariaDB](charts/mariadb/) | High-performance, open-source relational database server that is a drop-in replacement for MySQL | 0.1.5 | 11.8.2 |
-| [MinIO](charts/minio/) | High Performance Object Storage compatible with Amazon S3 APIs | 0.1.4 | 2024.8.17 |
-| [MongoDB](charts/mongodb/) | MongoDB a flexible NoSQL database for scalable, real-time data management | 0.1.4 | 8.0.12 |
-| [PostgreSQL](charts/postgres/) | The World's Most Advanced Open Source Relational Database | 0.1.3 | 17.2 |
-| [Redis](charts/redis/) | In-memory data structure store, used as a database, cache, and message broker | 0.1.4 | 8.2.0 |
-| [TimescaleDB](charts/timescaledb/) | TimescaleDB is a PostgreSQL extension for high-performance real-time analytics on time-series and event data | 0.1.0 | 2.21.3-pg17 |
-| [Valkey](charts/valkey/) | High performance in-memory data structure store, fork of Redis | 0.1.5 | 8.1.3 |
+| Chart | Description |
+|-------|-------------|
+| [ClusterPirate](charts/clusterpirate/) | Client agent for the CloudPirates Managed Observability Platform to connect your Kubernetes cluster to our infrastructure |
+| [Common](charts/common/) | A library chart for common templates and helper functions |
+| [MariaDB](charts/mariadb/) | High-performance, open-source relational database server that is a drop-in replacement for MySQL |
+| [MinIO](charts/minio/) | High Performance Object Storage compatible with Amazon S3 APIs |
+| [MongoDB](charts/mongodb/) | MongoDB a flexible NoSQL database for scalable, real-time data management |
+| [PostgreSQL](charts/postgres/) | The World's Most Advanced Open Source Relational Database |
+| [Redis](charts/redis/) | In-memory data structure store, used as a database, cache, and message broker |
+| [TimescaleDB](charts/timescaledb/) | TimescaleDB is a PostgreSQL extension for high-performance real-time analytics on time-series and event data |
+| [Valkey](charts/valkey/) | High performance in-memory data structure store, fork of Redis |
 
 ## Quick Start
 
@@ -64,10 +64,6 @@ All charts in this repository provide:
 - Service account customization
 - Common labels and annotations support
 
-### 🚀 **Cloud Native**
-- Node selection and affinity rules
-- Init containers where appropriate
-
 ## Configuration
 
 Each chart provides extensive configuration options through `values.yaml`. Key configuration areas include:
@@ -97,9 +93,6 @@ helm template test-release ./charts/<chart-name> -n test
 
 # Install for testing
 helm install test-release ./charts/<chart-name> -n test
-
-# Run chart tests
-helm test test-release -n test
 
 # Package chart
 helm package ./charts/<chart-name>
