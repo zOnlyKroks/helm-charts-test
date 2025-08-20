@@ -1,3 +1,7 @@
+<p align="center">
+    <a href="https://artifacthub.io/packages/search?org=cloudpirates"><img src="https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/cloudpirates" /></a>
+</p>
+
 # CloudPirates Open Source Helm Charts
 
 A curated collection of production-ready Helm charts for open-source cloud-native applications. This repository provides secure, well-documented, and configurable Helm charts following cloud-native best practices. This project is called "nonami" ;-)

@@ -1,3 +1,7 @@
+<p align="center">
+    <a href="https://artifacthub.io/packages/search?repo=cloudpirates-timescaledb"><img src="https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/cloudpirates-timescaledb" /></a>
+</p>
+
 # TimescaleDB
 
 A Helm chart for TimescaleDB - The Open Source Time-Series Database for PostgreSQL. TimescaleDB is built on PostgreSQL and provides advanced time-series capabilities including automatic partitioning, columnar compression, continuous aggregates, and more.

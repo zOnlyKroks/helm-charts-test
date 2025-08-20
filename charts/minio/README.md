@@ -1,3 +1,7 @@
+<p align="center">
+    <a href="https://artifacthub.io/packages/search?repo=cloudpirates-minio"><img src="https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/cloudpirates-minio" /></a>
+</p>
+
 # MinIO
 
 A Helm chart for MinIO - High Performance Object Storage compatible with Amazon S3 APIs. MinIO is a high-performance, distributed object storage server designed for large-scale data infrastructure.
