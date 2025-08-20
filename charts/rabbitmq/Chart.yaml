@@ -1,0 +1,26 @@
+apiVersion: v2
+name: rabbitmq
+description: A messaging broker that implements the Advanced Message Queuing Protocol (AMQP) 0-9-1.
+type: application
+version: 0.1.0
+appVersion: "4.0.2"
+keywords:
+  - rabbitmq
+  - message broker
+  - amqp
+  - messaging
+  - queue
+home: https://www.cloudpirates.io
+sources:
+  - https://github.com/CloudPirates-io/helm-charts/tree/main/charts/rabbitmq
+annotations:
+  category: Message Broker
+  license: Apache-2.0
+maintainers:
+  - name: CloudPirates GmbH & Co. KG
+    url: https://www.cloudpirates.io
+dependencies:
+  - name: common
+    version: "1.x.x"
+    repository: oci://registry-1.docker.io/cloudpirates
+icon: https://a.storyblok.com/f/143071/512x512/c8b56c8c4c/rabbitmq-logo.svg

@@ -1,0 +1,308 @@
+suite: test RabbitMQ functionality
+templates:
+  - templates/statefulset.yaml
+  - templates/service.yaml
+  - templates/secret.yaml
+  - templates/configmap.yaml
+  - templates/ingress.yaml
+  - templates/servicemonitor.yaml
+tests:
+  - it: should create statefulset with correct image
+    asserts:
+      - isKind:
+          of: StatefulSet
+        template: templates/statefulset.yaml
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: docker.io/rabbitmq:4.0.2-management
+        template: templates/statefulset.yaml
+
+  - it: should expose correct ports
+    template: templates/service.yaml
+    asserts:
+      - contains:
+          path: spec.ports
+          content:
+            port: 5672
+            targetPort: amqp
+            protocol: TCP
+            name: amqp
+      - contains:
+          path: spec.ports
+          content:
+            port: 15672
+            targetPort: management
+            protocol: TCP
+            name: management
+
+  - it: should create secret with password and erlang cookie when auth enabled
+    set:
+      auth:
+        enabled: true
+        password: ""
+        erlangCookie: ""
+    template: templates/secret.yaml
+    asserts:
+      - isKind:
+          of: Secret
+      - exists:
+          path: data.password
+      - exists:
+          path: data["erlang-cookie"]
+
+  - it: should not create secret when existing secret is provided
+    set:
+      auth:
+        existingSecret: my-existing-secret
+    template: templates/secret.yaml
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: should configure memory watermark correctly
+    set:
+      config:
+        memoryHighWatermark: 0.6
+        memoryHighWatermarkType: relative
+    template: templates/configmap.yaml
+    asserts:
+      - matchRegex:
+          path: data["rabbitmq.conf"]
+          pattern: "vm_memory_high_watermark.relative = 0.60"
+
+  - it: should configure disk free limit
+    set:
+      config:
+        diskFreeLimit: 5GB
+    template: templates/configmap.yaml
+    asserts:
+      - matchRegex:
+          path: data["rabbitmq.conf"]
+          pattern: "disk_free_limit.absolute = 5GB"
+
+  - it: should enable clustering when configured
+    set:
+      clustering:
+        enabled: true
+        replicaCount: 3
+    asserts:
+      - equal:
+          path: spec.replicas
+          value: 3
+        template: templates/statefulset.yaml
+      - matchRegex:
+          path: data["rabbitmq.conf"]
+          pattern: "cluster_formation.peer_discovery_backend = rabbit_peer_discovery_k8s"
+        template: templates/configmap.yaml
+      - equal:
+          path: spec.clusterIP
+          value: None
+        template: templates/service.yaml
+
+  - it: should configure clustering environment variables
+    set:
+      clustering:
+        enabled: true
+    template: templates/statefulset.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: RABBITMQ_USE_LONGNAME
+            value: "true"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: K8S_SERVICE_NAME
+            value: RELEASE-NAME-rabbitmq
+
+  - it: should configure resources correctly
+    set:
+      resources:
+        requests:
+          cpu: 200m
+          memory: 1Gi
+        limits:
+          cpu: 1000m
+          memory: 2Gi
+    template: templates/statefulset.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].resources.requests.cpu
+          value: 200m
+      - equal:
+          path: spec.template.spec.containers[0].resources.limits.memory
+          value: 2Gi
+
+  - it: should enable metrics when configured
+    set:
+      metrics:
+        enabled: true
+        port: 15692
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: metrics
+            containerPort: 15692
+            protocol: TCP
+        template: templates/statefulset.yaml
+      - contains:
+          path: spec.ports
+          content:
+            port: 15692
+            targetPort: metrics
+            protocol: TCP
+            name: metrics
+        template: templates/service.yaml
+
+  - it: should create ServiceMonitor when metrics and serviceMonitor enabled
+    set:
+      metrics:
+        enabled: true
+        serviceMonitor:
+          enabled: true
+    template: templates/servicemonitor.yaml
+    asserts:
+      - isKind:
+          of: ServiceMonitor
+      - equal:
+          path: spec.endpoints[0].port
+          value: metrics
+
+  - it: should configure LDAP when enabled
+    set:
+      ldap:
+        enabled: true
+        server: ldap.example.com
+        port: 389
+    template: templates/configmap.yaml
+    asserts:
+      - matchRegex:
+          path: data["rabbitmq.conf"]
+          pattern: "auth_backends.1 = rabbit_auth_backend_ldap"
+      - matchRegex:
+          path: data["rabbitmq.conf"]
+          pattern: "auth_ldap.servers.1 = ldap.example.com:389"
+
+  - it: should configure persistence correctly
+    set:
+      persistence:
+        enabled: true
+        size: 10Gi
+        storageClass: fast-ssd
+    template: templates/statefulset.yaml
+    asserts:
+      - equal:
+          path: spec.volumeClaimTemplates[0].spec.resources.requests.storage
+          value: "10Gi"
+      - equal:
+          path: spec.volumeClaimTemplates[0].spec.storageClassName
+          value: "fast-ssd"
+
+  - it: should create ingress when enabled
+    set:
+      ingress:
+        enabled: true
+        hosts:
+          - host: rabbitmq.example.com
+            paths:
+              - path: /
+                pathType: Prefix
+    template: templates/ingress.yaml
+    asserts:
+      - isKind:
+          of: Ingress
+      - equal:
+          path: spec.rules[0].host
+          value: rabbitmq.example.com
+
+  - it: should configure security contexts correctly
+    set:
+      podSecurityContext:
+        fsGroup: 999
+        runAsNonRoot: true
+      containerSecurityContext:
+        runAsUser: 999
+        runAsNonRoot: true
+        allowPrivilegeEscalation: false
+    template: templates/statefulset.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.securityContext.fsGroup
+          value: 999
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.runAsUser
+          value: 999
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.allowPrivilegeEscalation
+          value: false
+
+  - it: should configure health probes correctly
+    set:
+      livenessProbe:
+        enabled: true
+        initialDelaySeconds: 60
+        periodSeconds: 30
+      readinessProbe:
+        enabled: true
+        initialDelaySeconds: 10
+        periodSeconds: 10
+    template: templates/statefulset.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].livenessProbe.initialDelaySeconds
+          value: 60
+      - equal:
+          path: spec.template.spec.containers[0].readinessProbe.periodSeconds
+          value: 10
+
+  - it: should set correct environment variables for authentication
+    set:
+      auth:
+        enabled: true
+        username: testuser
+    template: templates/statefulset.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: RABBITMQ_DEFAULT_USER
+            value: testuser
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: RABBITMQ_DEFAULT_PASS
+            valueFrom:
+              secretKeyRef:
+                name: RELEASE-NAME-rabbitmq
+                key: password
+
+  - it: should mount volumes correctly
+    template: templates/statefulset.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: data
+            mountPath: /var/lib/rabbitmq
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: config
+            mountPath: /etc/rabbitmq
+
+  - it: should configure extra configuration when provided
+    set:
+      config:
+        extraConfiguration: |
+          management.rates_mode = basic
+          collect_statistics_interval = 10000
+    template: templates/configmap.yaml
+    asserts:
+      - matchRegex:
+          path: data["rabbitmq.conf"]
+          pattern: "management.rates_mode = basic"
+      - matchRegex:
+          path: data["rabbitmq.conf"]
+          pattern: "collect_statistics_interval = 10000"
