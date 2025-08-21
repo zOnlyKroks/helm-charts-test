@@ -45,10 +45,11 @@ winget install sigstore.cosign
 ### Step-by-Step Verification
 
 1. **Download the public key:**
+
    ```bash
    # Option 1: Download directly from GitHub
    curl -o cosign.pub https://raw.githubusercontent.com/CloudPirates-io/helm-charts/main/cosign.pub
-   
+
    # Option 2: Create manually
    cat > cosign.pub << 'EOF'
    -----BEGIN PUBLIC KEY-----
@@ -59,10 +60,11 @@ winget install sigstore.cosign
    ```
 
 2. **Verify a specific chart:**
+
    ```bash
    # Replace <chart-name> and <version> with actual values
    cosign verify --key cosign.pub registry-1.docker.io/cloudpirates/<chart-name>:<version>
-   
+
    # Examples:
    cosign verify --key cosign.pub registry-1.docker.io/cloudpirates/clusterpirate:1.0.0
    cosign verify --key cosign.pub registry-1.docker.io/cloudpirates/valkey:0.1.1
