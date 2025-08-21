@@ -85,35 +85,10 @@ Return the proper Docker Image Registry Secret Names
 {{ include "common.images.renderPullSecrets" (dict "images" (list .Values.image) "context" .) }}
 {{- end -}}
 
-{{/*
-Generate RabbitMQ hostname for clustering
-*/}}
-{{- define "rabbitmq.hostname" -}}
-{{- if .Values.clustering.enabled }}
-{{- printf "%s-${HOSTNAME##*-}.%s.%s.svc.cluster.local" (include "rabbitmq.fullname" .) (include "rabbitmq.fullname" .) .Release.Namespace }}
-{{- else }}
-{{- printf "%s.%s.svc.cluster.local" (include "rabbitmq.fullname" .) .Release.Namespace }}
-{{- end }}
-{{- end }}
-
-{{/*
-Generate RabbitMQ node name
-*/}}
-{{- define "rabbitmq.nodeName" -}}
-{{- if .Values.clustering.enabled }}
-rabbit@{{ include "rabbitmq.hostname" . }}
-{{- else }}
-rabbit@{{ include "rabbitmq.fullname" . }}
-{{- end }}
-{{- end }}
-
-{{/*
-Memory high watermark calculation
-*/}}
-{{- define "rabbitmq.memoryHighWatermark" -}}
-{{- if eq .Values.config.memoryHighWatermarkType "relative" }}
-{{- printf "%.2f" .Values.config.memoryHighWatermark }}
-{{- else }}
-{{- printf "%s" (.Values.config.memoryHighWatermark | toString) }}
-{{- end }}
-{{- end }}
+{{- define "rabbitmq.serviceAccountName" -}}
+    {{- if .Values.peerDiscoveryK8sPlugin.enabled -}}
+        {{- include "rabbitmq.fullname" . }}
+    {{- else -}}
+        {{- default "default" -}}
+    {{- end -}}
+{{- end -}}

@@ -81,21 +81,17 @@ tests:
       auth:
         enabled: false
     asserts:
-      - notExists:
+      - exists:
           path: spec.template.spec.containers[0].env
         template: templates/statefulset.yaml
 
   - it: should enable clustering
     set:
-      clustering:
+      replicaCount: 3
+      peerDiscoveryK8sPlugin:
         enabled: true
-        replicaCount: 3
     asserts:
       - equal:
           path: spec.replicas
           value: 3
         template: templates/statefulset.yaml
-      - equal:
-          path: spec.clusterIP
-          value: None
-        template: templates/service.yaml

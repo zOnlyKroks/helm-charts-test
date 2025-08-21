@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ include "rabbitmq.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- include "rabbitmq.labels" . | nindent 4 }}
   {{- with (include "rabbitmq.annotations" .) }}
@@ -10,12 +10,9 @@ metadata:
     {{- . | nindent 4 }}
   {{- end }}
 spec:
-  serviceName: {{ include "rabbitmq.fullname" . }}
-  {{- if .Values.clustering.enabled }}
-  replicas: {{ .Values.clustering.replicaCount }}
-  {{- else }}
+  serviceName: {{ include "rabbitmq.fullname" . }}-headless
   replicas: {{ .Values.replicaCount }}
-  {{- end }}
+  podManagementPolicy: OrderedReady
   selector:
     matchLabels:
       {{- include "rabbitmq.selectorLabels" . | nindent 6 }}
@@ -27,32 +24,27 @@ spec:
 {{- with (include "rabbitmq.imagePullSecrets" .) }}
 {{ . | nindent 6 }}
 {{- end }}
+      serviceAccountName: {{ include "rabbitmq.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
-          securityContext: {{- toYaml .Values.containerSecurityContext | nindent 12 }}
+          securityContext: {{- toYaml .Values.securityContext | nindent 12 }}
           image: {{ include "rabbitmq.image" . | quote }}
           imagePullPolicy: {{ include "common.imagePullPolicy" (dict "image" .Values.image) }}
           ports:
             - name: amqp
               containerPort: 5672
-              protocol: TCP
-            - name: management
+            - name: mgmt
               containerPort: 15672
-              protocol: TCP
             - name: epmd
               containerPort: 4369
-              protocol: TCP
             - name: dist
               containerPort: 25672
-              protocol: TCP
             {{- if .Values.metrics.enabled }}
-            - name: metrics
+            - name: prometheus
               containerPort: {{ .Values.metrics.port }}
-              protocol: TCP
             {{- end }}
-          {{- if or .Values.auth.enabled .Values.clustering.enabled .Values.extraEnv }}
           env:
             {{- if .Values.auth.enabled }}
             - name: RABBITMQ_DEFAULT_USER
@@ -68,28 +60,30 @@ spec:
                   name: {{ include "rabbitmq.secretName" . }}
                   key: {{ include "rabbitmq.secretErlangCookieKey" . }}
             {{- end }}
-            {{- if .Values.clustering.enabled }}
             - name: RABBITMQ_USE_LONGNAME
-              value: "true"
+              value: {{ .Values.peerDiscoveryK8sPlugin.useLongname | quote }}
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            {{- if .Values.peerDiscoveryK8sPlugin.useLongname }}
             - name: RABBITMQ_NODENAME
-              value: {{ include "rabbitmq.nodeName" . | quote }}
-            - name: K8S_SERVICE_NAME
-              value: {{ include "rabbitmq.fullname" . }}
-            - name: RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS
-              value: "-rabbit log_levels [{connection,info},{default,info}] -rabbit loopback_users []"
+              value: rabbit@$(NODE_NAME).{{ include "rabbitmq.fullname" . }}-headless.{{ .Release.Namespace }}.svc.cluster.local
+            {{- else }}
+            - name: RABBITMQ_NODENAME
+              value: rabbit@$(NODE_NAME)
             {{- end }}
             {{- range .Values.extraEnv }}
             - name: {{ .name }}
               value: {{ .value | quote }}
             {{- end }}
-          {{- end }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             exec:
               command:
                 - /bin/bash
                 - -ec
-                - rabbitmq-diagnostics -q ping
+                - rabbitmq-diagnostics -q check_running
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -109,29 +103,23 @@ spec:
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
             successThreshold: {{ .Values.readinessProbe.successThreshold }}
           {{- end }}
-          {{- if .Values.auth.enabled }}
-          lifecycle:
-            postStart:
-              exec:
-                command:
-                  - /bin/bash
-                  - -c
-                  - |
-                    # Wait for RabbitMQ to be ready
-                    timeout 60 bash -c 'until rabbitmqctl status >/dev/null 2>&1; do sleep 2; done'
-                    # Ensure admin user has correct password
-                    rabbitmqctl change_password {{ .Values.auth.username }} "${RABBITMQ_DEFAULT_PASS}" || true
+          {{- with .Values.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
           {{- end }}
-          resources: {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
             - name: data
               mountPath: /var/lib/rabbitmq
             - name: config
               mountPath: /etc/rabbitmq
+            - name: logs
+              mountPath: /var/log/rabbitmq
             {{- if .Values.extraVolumeMounts }}
             {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
             {{- end }}
       volumes:
+        - name: logs
+          emptyDir: {}
         {{- if not .Values.persistence.enabled }}
         - name: data
           emptyDir: {}
@@ -164,7 +152,9 @@ spec:
         {{- end }}
       spec:
         accessModes:
-          - {{ .Values.persistence.accessMode | quote }}
+          {{- range .Values.persistence.accessModes }}
+          - {{ . | quote }}
+          {{- end }}
         {{- if .Values.persistence.storageClass }}
         storageClassName: {{ .Values.persistence.storageClass | quote }}
         {{- end }}

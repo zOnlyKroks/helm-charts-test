@@ -1,8 +1,21 @@
+{{ $plugins := compact (list "") }}
+{{- if .Values.peerDiscoveryK8sPlugin.enabled }}
+{{ $plugins = append $plugins "rabbitmq_peer_discovery_k8s" }}
+{{- end }}
+{{- if .Values.managementPlugin.enabled }}
+{{ $plugins = append $plugins "rabbitmq_management" }}
+{{- end }}
+{{- if .Values.metrics.enabled }}
+{{ $plugins = append $plugins "rabbitmq_prometheus"}}
+{{- end }}
+{{- if .Values.additionalPlugins }}
+{{ $plugins = concat $plugins .Values.additionalPlugins }}
+{{- end }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "rabbitmq.fullname" . }}-config
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- include "rabbitmq.labels" . | nindent 4 }}
   {{- with (include "rabbitmq.annotations" .) }}
@@ -12,44 +25,33 @@ metadata:
 data:
   rabbitmq.conf: |
     # Default RabbitMQ configuration
-    listeners.tcp.default = 5672
-    management.tcp.port = 15672
-    
-    # Memory configuration
-    vm_memory_high_watermark.{{ .Values.config.memoryHighWatermarkType }} = {{ include "rabbitmq.memoryHighWatermark" . }}
-    
-    # Disk space configuration
-    disk_free_limit.absolute = {{ .Values.config.diskFreeLimit }}
-    
-    # Clustering configuration
-    {{- if .Values.clustering.enabled }}
-    cluster_formation.peer_discovery_backend = rabbit_peer_discovery_k8s
-    cluster_formation.k8s.host = kubernetes.default.svc.cluster.local
-    cluster_formation.k8s.address_type = hostname
-    cluster_formation.k8s.hostname_suffix = .{{ include "rabbitmq.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
-    cluster_formation.node_cleanup.only_log_warning = true
-    cluster_partition_handling = autoheal
-    cluster_formation.randomized_startup_delay_range.min = 0
-    cluster_formation.randomized_startup_delay_range.max = 2
+    loopback_users.guest = false
+    listeners.tcp.default = {{ .Values.service.amqpPort }}
+
+    {{- if .Values.managementPlugin.enabled }}
+    # Management plugin options
+    management.tcp.port = {{ .Values.service.managementPort }}
     {{- end }}
     
-    # Logging configuration
-    log.console = true
-    log.console.level = info
-    
-    # Management plugin configuration will use default settings
-    
+    {{- if .Values.peerDiscoveryK8sPlugin.enabled }}
+    # Clustering with K8s peer discovery plugin
+    cluster_name = {{ include "rabbitmq.fullname" . }}-cluster
+    cluster_formation.peer_discovery_backend = rabbit_peer_discovery_k8s
+    cluster_formation.k8s.host = kubernetes.default.svc.cluster.local
+    cluster_formation.k8s.address_type = {{ .Values.peerDiscoveryK8sPlugin.addressType }}
+    cluster_formation.k8s.service_name = {{ include "rabbitmq.fullname" . }}-headless
+    cluster_formation.k8s.hostname_suffix = .{{ include "rabbitmq.fullname" . }}-headless.{{ .Release.Namespace }}.svc.cluster.local
+    {{- end }}
+
+
+    {{- if .Values.config.memoryHighWatermark.enabled }}
+    # Memory configuration
+    vm_memory_high_watermark.{{ .Values.config.memoryHighWatermark.type }} = {{ .Values.config.memoryHighWatermark.value }}
+    {{- end }}
+
     {{- if .Values.metrics.enabled }}
     # Prometheus metrics
     prometheus.tcp.port = {{ .Values.metrics.port }}
-    {{- end }}
-    
-    {{- if .Values.ldap.enabled }}
-    # LDAP authentication
-    auth_backends.1 = rabbit_auth_backend_ldap
-    auth_backends.2 = rabbit_auth_backend_internal
-    auth_ldap.servers.1 = {{ .Values.ldap.server }}:{{ .Values.ldap.port }}
-    auth_ldap.user_dn_pattern = {{ .Values.ldap.userDnPattern }}
     {{- end }}
     
     {{- if and .Values.config.extraConfiguration (ne .Values.config.extraConfiguration "") }}
@@ -61,6 +63,5 @@ data:
   advanced.config: |
 {{ .Values.config.advancedConfiguration | indent 4 }}
   {{- end }}
-  
   enabled_plugins: |
-    [rabbitmq_management{{- if .Values.clustering.enabled }},rabbitmq_peer_discovery_k8s{{- end }}{{- if .Values.metrics.enabled }},rabbitmq_prometheus{{- end }}].
+    [{{- join "," $plugins }}].

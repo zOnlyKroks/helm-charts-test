@@ -6,6 +6,9 @@ templates:
   - templates/configmap.yaml
   - templates/ingress.yaml
   - templates/servicemonitor.yaml
+set:
+  image:
+    tag: 4.1.3-managemen@sha256:4c521003d812dd7b33793e2b7e45fbcc323d764b8c3309dfcb0e4c5db30c56ab
 tests:
   - it: should create statefulset with correct image
     asserts:
@@ -14,7 +17,7 @@ tests:
         template: templates/statefulset.yaml
       - equal:
           path: spec.template.spec.containers[0].image
-          value: docker.io/rabbitmq:4.0.2-management
+          value: docker.io/rabbitmq:4.1.3-managemen@sha256:4c521003d812dd7b33793e2b7e45fbcc323d764b8c3309dfcb0e4c5db30c56ab
         template: templates/statefulset.yaml
 
   - it: should expose correct ports
@@ -25,15 +28,13 @@ tests:
           content:
             port: 5672
             targetPort: amqp
-            protocol: TCP
             name: amqp
       - contains:
           path: spec.ports
           content:
             port: 15672
-            targetPort: management
-            protocol: TCP
-            name: management
+            targetPort: mgmt
+            name: mgmt
 
   - it: should create secret with password and erlang cookie when auth enabled
     set:
@@ -62,29 +63,21 @@ tests:
   - it: should configure memory watermark correctly
     set:
       config:
-        memoryHighWatermark: 0.6
-        memoryHighWatermarkType: relative
+        memoryHighWatermark:
+          enabled: true
+          type: relative
+          value: 0.6
     template: templates/configmap.yaml
     asserts:
       - matchRegex:
           path: data["rabbitmq.conf"]
-          pattern: "vm_memory_high_watermark.relative = 0.60"
-
-  - it: should configure disk free limit
-    set:
-      config:
-        diskFreeLimit: 5GB
-    template: templates/configmap.yaml
-    asserts:
-      - matchRegex:
-          path: data["rabbitmq.conf"]
-          pattern: "disk_free_limit.absolute = 5GB"
+          pattern: "vm_memory_high_watermark.relative = 0.6"
 
   - it: should enable clustering when configured
     set:
-      clustering:
+      replicaCount: 3
+      peerDiscoveryK8sPlugin:
         enabled: true
-        replicaCount: 3
     asserts:
       - equal:
           path: spec.replicas
@@ -94,14 +87,10 @@ tests:
           path: data["rabbitmq.conf"]
           pattern: "cluster_formation.peer_discovery_backend = rabbit_peer_discovery_k8s"
         template: templates/configmap.yaml
-      - equal:
-          path: spec.clusterIP
-          value: None
-        template: templates/service.yaml
 
   - it: should configure clustering environment variables
     set:
-      clustering:
+      peerDiscoveryK8sPlugin:
         enabled: true
     template: templates/statefulset.yaml
     asserts:
@@ -110,11 +99,6 @@ tests:
           content:
             name: RABBITMQ_USE_LONGNAME
             value: "true"
-      - contains:
-          path: spec.template.spec.containers[0].env
-          content:
-            name: K8S_SERVICE_NAME
-            value: RELEASE-NAME-rabbitmq
 
   - it: should configure resources correctly
     set:
@@ -143,17 +127,15 @@ tests:
       - contains:
           path: spec.template.spec.containers[0].ports
           content:
-            name: metrics
+            name: prometheus
             containerPort: 15692
-            protocol: TCP
         template: templates/statefulset.yaml
       - contains:
           path: spec.ports
           content:
             port: 15692
-            targetPort: metrics
-            protocol: TCP
-            name: metrics
+            targetPort: prometheus
+            name: prometheus
         template: templates/service.yaml
 
   - it: should create ServiceMonitor when metrics and serviceMonitor enabled
@@ -168,22 +150,7 @@ tests:
           of: ServiceMonitor
       - equal:
           path: spec.endpoints[0].port
-          value: metrics
-
-  - it: should configure LDAP when enabled
-    set:
-      ldap:
-        enabled: true
-        server: ldap.example.com
-        port: 389
-    template: templates/configmap.yaml
-    asserts:
-      - matchRegex:
-          path: data["rabbitmq.conf"]
-          pattern: "auth_backends.1 = rabbit_auth_backend_ldap"
-      - matchRegex:
-          path: data["rabbitmq.conf"]
-          pattern: "auth_ldap.servers.1 = ldap.example.com:389"
+          value: prometheus
 
   - it: should configure persistence correctly
     set:
@@ -221,8 +188,7 @@ tests:
     set:
       podSecurityContext:
         fsGroup: 999
-        runAsNonRoot: true
-      containerSecurityContext:
+      securityContext:
         runAsUser: 999
         runAsNonRoot: true
         allowPrivilegeEscalation: false

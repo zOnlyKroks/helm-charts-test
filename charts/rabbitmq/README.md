@@ -1,27 +1,23 @@
-# RabbitMQ Helm Chart
+<p align="center">
+    <a href="https://artifacthub.io/packages/search?repo=cloudpirates-rabbitmq"><img src="https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/cloudpirates-rabbitmq" /></a>
+</p>
 
-A messaging broker that implements the Advanced Message Queuing Protocol (AMQP) 0-9-1.
+# RabbitMQ
 
-## Quick Start
+A Helm chart for RabbitMQ - A messaging broker that implements the Advanced Message Queuing Protocol (AMQP). RabbitMQ is a reliable, feature-rich message broker that supports multiple messaging patterns and is widely used for building distributed systems, microservices communication, and event-driven architectures.
 
-### Prerequisites
+## Prerequisites
 
-- Kubernetes 1.24+
+- Kubernetes 1.19+
 - Helm 3.2.0+
 - PV provisioner support in the underlying infrastructure (if persistence is enabled)
 
-### Installation
+## Installing the Chart
 
 To install the chart with the release name `my-rabbitmq`:
 
 ```bash
 $ helm install my-rabbitmq oci://registry-1.docker.io/cloudpirates/rabbitmq
-```
-
-To install with custom values:
-
-```bash
-helm install my-rabbitmq oci://registry-1.docker.io/cloudpirates/rabbitmq -f my-values.yaml
 ```
 
 Or install directly from the local chart:
@@ -30,46 +26,48 @@ Or install directly from the local chart:
 $ helm install my-rabbitmq ./charts/rabbitmq
 ```
 
-### Getting Started
+The command deploys RabbitMQ on the Kubernetes cluster in the default configuration. The [Configuration](#configuration) section lists the parameters that can be configured during installation.
 
-1. Get the RabbitMQ password:
+## Uninstalling the Chart
+
+To uninstall/delete the `my-rabbitmq` deployment:
 
 ```bash
-kubectl get secret my-rabbitmq -o jsonpath="{.data.password}" | base64 -d
+$ helm uninstall my-rabbitmq
 ```
 
-2. Access RabbitMQ Management UI:
+The command removes all the Kubernetes components associated with the chart and deletes the release.
 
-```bash
-kubectl port-forward svc/my-rabbitmq 15672:15672
+## Security & Signature Verification
+
+This Helm chart is cryptographically signed with Cosign to ensure authenticity and prevent tampering.
+
+**Public Key:**
+```
+-----BEGIN PUBLIC KEY-----
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE7BgqFgKdPtHdXz6OfYBklYwJgGWQ
+mZzYz8qJ9r6QhF3NxK8rD2oG7Bk6nHJz7qWXhQoU2JvJdI3Zx9HGpLfKvw==
+-----END PUBLIC KEY-----
 ```
 
-Then visit http://localhost:15672 and login with username `admin` and the password from step 1.
-
-3. Connect to RabbitMQ from inside the cluster:
+To verify the helm chart before installation, copy the public key to the file `cosign.pub` and run cosign:
 
 ```bash
-kubectl run rabbitmq-client --rm --tty -i --restart='Never' \
-    --image rabbitmq:4.0.2-management -- bash
-
-# Inside the pod:
-rabbitmqctl status
+cosign verify --key cosign.pub registry-1.docker.io/cloudpirates/rabbitmq:<version>
 ```
 
 ## Configuration
 
-### Image Configuration
+The following table lists the configurable parameters of the RabbitMQ chart and their default values.
+
+### Global parameters
 
 | Parameter | Description | Default |
 |-----------|-------------|---------|
-| `image.registry` | RabbitMQ image registry | `docker.io` |
-| `image.repository` | RabbitMQ image repository | `rabbitmq` |
-| `image.tag` | RabbitMQ image tag | `4.0.2-management@sha256:...` |
-| `image.pullPolicy` | Image pull policy | `Always` |
-| `global.imageRegistry` | Global Docker image registry override | `""` |
-| `global.imagePullSecrets` | Global Docker registry secret names | `[]` |
+| `global.imageRegistry` | Global Docker image registry | `""` |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]` |
 
-### Common Parameters
+### Common parameters
 
 | Parameter | Description | Default |
 |-----------|-------------|---------|
@@ -77,9 +75,23 @@ rabbitmqctl status
 | `fullnameOverride` | String to fully override rabbitmq.fullname | `""` |
 | `commonLabels` | Labels to add to all deployed objects | `{}` |
 | `commonAnnotations` | Annotations to add to all deployed objects | `{}` |
-| `replicaCount` | Number of RabbitMQ replicas to deploy | `1` |
 
-### Service Configuration
+### RabbitMQ image parameters
+
+| Parameter | Description | Default |
+|-----------|-------------|---------|
+| `image.registry` | RabbitMQ image registry | `docker.io` |
+| `image.repository` | RabbitMQ image repository | `rabbitmq` |
+| `image.tag` | RabbitMQ image tag | `"4.1.3-managemen@sha256:4c521003d812dd7b33793e2b7e45fbcc323d764b8c3309dfcb0e4c5db30c56ab"` |
+| `image.imagePullPolicy` | RabbitMQ image pull policy | `Always` |
+
+### Deployment configuration
+
+| Parameter | Description | Default |
+|-----------|-------------|---------|
+| `replicaCount` | Number of RabbitMQ replicas to deploy (clustering needs to be enabled to set more than 1 replicas) | `1` |
+
+### Service configuration
 
 | Parameter | Description | Default |
 |-----------|-------------|---------|
@@ -89,7 +101,7 @@ rabbitmqctl status
 | `service.epmdPort` | RabbitMQ EPMD port | `4369` |
 | `service.distPort` | RabbitMQ distribution port | `25672` |
 
-### Authentication
+### RabbitMQ Authentication
 
 | Parameter | Description | Default |
 |-----------|-------------|---------|
@@ -98,50 +110,38 @@ rabbitmqctl status
 | `auth.password` | RabbitMQ password (if empty, random password will be generated) | `""` |
 | `auth.erlangCookie` | Erlang cookie for clustering (if empty, random cookie will be generated) | `""` |
 | `auth.existingSecret` | Name of existing secret containing RabbitMQ credentials | `""` |
-| `auth.existingPasswordKey` | Key in existing secret containing RabbitMQ password | `password` |
-| `auth.existingErlangCookieKey` | Key in existing secret containing Erlang cookie | `erlang-cookie` |
+| `auth.existingPasswordKey` | Key in existing secret containing RabbitMQ password | `"password"` |
+| `auth.existingErlangCookieKey` | Key in existing secret containing Erlang cookie | `"erlang-cookie"` |
 
-### Clustering Configuration
-
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `clustering.enabled` | Enable RabbitMQ clustering | `false` |
-| `clustering.replicaCount` | Number of RabbitMQ replicas when clustering is enabled | `3` |
-
-### RabbitMQ Configuration
+### RabbitMQ configuration
 
 | Parameter | Description | Default |
 |-----------|-------------|---------|
-| `config.memoryHighWatermark` | RabbitMQ memory high watermark | `0.4` |
-| `config.memoryHighWatermarkType` | Memory high watermark type (relative\|absolute) | `relative` |
-| `config.diskFreeLimit` | RabbitMQ disk free limit | `2GB` |
+| `config.memoryHighWatermark.enabled` | Enable configuring Memory high watermark on RabbitMQ | `false` |
+| `config.memoryHighWatermark.type` | Memory high watermark type. Either `absolute` or `relative` | `"relative"` |
+| `config.memoryHighWatermark.value` | Memory high watermark value | `0.4` |
 | `config.extraConfiguration` | Additional RabbitMQ configuration | `""` |
 | `config.advancedConfiguration` | Advanced RabbitMQ configuration | `""` |
 
-### LDAP Configuration
+### PeerDiscoveryK8sPlugin configuration
 
 | Parameter | Description | Default |
 |-----------|-------------|---------|
-| `ldap.enabled` | Enable LDAP authentication | `false` |
-| `ldap.server` | LDAP server hostname | `""` |
-| `ldap.port` | LDAP server port | `389` |
-| `ldap.userDnPattern` | LDAP user DN pattern | `cn=${username},ou=People,dc=example,dc=org` |
+| `peerDiscoveryK8sPlugin.enabled` | Enable K8s peer discovery plugin for a RabbitMQ HA-cluster | `false` |
+| `peerDiscoveryK8sPlugin.useLongname` | Uses the FQDN as connection string (RABBITMQ_USE_LONGNAME) | `true` |
+| `peerDiscoveryK8sPlugin.addressType` | Peer discovery plugin address type | `hostname` |
 
-### Persistence
-
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `persistence.enabled` | Enable persistent storage | `true` |
-| `persistence.storageClass` | Storage class for persistent volume | `""` |
-| `persistence.accessMode` | Access mode for persistent volume | `ReadWriteOnce` |
-| `persistence.size` | Size of persistent volume | `8Gi` |
-| `persistence.annotations` | Annotations for persistent volume claims | `{}` |
-
-### Metrics Configuration
+### ManagementPlugin configuration
 
 | Parameter | Description | Default |
 |-----------|-------------|---------|
-| `metrics.enabled` | Enable RabbitMQ metrics | `false` |
+| `managementPlugin.enabled` | Enable RabbitMQ management plugin | `true` |
+
+### Metrics configuration
+
+| Parameter | Description | Default |
+|-----------|-------------|---------|
+| `metrics.enabled` | Enable RabbitMQ metrics (via prometheus plugin) | `false` |
 | `metrics.port` | RabbitMQ metrics port | `15692` |
 | `metrics.serviceMonitor.enabled` | Create ServiceMonitor for Prometheus monitoring | `false` |
 | `metrics.serviceMonitor.namespace` | Namespace for ServiceMonitor | `""` |
@@ -149,111 +149,177 @@ rabbitmqctl status
 | `metrics.serviceMonitor.annotations` | Annotations for ServiceMonitor | `{}` |
 | `metrics.serviceMonitor.interval` | Scrape interval | `30s` |
 | `metrics.serviceMonitor.scrapeTimeout` | Scrape timeout | `10s` |
+| `additionalPlugins` | Additional RabbitMQ plugins to enable (Prometheus Metrics, PeerDiscoveryK8s and Management plugins are automatically added) | `[]` |
 
-### Ingress Configuration
+### Persistence
+
+| Parameter | Description | Default |
+|-----------|-------------|---------|
+| `persistence.enabled` | Enable persistent storage | `true` |
+| `persistence.storageClass` | Storage class to use for persistent volume | `""` |
+| `persistence.accessModes` | Persistent Volume access modes | `["ReadWriteOnce"]` |
+| `persistence.size` | Size of persistent volume | `8Gi` |
+| `persistence.annotations` | Annotations for persistent volume claims | `{}` |
+
+### Ingress configuration
 
 | Parameter | Description | Default |
 |-----------|-------------|---------|
 | `ingress.enabled` | Enable ingress for RabbitMQ management | `false` |
 | `ingress.className` | Ingress class name | `""` |
 | `ingress.annotations` | Ingress annotations | `{}` |
-| `ingress.hosts` | Ingress hosts configuration | `[{host: "rabbitmq.local", paths: [{path: "/", pathType: "Prefix"}]}]` |
+| `ingress.hosts` | Ingress hosts configuration | `[{"host": "rabbitmq.local", "paths": [{"path": "/", "pathType": "Prefix"}]}]` |
 | `ingress.tls` | Ingress TLS configuration | `[]` |
 
-### Resource Management
+### Resources
 
 | Parameter | Description | Default |
 |-----------|-------------|---------|
-| `resources.limits.memory` | Memory limit | `2Gi` |
-| `resources.limits.cpu` | CPU limit | `1000m` |
-| `resources.requests.cpu` | CPU request | `100m` |
-| `resources.requests.memory` | Memory request | `1Gi` |
+| `resources` | Resource limits and requests for RabbitMQ pods | `{}` |
 
-### Pod Assignment
+### Node Selection
 
 | Parameter | Description | Default |
 |-----------|-------------|---------|
-| `nodeSelector` | Node selector for pod assignment | `{}` |
-| `tolerations` | Tolerations for pod assignment | `[]` |
-| `affinity` | Affinity rules for pod assignment | `{}` |
+| `nodeSelector` | Node labels for pod assignment | `{}` |
+| `tolerations` | Toleration labels for pod assignment | `[]` |
+| `affinity` | Affinity settings for pod assignment | `{}` |
 
 ### Security Context
 
 | Parameter | Description | Default |
 |-----------|-------------|---------|
-| `containerSecurityContext.runAsUser` | User ID to run the container | `999` |
-| `containerSecurityContext.runAsGroup` | Group ID to run the container | `999` |
-| `containerSecurityContext.runAsNonRoot` | Run as non-root user | `true` |
-| `containerSecurityContext.allowPrivilegeEscalation` | Allow privilege escalation | `false` |
-| `podSecurityContext.fsGroup` | Pod's Security Context fsGroup | `999` |
+| `podSecurityContext.fsGroup` | Group ID for the volumes of the pod | `999` |
+| `securityContext.allowPrivilegeEscalation` | Enable container privilege escalation | `false` |
+| `securityContext.runAsNonRoot` | Configure the container to run as a non-root user | `true` |
+| `securityContext.runAsUser` | User ID for the RabbitMQ container | `999` |
+| `securityContext.runAsGroup` | Group ID for the RabbitMQ container | `999` |
+| `securityContext.readOnlyRootFilesystem` | Mount container root filesystem as read-only | `true` |
+| `securityContext.capabilities.drop` | Linux capabilities to be dropped | `["ALL"]` |
 
-### Health Checks
-
-#### Liveness Probe
-
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `livenessProbe.enabled` | Enable liveness probe | `true` |
-| `livenessProbe.initialDelaySeconds` | Initial delay before starting probes | `120` |
-| `livenessProbe.periodSeconds` | How often to perform the probe | `30` |
-| `livenessProbe.timeoutSeconds` | Timeout for each probe attempt | `20` |
-| `livenessProbe.failureThreshold` | Number of failures before pod is restarted | `6` |
-| `livenessProbe.successThreshold` | Number of successes to mark probe as successful | `1` |
-
-#### Readiness Probe
+### Liveness and readiness probes
 
 | Parameter | Description | Default |
 |-----------|-------------|---------|
-| `readinessProbe.enabled` | Enable readiness probe | `true` |
-| `readinessProbe.initialDelaySeconds` | Initial delay before starting probes | `10` |
-| `readinessProbe.periodSeconds` | How often to perform the probe | `30` |
-| `readinessProbe.timeoutSeconds` | Timeout for each probe attempt | `20` |
-| `readinessProbe.failureThreshold` | Number of failures before pod is marked unready | `3` |
-| `readinessProbe.successThreshold` | Number of successes to mark probe as successful | `1` |
+| `livenessProbe.enabled` | Enable livenessProbe on RabbitMQ containers | `true` |
+| `livenessProbe.initialDelaySeconds` | Initial delay seconds for livenessProbe | `120` |
+| `livenessProbe.periodSeconds` | Period seconds for livenessProbe | `30` |
+| `livenessProbe.timeoutSeconds` | Timeout seconds for livenessProbe | `20` |
+| `livenessProbe.failureThreshold` | Failure threshold for livenessProbe | `3` |
+| `livenessProbe.successThreshold` | Success threshold for livenessProbe | `1` |
+| `readinessProbe.enabled` | Enable readinessProbe on RabbitMQ containers | `true` |
+| `readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe | `0` |
+| `readinessProbe.periodSeconds` | Period seconds for readinessProbe | `10` |
+| `readinessProbe.timeoutSeconds` | Timeout seconds for readinessProbe | `5` |
+| `readinessProbe.failureThreshold` | Failure threshold for readinessProbe | `1` |
+| `readinessProbe.successThreshold` | Success threshold for readinessProbe | `1` |
 
 ### Additional Configuration
 
 | Parameter | Description | Default |
 |-----------|-------------|---------|
-| `extraEnv` | Additional environment variables | `[]` |
+| `extraEnv` | Additional environment variables to set | `[]` |
 | `extraVolumes` | Additional volumes to add to the pod | `[]` |
-| `extraVolumeMounts` | Additional volume mounts for RabbitMQ container | `[]` |
+| `extraVolumeMounts` | Additional volume mounts to add to the RabbitMQ container | `[]` |
 
 ## Examples
 
 ### Basic Deployment
+
+Deploy RabbitMQ with default configuration:
+
 ```bash
 helm install my-rabbitmq ./charts/rabbitmq
 ```
 
-### Enable Clustering
+### Production Setup with Persistence
+
 ```yaml
-# values-cluster.yaml
-clustering:
+# values-production.yaml
+persistence:
   enabled: true
-  replicaCount: 3
+  storageClass: "fast-ssd"
+  size: 50Gi
 
 resources:
   requests:
-    memory: 2Gi
-    cpu: 200m
+    memory: "2Gi"
+    cpu: "500m"
   limits:
-    memory: 4Gi
-    cpu: 1000m
+    memory: "4Gi"
+    cpu: "2000m"
+
+auth:
+  enabled: true
+  username: "admin"
+  password: "your-secure-admin-password"
+
+config:
+  memoryHighWatermark:
+    enabled: true
+    type: "relative"
+    value: 0.5
+
+ingress:
+  enabled: true
+  className: "nginx"
+  hosts:
+    - host: rabbitmq.yourdomain.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: rabbitmq-tls
+      hosts:
+        - rabbitmq.yourdomain.com
 ```
 
-### Enable Metrics with ServiceMonitor
+Deploy with production values:
+
+```bash
+helm install my-rabbitmq ./charts/rabbitmq -f values-production.yaml
+```
+
+### High Availability Cluster Setup
+
 ```yaml
-# values-monitoring.yaml
-metrics:
+# values-cluster.yaml
+replicaCount: 3
+
+peerDiscoveryK8sPlugin:
   enabled: true
-  serviceMonitor:
-    enabled: true
-    labels:
-      prometheus: kube-prometheus
+  useLongname: true
+  addressType: hostname
+
+resources:
+  requests:
+    memory: "4Gi"
+    cpu: "1000m"
+  limits:
+    memory: "8Gi"
+    cpu: "4000m"
+
+persistence:
+  enabled: true
+  storageClass: "fast-ssd"
+  size: 100Gi
+
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 100
+      podAffinityTerm:
+        labelSelector:
+          matchExpressions:
+          - key: app.kubernetes.io/name
+            operator: In
+            values:
+            - rabbitmq
+        topologyKey: kubernetes.io/hostname
 ```
 
 ### Using Existing Secret for Authentication
+
 ```yaml
 # values-external-secret.yaml
 auth:
@@ -263,100 +329,88 @@ auth:
   existingErlangCookieKey: "erlang-cookie"
 ```
 
-### Enable LDAP Authentication
+Create the secret first:
+
+```bash
+kubectl create secret generic rabbitmq-credentials \
+  --from-literal=password=your-rabbitmq-password \
+  --from-literal=erlang-cookie=your-erlang-cookie
+```
+
+### Enable Metrics and Monitoring
+
 ```yaml
-# values-ldap.yaml
-ldap:
+# values-monitoring.yaml
+metrics:
   enabled: true
-  server: "ldap.example.com"
-  port: 389
-  userDnPattern: "cn=${username},ou=Users,dc=example,dc=com"
+  serviceMonitor:
+    enabled: true
+    labels:
+      prometheus: kube-prometheus
+    interval: 15s
+    scrapeTimeout: 10s
+
+additionalPlugins:
+  - rabbitmq_shovel
+  - rabbitmq_federation
 ```
 
-## Upgrading
+## Access RabbitMQ
 
-To upgrade your RabbitMQ installation:
+### Via kubectl port-forward
 
 ```bash
-helm upgrade my-rabbitmq oci://registry-1.docker.io/cloudpirates/rabbitmq
+kubectl port-forward service/my-rabbitmq 15672:15672
 ```
 
-## Uninstalling
+### Access Management UI
 
-To uninstall/delete the RabbitMQ deployment:
+Open http://localhost:15672 in your browser and login with:
+- **Username**: `admin` (or configured username)
+- **Password**: Get from secret or configured value
+
+### Connect using AMQP
 
 ```bash
-helm delete my-rabbitmq
+kubectl port-forward service/my-rabbitmq 5672:5672
 ```
 
-## Testing
+### Default Credentials
 
-This chart includes a comprehensive test suite to verify all RabbitMQ functionality.
+- **Admin User**: `admin`
+- **Admin Password**: Auto-generated (check secret) or configured value
+- **Management UI Port**: `15672`
+- **AMQP Port**: `5672`
 
-### Running Tests
-
-#### 1. Helm Unit Tests
-```bash
-# Test template rendering and configuration
-helm unittest charts/rabbitmq
-```
-
-#### 2. Integration Tests
-```bash
-# Test single node deployment
-./charts/rabbitmq/tests/integration-test.sh rabbitmq my-rabbitmq
-
-# Test all functionality
-./charts/rabbitmq/tests/run-all-tests.sh
-```
-
-#### 3. Clustering Tests
-```bash
-# Deploy clustered RabbitMQ first
-helm install my-cluster ./charts/rabbitmq \
-  --set clustering.enabled=true \
-  --set clustering.replicaCount=3
-
-# Run clustering tests
-./charts/rabbitmq/tests/clustering-test.sh rabbitmq my-cluster 3
-```
-
-#### 4. Performance Tests
-```bash
-# Test message throughput (requires python3 and pika)
-./charts/rabbitmq/tests/performance-test.sh rabbitmq my-rabbitmq 60 1000
-```
-
-### Test Coverage
-
-The test suite verifies:
-- ✅ Pod deployment and readiness
-- ✅ Service configuration and ports
-- ✅ Authentication and secrets
-- ✅ Configuration management
-- ✅ Persistence and storage
-- ✅ Clustering functionality
-- ✅ Message publishing/consuming
-- ✅ Management API access
-- ✅ Health checks and probes
-- ✅ Security contexts
-- ✅ Resource limits
-- ✅ LDAP integration (when enabled)
-- ✅ Metrics and monitoring (when enabled)
-- ✅ Ingress configuration (when enabled)
-- ✅ Node failure and recovery
-- ✅ Performance and throughput
-
-### Prerequisites for Full Testing
+Get the auto-generated password:
 
 ```bash
-# Install required tools
-pip3 install pika  # For AMQP tests
+kubectl get secret my-rabbitmq -o jsonpath="{.data.password}" | base64 --decode
 ```
 
-## Getting Support
+## Troubleshooting
 
-For issues related to this Helm chart, please check:
-- [RabbitMQ Documentation](https://www.rabbitmq.com/docs/)
-- [Kubernetes Documentation](https://kubernetes.io/docs/)
-- Chart repository issues
+### Common Issues
+
+1. **Pod fails to start with permission errors**
+   - Ensure your storage class supports the required access modes
+   - Check if security contexts are compatible with your cluster policies
+   - Verify the RabbitMQ data directory permissions
+
+2. **Cannot connect to RabbitMQ**
+   - Verify the service is running: `kubectl get svc`
+   - Check if authentication is properly configured
+   - Ensure firewall rules allow access to ports 5672 (AMQP) and 15672 (Management UI)
+   - Check RabbitMQ logs: `kubectl logs <pod-name>`
+
+3. **Clustering issues**
+   - Verify all nodes can reach each other
+   - Check Erlang cookie consistency across cluster nodes
+   - Ensure proper DNS resolution for pod hostnames
+   - Review peer discovery plugin configuration
+
+4. **Memory-related issues**
+   - Check configured memory high watermark settings
+   - Monitor resource usage with `kubectl top pod`
+   - Adjust memory limits and RabbitMQ memory configuration
+   - Consider increasing resources
