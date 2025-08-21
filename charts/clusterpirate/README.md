@@ -62,6 +62,7 @@ The command removes all the Kubernetes components associated with the chart and 
 This Helm chart is cryptographically signed with Cosign to ensure authenticity and prevent tampering.
 
 **Public Key:**
+
 ```
 -----BEGIN PUBLIC KEY-----
 MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE7BgqFgKdPtHdXz6OfYBklYwJgGWQ
@@ -81,92 +82,92 @@ The following table lists the configurable parameters of the ClusterPirate chart
 
 ### Global parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `commonLabels` | Labels to add to all deployed objects | `{}` |
-| `commonAnnotations` | Annotations to add to all deployed objects | `{}` |
-| `imagePullSecrets` | Docker registry secret names as an array | `[{"name": "k7r-registry"}]` |
+| Parameter           | Description                                | Default                      |
+| ------------------- | ------------------------------------------ | ---------------------------- |
+| `commonLabels`      | Labels to add to all deployed objects      | `{}`                         |
+| `commonAnnotations` | Annotations to add to all deployed objects | `{}`                         |
+| `imagePullSecrets`  | Docker registry secret names as an array   | `[{"name": "k7r-registry"}]` |
 
 ### Deployment configuration
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `deployment.image.registry` | ClusterPirate image registry | `harbor.cloudpirates.io` |
-| `deployment.image.repository` | ClusterPirate image repository | `koperator-internal/services/clusterpirate` |
-| `deployment.image.tag` | ClusterPirate image tag | `latest` |
-| `deployment.image.pullPolicy` | ClusterPirate image pull policy | `Always` |
-| `deployment.resources.limits.memory` | Memory limit for ClusterPirate container | `300Mi` |
-| `deployment.resources.requests.memory` | Memory request for ClusterPirate container | `100Mi` |
-| `deployment.resources.requests.cpu` | CPU request for ClusterPirate container | `10m` |
-| `deployment.extraEnvVars` | Additional environment variables | `[]` |
+| Parameter                              | Description                                | Default                                     |
+| -------------------------------------- | ------------------------------------------ | ------------------------------------------- |
+| `deployment.image.registry`            | ClusterPirate image registry               | `harbor.cloudpirates.io`                    |
+| `deployment.image.repository`          | ClusterPirate image repository             | `koperator-internal/services/clusterpirate` |
+| `deployment.image.tag`                 | ClusterPirate image tag                    | `latest`                                    |
+| `deployment.image.pullPolicy`          | ClusterPirate image pull policy            | `Always`                                    |
+| `deployment.resources.limits.memory`   | Memory limit for ClusterPirate container   | `300Mi`                                     |
+| `deployment.resources.requests.memory` | Memory request for ClusterPirate container | `100Mi`                                     |
+| `deployment.resources.requests.cpu`    | CPU request for ClusterPirate container    | `10m`                                       |
+| `deployment.extraEnvVars`              | Additional environment variables           | `[]`                                        |
 
 ### Health probe configuration
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `deployment.probes.livenessProbe.enabled` | Enable livenessProbe on ClusterPirate containers | `true` |
-| `deployment.probes.livenessProbe.initialDelaySeconds` | Initial delay seconds for livenessProbe | `30` |
-| `deployment.probes.livenessProbe.periodSeconds` | Period seconds for livenessProbe | `10` |
-| `deployment.probes.livenessProbe.timeoutSeconds` | Timeout seconds for livenessProbe | `5` |
-| `deployment.probes.livenessProbe.failureThreshold` | Failure threshold for livenessProbe | `3` |
-| `deployment.probes.livenessProbe.successThreshold` | Success threshold for livenessProbe | `1` |
-| `deployment.probes.readinessProbe.enabled` | Enable readinessProbe on ClusterPirate containers | `true` |
-| `deployment.probes.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe | `5` |
-| `deployment.probes.readinessProbe.periodSeconds` | Period seconds for readinessProbe | `5` |
-| `deployment.probes.readinessProbe.timeoutSeconds` | Timeout seconds for readinessProbe | `3` |
-| `deployment.probes.readinessProbe.failureThreshold` | Failure threshold for readinessProbe | `3` |
-| `deployment.probes.readinessProbe.successThreshold` | Success threshold for readinessProbe | `1` |
+| Parameter                                              | Description                                       | Default |
+| ------------------------------------------------------ | ------------------------------------------------- | ------- |
+| `deployment.probes.livenessProbe.enabled`              | Enable livenessProbe on ClusterPirate containers  | `true`  |
+| `deployment.probes.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe           | `30`    |
+| `deployment.probes.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                  | `10`    |
+| `deployment.probes.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                 | `5`     |
+| `deployment.probes.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe               | `3`     |
+| `deployment.probes.livenessProbe.successThreshold`     | Success threshold for livenessProbe               | `1`     |
+| `deployment.probes.readinessProbe.enabled`             | Enable readinessProbe on ClusterPirate containers | `true`  |
+| `deployment.probes.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe          | `5`     |
+| `deployment.probes.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                 | `5`     |
+| `deployment.probes.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                | `3`     |
+| `deployment.probes.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe              | `3`     |
+| `deployment.probes.readinessProbe.successThreshold`    | Success threshold for readinessProbe              | `1`     |
 
 ### ClusterPirate Application Configuration
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `clusterPirate.logLevel` | Application logging level (debug, info, warn, error, fatal) | `info` |
-| `clusterPirate.healthPort` | Health check server port | `3000` |
-| `clusterPirate.metrics.enabled` | Enable/disable metrics collection | `true` |
-| `clusterPirate.metrics.updateIntervalSeconds` | Interval in seconds for metrics updates | `60` |
-| `clusterPirate.metrics.cache.host` | Valkey server hostname or IP address | `""` |
-| `clusterPirate.metrics.cache.port` | Valkey server port | `6379` |
-| `clusterPirate.metrics.cache.password` | Valkey authentication password | `""` |
-| `clusterPirate.metrics.cache.ttl` | Time-to-live for cached metrics in seconds | `86400` |
-| `clusterPirate.monitoring.resourceEventsEnabled` | Enable monitoring of Kubernetes resources | `true` |
-| `clusterPirate.monitoring.systemEventsEnabled` | Enable monitoring of Kubernetes system events | `true` |
+| Parameter                                        | Description                                                 | Default |
+| ------------------------------------------------ | ----------------------------------------------------------- | ------- |
+| `clusterPirate.logLevel`                         | Application logging level (debug, info, warn, error, fatal) | `info`  |
+| `clusterPirate.healthPort`                       | Health check server port                                    | `3000`  |
+| `clusterPirate.metrics.enabled`                  | Enable/disable metrics collection                           | `true`  |
+| `clusterPirate.metrics.updateIntervalSeconds`    | Interval in seconds for metrics updates                     | `60`    |
+| `clusterPirate.metrics.cache.host`               | Valkey server hostname or IP address                        | `""`    |
+| `clusterPirate.metrics.cache.port`               | Valkey server port                                          | `6379`  |
+| `clusterPirate.metrics.cache.password`           | Valkey authentication password                              | `""`    |
+| `clusterPirate.metrics.cache.ttl`                | Time-to-live for cached metrics in seconds                  | `86400` |
+| `clusterPirate.monitoring.resourceEventsEnabled` | Enable monitoring of Kubernetes resources                   | `true`  |
+| `clusterPirate.monitoring.systemEventsEnabled`   | Enable monitoring of Kubernetes system events               | `true`  |
 
 ### CloudPirates API Configuration
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
+| Parameter                          | Description                           | Default                                                 |
+| ---------------------------------- | ------------------------------------- | ------------------------------------------------------- |
 | `cloudpiratesApi.registerEndpoint` | API endpoint for cluster registration | `https://api.cloudpirates.io/v1/clusterpirate/register` |
 
 ### Authentication Configuration
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `auth.accessToken` | Access token for CloudPirates API | `""` |
-| `auth.existingSecret` | Name of existing secret containing the access token | `""` |
+| Parameter                           | Description                                                   | Default         |
+| ----------------------------------- | ------------------------------------------------------------- | --------------- |
+| `auth.accessToken`                  | Access token for CloudPirates API                             | `""`            |
+| `auth.existingSecret`               | Name of existing secret containing the access token           | `""`            |
 | `auth.existingSecretAccessTokenKey` | Key within the existing secret that contains the access token | `"accessToken"` |
 
 ### RBAC Configuration
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `rbac.create` | Whether to create RBAC resources (ClusterRole and ClusterRoleBinding) | `true` |
+| Parameter     | Description                                                           | Default |
+| ------------- | --------------------------------------------------------------------- | ------- |
+| `rbac.create` | Whether to create RBAC resources (ClusterRole and ClusterRoleBinding) | `true`  |
 
 ### Service Account Configuration
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `serviceAccount.create` | Whether to create a service account | `true` |
-| `serviceAccount.name` | Name of the service account to create or use | `""` |
+| Parameter               | Description                                  | Default |
+| ----------------------- | -------------------------------------------- | ------- |
+| `serviceAccount.create` | Whether to create a service account          | `true`  |
+| `serviceAccount.name`   | Name of the service account to create or use | `""`    |
 
 ### Valkey Configuration (Dependency)
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `valkey.enabled` | Enable/disable Valkey installation as a dependency | `true` |
-| `valkey.auth.enabled` | Enable/disable password authentication for Valkey | `true` |
-| `valkey.auth.password` | Valkey password | `""` |
-| `valkey.auth.existingSecret` | Name of existing secret containing the Valkey password | `""` |
+| Parameter                               | Description                                               | Default      |
+| --------------------------------------- | --------------------------------------------------------- | ------------ |
+| `valkey.enabled`                        | Enable/disable Valkey installation as a dependency        | `true`       |
+| `valkey.auth.enabled`                   | Enable/disable password authentication for Valkey         | `true`       |
+| `valkey.auth.password`                  | Valkey password                                           | `""`         |
+| `valkey.auth.existingSecret`            | Name of existing secret containing the Valkey password    | `""`         |
 | `valkey.auth.existingSecretPasswordKey` | Key within the existing secret that contains the password | `"password"` |
 
 ## Examples
@@ -194,7 +195,7 @@ clusterPirate:
       host: "external-valkey.example.com"
       port: 6379
       password: "secure-valkey-password"
-      ttl: 43200  # 12 hours
+      ttl: 43200 # 12 hours
 
 deployment:
   resources:
@@ -257,7 +258,7 @@ clusterPirate:
   metrics:
     updateIntervalSeconds: 120
     cache:
-      ttl: 3600  # 1 hour
+      ttl: 3600 # 1 hour
 
 deployment:
   image:
@@ -266,7 +267,7 @@ deployment:
 
 valkey:
   persistence:
-    enabled: false  # Use emptyDir for development
+    enabled: false # Use emptyDir for development
 ```
 
 ## Access ClusterPirate
@@ -298,21 +299,25 @@ kubectl get secret clusterpirate-valkey --namespace clusterpirate-system -o json
 ### Common Issues
 
 1. **Pod fails to start with authentication errors**
+
    - Ensure the access token is correctly configured
    - Verify the CloudPirates API endpoint is accessible
    - Check the secret name and key if using existing secrets
 
 2. **Cannot connect to Valkey**
+
    - Verify Valkey is running: `kubectl get pods -l app.kubernetes.io/name=valkey --namespace clusterpirate-system`
    - Check if authentication is properly configured
    - Ensure the service is accessible within the cluster
 
 3. **Metrics collection not working**
+
    - Verify RBAC permissions are created correctly
    - Check if the metrics server is running in the cluster
    - Review ClusterPirate logs for connection errors
 
 4. **High memory usage**
+
    - Adjust metrics cache TTL to reduce memory footprint
    - Increase memory limits if necessary
    - Consider reducing the metrics update interval
@@ -325,13 +330,14 @@ kubectl get secret clusterpirate-valkey --namespace clusterpirate-system -o json
 ### Performance Tuning
 
 1. **Memory Optimization**
+
    ```yaml
    clusterPirate:
      metrics:
        cache:
-         ttl: 7200  # Reduce cache TTL
-       updateIntervalSeconds: 120  # Increase update interval
-   
+         ttl: 7200 # Reduce cache TTL
+       updateIntervalSeconds: 120 # Increase update interval
+
    deployment:
      resources:
        requests:
@@ -343,6 +349,7 @@ kubectl get secret clusterpirate-valkey --namespace clusterpirate-system -o json
 ### Getting Support
 
 For issues related to this Helm chart, please check:
+
 - [Developer Portal](https://developer.cloudpirates.io)
 - Chart repository issues
 
@@ -355,17 +362,17 @@ For issues related to this Helm chart, please check:
 
 ### Environment Variables
 
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `LOG_LEVEL` | ✗ | info | Service log level |
-| `HEALTH_PORT` | ✗ | 3000 | Health check server port |
-| `METRICS_ENABLED` | ✗ | true | Enable metrics collection |
-| `METRICS_UPDATE_INTERVAL_SECONDS` | ✗ | 60 | Metrics update interval |
-| `VALKEY_HOST` | ✗ | auto-configured | Valkey server hostname |
-| `VALKEY_PORT` | ✗ | 6379 | Valkey server port |
-| `VALKEY_PASSWORD` | ✗ | auto-generated | Valkey authentication password |
-| `VALKEY_TTL` | ✗ | 86400 | Cache TTL in seconds |
-| `MONITORING_RESOURCE_EVENTS_ENABLED` | ✗ | true | Enable resource monitoring |
-| `MONITORING_SYSTEM_EVENTS_ENABLED` | ✗ | true | Enable system events monitoring |
-| `CLOUDPIRATES_API_REGISTER_ENDPOINT` | ✗ | https://api.cloudpirates.io/v1/clusterpirate/register | API registration endpoint |
-| `ACCESS_TOKEN` | ✓ | - | CloudPirates API access token |
+| Variable                             | Required | Default                                               | Description                     |
+| ------------------------------------ | -------- | ----------------------------------------------------- | ------------------------------- |
+| `LOG_LEVEL`                          | ✗        | info                                                  | Service log level               |
+| `HEALTH_PORT`                        | ✗        | 3000                                                  | Health check server port        |
+| `METRICS_ENABLED`                    | ✗        | true                                                  | Enable metrics collection       |
+| `METRICS_UPDATE_INTERVAL_SECONDS`    | ✗        | 60                                                    | Metrics update interval         |
+| `VALKEY_HOST`                        | ✗        | auto-configured                                       | Valkey server hostname          |
+| `VALKEY_PORT`                        | ✗        | 6379                                                  | Valkey server port              |
+| `VALKEY_PASSWORD`                    | ✗        | auto-generated                                        | Valkey authentication password  |
+| `VALKEY_TTL`                         | ✗        | 86400                                                 | Cache TTL in seconds            |
+| `MONITORING_RESOURCE_EVENTS_ENABLED` | ✗        | true                                                  | Enable resource monitoring      |
+| `MONITORING_SYSTEM_EVENTS_ENABLED`   | ✗        | true                                                  | Enable system events monitoring |
+| `CLOUDPIRATES_API_REGISTER_ENDPOINT` | ✗        | https://api.cloudpirates.io/v1/clusterpirate/register | API registration endpoint       |
+| `ACCESS_TOKEN`                       | ✓        | -                                                     | CloudPirates API access token   |

@@ -21,6 +21,7 @@ Use the provided test runner script to run tests for all charts:
 ```
 
 This script will:
+
 - Check if helm-unittest plugin is installed
 - Update dependencies for each chart
 - Run unit tests for all charts

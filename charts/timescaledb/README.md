@@ -43,6 +43,7 @@ The command removes all the Kubernetes components associated with the chart and 
 This Helm chart is cryptographically signed with Cosign to ensure authenticity and prevent tampering.
 
 **Public Key:**
+
 ```
 -----BEGIN PUBLIC KEY-----
 MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE7BgqFgKdPtHdXz6OfYBklYwJgGWQ
@@ -62,139 +63,138 @@ The following table lists the configurable parameters of the TimescaleDB chart a
 
 ### Global parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `global.imageRegistry` | Global Docker image registry | `""` |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]` |
+| Parameter                 | Description                                     | Default |
+| ------------------------- | ----------------------------------------------- | ------- |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`    |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`    |
 
 ### TimescaleDB image configuration
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `image.registry` | TimescaleDB image registry | `docker.io` |
-| `image.repository` | TimescaleDB image repository | `timescale/timescaledb` |
-| `image.tag` | TimescaleDB image tag (immutable tags are recommended) | `"2.17.2-pg17"` |
-| `image.pullPolicy` | TimescaleDB image pull policy | `Always` |
+| Parameter          | Description                                            | Default                 |
+| ------------------ | ------------------------------------------------------ | ----------------------- |
+| `image.registry`   | TimescaleDB image registry                             | `docker.io`             |
+| `image.repository` | TimescaleDB image repository                           | `timescale/timescaledb` |
+| `image.tag`        | TimescaleDB image tag (immutable tags are recommended) | `"2.17.2-pg17"`         |
+| `image.pullPolicy` | TimescaleDB image pull policy                          | `Always`                |
 
 ### Deployment configuration
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `replicaCount` | Number of TimescaleDB replicas to deploy (Note: TimescaleDB doesn't support multi-master replication by default) | `1` |
-| `nameOverride` | String to partially override timescaledb.fullname | `""` |
-| `fullnameOverride` | String to fully override timescaledb.fullname | `""` |
-| `commonLabels` | Labels to add to all deployed objects | `{}` |
-| `commonAnnotations` | Annotations to add to all deployed objects | `{}` |
-
+| Parameter           | Description                                                                                                      | Default |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------- | ------- |
+| `replicaCount`      | Number of TimescaleDB replicas to deploy (Note: TimescaleDB doesn't support multi-master replication by default) | `1`     |
+| `nameOverride`      | String to partially override timescaledb.fullname                                                                | `""`    |
+| `fullnameOverride`  | String to fully override timescaledb.fullname                                                                    | `""`    |
+| `commonLabels`      | Labels to add to all deployed objects                                                                            | `{}`    |
+| `commonAnnotations` | Annotations to add to all deployed objects                                                                       | `{}`    |
 
 ### Security Context
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `podSecurityContext.fsGroup` | Group ID for the volumes of the pod | `999` |
-| `securityContext.allowPrivilegeEscalation` | Enable container privilege escalation | `false` |
-| `securityContext.runAsNonRoot` | Configure the container to run as a non-root user | `true` |
-| `securityContext.runAsUser` | User ID for the TimescaleDB container | `999` |
-| `securityContext.runAsGroup` | Group ID for the TimescaleDB container | `999` |
-| `securityContext.readOnlyRootFilesystem` | Mount container root filesystem as read-only | `false` |
-| `securityContext.capabilities.drop` | Linux capabilities to be dropped | `["ALL"]` |
+| Parameter                                  | Description                                       | Default   |
+| ------------------------------------------ | ------------------------------------------------- | --------- |
+| `podSecurityContext.fsGroup`               | Group ID for the volumes of the pod               | `999`     |
+| `securityContext.allowPrivilegeEscalation` | Enable container privilege escalation             | `false`   |
+| `securityContext.runAsNonRoot`             | Configure the container to run as a non-root user | `true`    |
+| `securityContext.runAsUser`                | User ID for the TimescaleDB container             | `999`     |
+| `securityContext.runAsGroup`               | Group ID for the TimescaleDB container            | `999`     |
+| `securityContext.readOnlyRootFilesystem`   | Mount container root filesystem as read-only      | `false`   |
+| `securityContext.capabilities.drop`        | Linux capabilities to be dropped                  | `["ALL"]` |
 
 ### TimescaleDB Authentication
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `auth.postgresPassword` | Password for the postgres admin user. If not set, a random password will be generated | `""` |
-| `auth.existingSecret` | Name of existing secret to use for TimescaleDB credentials | `""` |
-| `auth.secretKeys.adminPasswordKey` | Name of key in existing secret to use for TimescaleDB credentials | `"postgres-password"` |
+| Parameter                          | Description                                                                           | Default               |
+| ---------------------------------- | ------------------------------------------------------------------------------------- | --------------------- |
+| `auth.postgresPassword`            | Password for the postgres admin user. If not set, a random password will be generated | `""`                  |
+| `auth.existingSecret`              | Name of existing secret to use for TimescaleDB credentials                            | `""`                  |
+| `auth.secretKeys.adminPasswordKey` | Name of key in existing secret to use for TimescaleDB credentials                     | `"postgres-password"` |
 
 ### TimescaleDB Configuration
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `config.postgresqlSharedPreloadLibraries` | Shared preload libraries (comma-separated list) | `"timescaledb"` |
-| `config.postgresqlMaxConnections` | Maximum number of connections | `100` |
-| `config.postgresqlSharedBuffers` | Amount of memory the database server uses for shared memory buffers | `""` |
-| `config.postgresqlEffectiveCacheSize` | Effective cache size | `""` |
-| `config.postgresqlWorkMem` | Amount of memory to be used by internal sort operations and hash tables | `""` |
-| `config.postgresqlMaintenanceWorkMem` | Maximum amount of memory to be used by maintenance operations | `""` |
-| `config.postgresqlWalBuffers` | Amount of memory used in shared memory for WAL data | `""` |
-| `config.postgresqlCheckpointCompletionTarget` | Time spent flushing dirty buffers during checkpoint, as fraction of checkpoint interval | `""` |
-| `config.postgresqlRandomPageCost` | Sets the planner's estimate of the cost of a non-sequentially-fetched disk page | `""` |
-| `config.postgresqlLogStatement` | Sets the type of statements logged | `""` |
-| `config.postgresqlLogMinDurationStatement` | Sets the minimum execution time above which statements will be logged | `""` |
-| `config.timescaledbTelemetry` | Enable/disable TimescaleDB telemetry | `"off"` |
-| `config.timescaledbMaxBackgroundWorkers` | Maximum number of TimescaleDB background workers | `8` |
-| `config.extraConfig` | Additional TimescaleDB configuration parameters | `[]` |
-| `config.existingConfigmap` | Name of existing ConfigMap with TimescaleDB configuration | `""` |
+| Parameter                                     | Description                                                                             | Default         |
+| --------------------------------------------- | --------------------------------------------------------------------------------------- | --------------- |
+| `config.postgresqlSharedPreloadLibraries`     | Shared preload libraries (comma-separated list)                                         | `"timescaledb"` |
+| `config.postgresqlMaxConnections`             | Maximum number of connections                                                           | `100`           |
+| `config.postgresqlSharedBuffers`              | Amount of memory the database server uses for shared memory buffers                     | `""`            |
+| `config.postgresqlEffectiveCacheSize`         | Effective cache size                                                                    | `""`            |
+| `config.postgresqlWorkMem`                    | Amount of memory to be used by internal sort operations and hash tables                 | `""`            |
+| `config.postgresqlMaintenanceWorkMem`         | Maximum amount of memory to be used by maintenance operations                           | `""`            |
+| `config.postgresqlWalBuffers`                 | Amount of memory used in shared memory for WAL data                                     | `""`            |
+| `config.postgresqlCheckpointCompletionTarget` | Time spent flushing dirty buffers during checkpoint, as fraction of checkpoint interval | `""`            |
+| `config.postgresqlRandomPageCost`             | Sets the planner's estimate of the cost of a non-sequentially-fetched disk page         | `""`            |
+| `config.postgresqlLogStatement`               | Sets the type of statements logged                                                      | `""`            |
+| `config.postgresqlLogMinDurationStatement`    | Sets the minimum execution time above which statements will be logged                   | `""`            |
+| `config.timescaledbTelemetry`                 | Enable/disable TimescaleDB telemetry                                                    | `"off"`         |
+| `config.timescaledbMaxBackgroundWorkers`      | Maximum number of TimescaleDB background workers                                        | `8`             |
+| `config.extraConfig`                          | Additional TimescaleDB configuration parameters                                         | `[]`            |
+| `config.existingConfigmap`                    | Name of existing ConfigMap with TimescaleDB configuration                               | `""`            |
 
 ### Service configuration
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `service.type` | TimescaleDB service type | `ClusterIP` |
-| `service.port` | TimescaleDB service port | `5432` |
-| `service.targetPort` | TimescaleDB container port | `5432` |
-| `service.annotations` | Service annotations | `{}` |
+| Parameter             | Description                | Default     |
+| --------------------- | -------------------------- | ----------- |
+| `service.type`        | TimescaleDB service type   | `ClusterIP` |
+| `service.port`        | TimescaleDB service port   | `5432`      |
+| `service.targetPort`  | TimescaleDB container port | `5432`      |
+| `service.annotations` | Service annotations        | `{}`        |
 
 ### Ingress configuration
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `ingress.enabled` | Enable ingress record generation for TimescaleDB | `false` |
-| `ingress.className` | IngressClass that will be used to implement the Ingress | `""` |
-| `ingress.annotations` | Additional annotations for the Ingress resource | `{}` |
-| `ingress.hosts[0].host` | Hostname for TimescaleDB ingress | `timescaledb.local` |
-| `ingress.hosts[0].paths[0].path` | Path for TimescaleDB ingress | `/` |
-| `ingress.hosts[0].paths[0].pathType` | Path type for TimescaleDB ingress | `Prefix` |
-| `ingress.tls` | TLS configuration for TimescaleDB ingress | `[]` |
+| Parameter                            | Description                                             | Default             |
+| ------------------------------------ | ------------------------------------------------------- | ------------------- |
+| `ingress.enabled`                    | Enable ingress record generation for TimescaleDB        | `false`             |
+| `ingress.className`                  | IngressClass that will be used to implement the Ingress | `""`                |
+| `ingress.annotations`                | Additional annotations for the Ingress resource         | `{}`                |
+| `ingress.hosts[0].host`              | Hostname for TimescaleDB ingress                        | `timescaledb.local` |
+| `ingress.hosts[0].paths[0].path`     | Path for TimescaleDB ingress                            | `/`                 |
+| `ingress.hosts[0].paths[0].pathType` | Path type for TimescaleDB ingress                       | `Prefix`            |
+| `ingress.tls`                        | TLS configuration for TimescaleDB ingress               | `[]`                |
 
 ### Resources
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `resources` | The resources to allocate for the container | `{}` |
+| Parameter   | Description                                 | Default |
+| ----------- | ------------------------------------------- | ------- |
+| `resources` | The resources to allocate for the container | `{}`    |
 
 ### Persistence
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `persistence.enabled` | Enable persistence using Persistent Volume Claims | `true` |
-| `persistence.storageClass` | Persistent Volume storage class | `""` |
-| `persistence.annotations` | Persistent Volume Claim annotations | `{}` |
-| `persistence.size` | Persistent Volume size | `8Gi` |
-| `persistence.accessModes` | Persistent Volume access modes | `["ReadWriteOnce"]` |
-| `persistence.existingClaim` | The name of an existing PVC to use for persistence | `""` |
+| Parameter                   | Description                                        | Default             |
+| --------------------------- | -------------------------------------------------- | ------------------- |
+| `persistence.enabled`       | Enable persistence using Persistent Volume Claims  | `true`              |
+| `persistence.storageClass`  | Persistent Volume storage class                    | `""`                |
+| `persistence.annotations`   | Persistent Volume Claim annotations                | `{}`                |
+| `persistence.size`          | Persistent Volume size                             | `8Gi`               |
+| `persistence.accessModes`   | Persistent Volume access modes                     | `["ReadWriteOnce"]` |
+| `persistence.existingClaim` | The name of an existing PVC to use for persistence | `""`                |
 
 ### Liveness and readiness probes
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `livenessProbe.enabled` | Enable livenessProbe on TimescaleDB containers | `true` |
-| `livenessProbe.initialDelaySeconds` | Initial delay seconds for livenessProbe | `30` |
-| `livenessProbe.periodSeconds` | Period seconds for livenessProbe | `10` |
-| `livenessProbe.timeoutSeconds` | Timeout seconds for livenessProbe | `5` |
-| `livenessProbe.failureThreshold` | Failure threshold for livenessProbe | `3` |
-| `livenessProbe.successThreshold` | Success threshold for livenessProbe | `1` |
-| `readinessProbe.enabled` | Enable readinessProbe on TimescaleDB containers | `true` |
-| `readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe | `5` |
-| `readinessProbe.periodSeconds` | Period seconds for readinessProbe | `5` |
-| `readinessProbe.timeoutSeconds` | Timeout seconds for readinessProbe | `5` |
-| `readinessProbe.failureThreshold` | Failure threshold for readinessProbe | `3` |
-| `readinessProbe.successThreshold` | Success threshold for readinessProbe | `1` |
-| `startupProbe.enabled` | Enable startupProbe on TimescaleDB containers | `true` |
-| `startupProbe.initialDelaySeconds` | Initial delay seconds for startupProbe | `30` |
-| `startupProbe.periodSeconds` | Period seconds for startupProbe | `10` |
-| `startupProbe.timeoutSeconds` | Timeout seconds for startupProbe | `5` |
-| `startupProbe.failureThreshold` | Failure threshold for startupProbe | `30` |
-| `startupProbe.successThreshold` | Success threshold for startupProbe | `1` |
+| Parameter                            | Description                                     | Default |
+| ------------------------------------ | ----------------------------------------------- | ------- |
+| `livenessProbe.enabled`              | Enable livenessProbe on TimescaleDB containers  | `true`  |
+| `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe         | `30`    |
+| `livenessProbe.periodSeconds`        | Period seconds for livenessProbe                | `10`    |
+| `livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe               | `5`     |
+| `livenessProbe.failureThreshold`     | Failure threshold for livenessProbe             | `3`     |
+| `livenessProbe.successThreshold`     | Success threshold for livenessProbe             | `1`     |
+| `readinessProbe.enabled`             | Enable readinessProbe on TimescaleDB containers | `true`  |
+| `readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe        | `5`     |
+| `readinessProbe.periodSeconds`       | Period seconds for readinessProbe               | `5`     |
+| `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe              | `5`     |
+| `readinessProbe.failureThreshold`    | Failure threshold for readinessProbe            | `3`     |
+| `readinessProbe.successThreshold`    | Success threshold for readinessProbe            | `1`     |
+| `startupProbe.enabled`               | Enable startupProbe on TimescaleDB containers   | `true`  |
+| `startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe          | `30`    |
+| `startupProbe.periodSeconds`         | Period seconds for startupProbe                 | `10`    |
+| `startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                | `5`     |
+| `startupProbe.failureThreshold`      | Failure threshold for startupProbe              | `30`    |
+| `startupProbe.successThreshold`      | Success threshold for startupProbe              | `1`     |
 
 ### Node Selection
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `nodeSelector` | Node labels for pod assignment | `{}` |
-| `tolerations` | Toleration labels for pod assignment | `[]` |
-| `affinity` | Affinity settings for pod assignment | `{}` |
+| Parameter      | Description                          | Default |
+| -------------- | ------------------------------------ | ------- |
+| `nodeSelector` | Node labels for pod assignment       | `{}`    |
+| `tolerations`  | Toleration labels for pod assignment | `[]`    |
+| `affinity`     | Affinity settings for pod assignment | `{}`    |
 
 ## Examples
 
@@ -292,15 +292,15 @@ persistence:
 affinity:
   podAntiAffinity:
     preferredDuringSchedulingIgnoredDuringExecution:
-    - weight: 100
-      podAffinityTerm:
-        labelSelector:
-          matchExpressions:
-          - key: app.kubernetes.io/name
-            operator: In
-            values:
-            - timescaledb
-        topologyKey: kubernetes.io/hostname
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                  - timescaledb
+          topologyKey: kubernetes.io/hostname
 ```
 
 ### Using Existing Secret for Authentication
@@ -343,12 +343,12 @@ data:
     effective_cache_size = 2GB
     work_mem = 16MB
     maintenance_work_mem = 256MB
-    
+
     # TimescaleDB specific settings
     shared_preload_libraries = 'timescaledb'
     timescaledb.telemetry_level = OFF
     timescaledb.max_background_workers = 16
-    
+
     # Time-series optimizations
     effective_io_concurrency = 200
     random_page_cost = 1.0
@@ -390,14 +390,14 @@ CREATE TABLE sensor_data (
 SELECT create_hypertable('sensor_data', 'time');
 
 -- Insert time-series data
-INSERT INTO sensor_data VALUES 
+INSERT INTO sensor_data VALUES
   (NOW(), 1, 20.5, 65.2),
   (NOW() - INTERVAL '1 hour', 1, 19.8, 64.1),
   (NOW() - INTERVAL '2 hours', 1, 21.2, 66.8);
 
 -- Query recent data
-SELECT * FROM sensor_data 
-WHERE time > NOW() - INTERVAL '24 hours' 
+SELECT * FROM sensor_data
+WHERE time > NOW() - INTERVAL '24 hours'
 ORDER BY time DESC;
 ```
 
@@ -418,17 +418,20 @@ kubectl get secret my-timescaledb -o jsonpath="{.data.postgres-password}" | base
 ### Common Issues
 
 1. **Pod fails to start with permission errors**
+
    - Ensure your storage class supports the required access modes
    - Check if security contexts are compatible with your cluster policies
    - Verify the TimescaleDB data directory permissions
 
 2. **Cannot connect to TimescaleDB**
+
    - Verify the service is running: `kubectl get svc`
    - Check if authentication is properly configured
    - Ensure firewall rules allow access to port 5432
    - Check TimescaleDB logs: `kubectl logs <pod-name>`
 
 3. **TimescaleDB extension not loaded**
+
    - Verify `shared_preload_libraries` includes `timescaledb`
    - Check if the database initialization completed successfully
    - Review pod logs for TimescaleDB-specific errors
@@ -442,25 +445,28 @@ kubectl get secret my-timescaledb -o jsonpath="{.data.postgres-password}" | base
 ### Performance Tuning for Time-Series Workloads
 
 1. **Memory Configuration for Time-Series**
+
    ```yaml
    config:
-     postgresqlSharedBuffers: "512MB"    # 25-30% of RAM for time-series
+     postgresqlSharedBuffers: "512MB" # 25-30% of RAM for time-series
      postgresqlEffectiveCacheSize: "2GB" # 75% of RAM
-     postgresqlWorkMem: "16MB"           # Higher for analytical queries
+     postgresqlWorkMem: "16MB" # Higher for analytical queries
      postgresqlMaintenanceWorkMem: "256MB"
-     timescaledbMaxBackgroundWorkers: 16  # More workers for compression
+     timescaledbMaxBackgroundWorkers: 16 # More workers for compression
    ```
 
 2. **Connection Settings**
+
    ```yaml
    config:
      postgresqlMaxConnections: 200
    ```
 
 3. **I/O Optimization**
+
    ```yaml
    config:
-     postgresqlRandomPageCost: "1.0"    # Lower for SSD storage
+     postgresqlRandomPageCost: "1.0" # Lower for SSD storage
      extraConfig:
        - "effective_io_concurrency = 200"
        - "maintenance_io_concurrency = 10"
@@ -479,11 +485,13 @@ kubectl get secret my-timescaledb -o jsonpath="{.data.postgres-password}" | base
 ### Backup and Recovery
 
 **Manual Backup with pg_dump**
+
 ```bash
 kubectl exec -it <pod-name> -- pg_dump -U postgres -d mydb > backup.sql
 ```
 
 **TimescaleDB-specific Backup**
+
 ```bash
 kubectl exec -it <pod-name> -- pg_dump -U postgres -d mydb --schema-only > schema.sql
 kubectl exec -it <pod-name> -- pg_dump -U postgres -d mydb --data-only > data.sql
@@ -492,12 +500,14 @@ kubectl exec -it <pod-name> -- pg_dump -U postgres -d mydb --data-only > data.sq
 ### Monitoring Time-Series Performance
 
 Check hypertable statistics:
+
 ```sql
 SELECT * FROM timescaledb_information.hypertables;
 SELECT * FROM timescaledb_information.chunks;
 ```
 
 Monitor compression:
+
 ```sql
 SELECT * FROM timescaledb_information.compression_settings;
 ```
@@ -505,6 +515,7 @@ SELECT * FROM timescaledb_information.compression_settings;
 ### Getting Support
 
 For issues related to this Helm chart, please check:
+
 - [TimescaleDB Documentation](https://docs.timescale.com/)
 - [PostgreSQL Documentation](https://www.postgresql.org/docs/)
 - [Kubernetes Documentation](https://kubernetes.io/docs/)
