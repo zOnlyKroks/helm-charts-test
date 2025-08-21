@@ -17,7 +17,7 @@ High performance in-memory data structure store, fork of Redis. Valkey is an ope
 To install the chart with the release name `my-valkey`:
 
 ```bash
-$ helm install my-valkey oci://registry-1.docker.io/cloudpirates/valkey
+helm install my-valkey oci://registry-1.docker.io/cloudpirates/valkey
 ```
 
 To install with custom values:
@@ -29,7 +29,7 @@ helm install my-valkey oci://registry-1.docker.io/cloudpirates/valkey -f my-valu
 Or install directly from the local chart:
 
 ```bash
-$ helm install my-valkey ./charts/valkey
+helm install my-valkey ./charts/valkey
 ```
 
 The command deploys Valkey on the Kubernetes cluster in the default configuration. The [Configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -39,7 +39,7 @@ The command deploys Valkey on the Kubernetes cluster in the default configuratio
 To uninstall/delete the `my-valkey` deployment:
 
 ```bash
-$ helm uninstall my-valkey
+helm uninstall my-valkey
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.

@@ -17,7 +17,7 @@ A Helm chart for MinIO - High Performance Object Storage compatible with Amazon 
 To install the chart with the release name `my-minio`:
 
 ```bash
-$ helm install my-minio oci://registry-1.docker.io/cloudpirates/minio
+helm install my-minio oci://registry-1.docker.io/cloudpirates/minio
 ```
 
 To install with custom values:
@@ -29,7 +29,7 @@ helm install my-minio oci://registry-1.docker.io/cloudpirates/minio -f my-values
 Or install directly from the local chart:
 
 ```bash
-$ helm install my-minio ./charts/minio
+helm install my-minio ./charts/minio
 ```
 
 The command deploys MinIO on the Kubernetes cluster in the default configuration. The [Configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -39,7 +39,7 @@ The command deploys MinIO on the Kubernetes cluster in the default configuration
 To uninstall/delete the `my-minio` deployment:
 
 ```bash
-$ helm uninstall my-minio
+helm uninstall my-minio
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
