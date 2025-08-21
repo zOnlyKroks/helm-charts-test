@@ -24,7 +24,7 @@ if ! helm plugin list | grep -q unittest; then
 fi
 
 # Charts to test
-CHARTS=("mongodb" "clusterpirate" "mariadb" "redis" "minio" "postgres" "valkey")
+CHARTS=("mongodb" "clusterpirate" "mariadb" "redis" "minio" "postgres" "valkey" "rabbitmq")
 
 # Track results
 PASSED_CHARTS=()
