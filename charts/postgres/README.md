@@ -17,13 +17,13 @@ A Helm chart for PostgreSQL - The World's Most Advanced Open Source Relational D
 To install the chart with the release name `my-postgres`:
 
 ```bash
-$ helm install my-postgres oci://registry-1.docker.io/cloudpirates/postgres
+helm install my-postgres oci://registry-1.docker.io/cloudpirates/postgres
 ```
 
 Or install directly from the local chart:
 
 ```bash
-$ helm install my-postgres ./charts/postgres
+helm install my-postgres ./charts/postgres
 ```
 
 The command deploys PostgreSQL on the Kubernetes cluster in the default configuration. The [Configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -33,7 +33,7 @@ The command deploys PostgreSQL on the Kubernetes cluster in the default configur
 To uninstall/delete the `my-postgres` deployment:
 
 ```bash
-$ helm uninstall my-postgres
+helm uninstall my-postgres
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.

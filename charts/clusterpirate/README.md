@@ -34,15 +34,15 @@ The collected data is processed and visualized through the CloudPirates web cons
 To install the chart with the release name `clusterpirate` in the `clusterpirate-system` namespace:
 
 ```bash
-$ kubectl create namespace clusterpirate-system
-$ helm install clusterpirate --namespace clusterpirate-system oci://registry-1.docker.io/cloudpirates/clusterpirate
+kubectl create namespace clusterpirate-system
+helm install clusterpirate --namespace clusterpirate-system oci://registry-1.docker.io/cloudpirates/clusterpirate
 ```
 
 Or install directly from the local chart:
 
 ```bash
-$ kubectl create namespace clusterpirate-system
-$ helm install clusterpirate ./charts/clusterpirate --namespace clusterpirate-system
+kubectl create namespace clusterpirate-system
+helm install clusterpirate ./charts/clusterpirate --namespace clusterpirate-system
 ```
 
 The command deploys ClusterPirate on the Kubernetes cluster in the default configuration. The [Configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -52,7 +52,7 @@ The command deploys ClusterPirate on the Kubernetes cluster in the default confi
 To uninstall/delete the `clusterpirate` deployment:
 
 ```bash
-$ helm uninstall clusterpirate --namespace clusterpirate-system
+helm uninstall clusterpirate --namespace clusterpirate-system
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.

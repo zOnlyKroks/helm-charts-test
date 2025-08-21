@@ -26,7 +26,7 @@ This Helm chart provides a complete MongoDB StatefulSet deployment solution with
 To install the chart with the release name `my-mongodb`:
 
 ```bash
-$ helm install my-mongodb oci://registry-1.docker.io/cloudpirates/mongodb
+helm install my-mongodb oci://registry-1.docker.io/cloudpirates/mongodb
 ```
 
 To install with custom values:

@@ -21,7 +21,7 @@ Add the CloudPirates repository:
 To install the chart with the release name `my-redis`:
 
 ```bash
-$ helm install my-redis oci://registry-1.docker.io/cloudpirates/redis
+helm install my-redis oci://registry-1.docker.io/cloudpirates/redis
 ```
 
 To install with custom values:
@@ -33,7 +33,7 @@ helm install my-redis oci://registry-1.docker.io/cloudpirates/redis -f my-values
 Or install directly from the local chart:
 
 ```bash
-$ helm install my-redis ./charts/redis
+helm install my-redis ./charts/redis
 ```
 
 ### Getting Started

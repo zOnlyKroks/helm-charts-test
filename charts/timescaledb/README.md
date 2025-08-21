@@ -17,13 +17,13 @@ A Helm chart for TimescaleDB - The Open Source Time-Series Database for PostgreS
 To install the chart with the release name `my-timescaledb`:
 
 ```bash
-$ helm install my-timescaledb oci://registry-1.docker.io/cloudpirates/timescaledb
+helm install my-timescaledb oci://registry-1.docker.io/cloudpirates/timescaledb
 ```
 
 Or install directly from the local chart:
 
 ```bash
-$ helm install my-timescaledb ./charts/timescaledb
+helm install my-timescaledb ./charts/timescaledb
 ```
 
 The command deploys TimescaleDB on the Kubernetes cluster in the default configuration. The [Configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -33,7 +33,7 @@ The command deploys TimescaleDB on the Kubernetes cluster in the default configu
 To uninstall/delete the `my-timescaledb` deployment:
 
 ```bash
-$ helm uninstall my-timescaledb
+helm uninstall my-timescaledb
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
