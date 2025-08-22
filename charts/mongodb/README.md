@@ -26,7 +26,7 @@ This Helm chart provides a complete MongoDB StatefulSet deployment solution with
 To install the chart with the release name `my-mongodb`:
 
 ```bash
-$ helm install my-mongodb oci://registry-1.docker.io/cloudpirates/mongodb
+helm install my-mongodb oci://registry-1.docker.io/cloudpirates/mongodb
 ```
 
 To install with custom values:
@@ -48,6 +48,7 @@ helm delete my-mongodb
 This Helm chart is cryptographically signed with Cosign to ensure authenticity and prevent tampering.
 
 **Public Key:**
+
 ```
 -----BEGIN PUBLIC KEY-----
 MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE7BgqFgKdPtHdXz6OfYBklYwJgGWQ
@@ -67,92 +68,92 @@ The following table lists the configurable parameters of the MongoDB chart and t
 
 ### Global Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `replicaCount` | Number of MongoDB replicas to deploy | `1` |
-| `nameOverride` | String to partially override mongodb.fullname | `""` |
-| `fullnameOverride` | String to fully override mongodb.fullname | `""` |
+| Parameter          | Description                                   | Default |
+| ------------------ | --------------------------------------------- | ------- |
+| `replicaCount`     | Number of MongoDB replicas to deploy          | `1`     |
+| `nameOverride`     | String to partially override mongodb.fullname | `""`    |
+| `fullnameOverride` | String to fully override mongodb.fullname     | `""`    |
 
 ### Image Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `image.repository` | MongoDB Docker image repository | `mongo` |
-| `image.tag` | MongoDB Docker image tag | `"8.0.12"` |
-| `image.digest` | MongoDB Docker image digest | `"sha256:a6bda40d00e56682aeaa1bfc88e024b7dd755782c575c02760104fe02010f94f"` |
-| `image.pullPolicy` | MongoDB image pull policy | `IfNotPresent` |
+| Parameter          | Description                     | Default                                                                     |
+| ------------------ | ------------------------------- | --------------------------------------------------------------------------- |
+| `image.repository` | MongoDB Docker image repository | `mongo`                                                                     |
+| `image.tag`        | MongoDB Docker image tag        | `"8.0.12"`                                                                  |
+| `image.digest`     | MongoDB Docker image digest     | `"sha256:a6bda40d00e56682aeaa1bfc88e024b7dd755782c575c02760104fe02010f94f"` |
+| `image.pullPolicy` | MongoDB image pull policy       | `IfNotPresent`                                                              |
 
 ### Service Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
+| Parameter      | Description             | Default     |
+| -------------- | ----------------------- | ----------- |
 | `service.type` | Kubernetes service type | `ClusterIP` |
-| `service.port` | MongoDB service port | `27017` |
+| `service.port` | MongoDB service port    | `27017`     |
 
 ### MongoDB Configuration Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `auth.enabled` | Enable MongoDB authentication | `true` |
-| `auth.rootUsername` | MongoDB root username | `admin` |
-| `auth.rootPassword` | MongoDB root password (if empty, random password will be generated) | `""` |
-| `auth.existingSecret` | Name of existing secret containing MongoDB password | `""` |
-| `auth.existingSecretPasswordKey` | Key in existing secret containing MongoDB password | `""` |
-| `config` | MongoDB configuration options | `{}` |
+| Parameter                        | Description                                                         | Default |
+| -------------------------------- | ------------------------------------------------------------------- | ------- |
+| `auth.enabled`                   | Enable MongoDB authentication                                       | `true`  |
+| `auth.rootUsername`              | MongoDB root username                                               | `admin` |
+| `auth.rootPassword`              | MongoDB root password (if empty, random password will be generated) | `""`    |
+| `auth.existingSecret`            | Name of existing secret containing MongoDB password                 | `""`    |
+| `auth.existingSecretPasswordKey` | Key in existing secret containing MongoDB password                  | `""`    |
+| `config`                         | MongoDB configuration options                                       | `{}`    |
 
 ### Persistence Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `persistence.enabled` | Enable persistent storage | `true` |
-| `persistence.storageClass` | Storage class to use for persistent volume | `""` |
-| `persistence.accessMode` | Access mode for persistent volume | `ReadWriteOnce` |
-| `persistence.size` | Size of persistent volume | `8Gi` |
-| `persistence.mountPath` | Mount path for MongoDB data | `/data/db` |
-| `persistence.annotations` | Annotations for persistent volume claims | `{}` |
+| Parameter                  | Description                                | Default         |
+| -------------------------- | ------------------------------------------ | --------------- |
+| `persistence.enabled`      | Enable persistent storage                  | `true`          |
+| `persistence.storageClass` | Storage class to use for persistent volume | `""`            |
+| `persistence.accessMode`   | Access mode for persistent volume          | `ReadWriteOnce` |
+| `persistence.size`         | Size of persistent volume                  | `8Gi`           |
+| `persistence.mountPath`    | Mount path for MongoDB data                | `/data/db`      |
+| `persistence.annotations`  | Annotations for persistent volume claims   | `{}`            |
 
 ### Resource Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `resources` | Resource limits and requests for MongoDB pod | `{}` |
-| `nodeSelector` | Node selector for pod assignment | `{}` |
-| `tolerations` | Tolerations for pod assignment | `[]` |
-| `affinity` | Affinity rules for pod assignment | `{}` |
+| Parameter      | Description                                  | Default |
+| -------------- | -------------------------------------------- | ------- |
+| `resources`    | Resource limits and requests for MongoDB pod | `{}`    |
+| `nodeSelector` | Node selector for pod assignment             | `{}`    |
+| `tolerations`  | Tolerations for pod assignment               | `[]`    |
+| `affinity`     | Affinity rules for pod assignment            | `{}`    |
 
 ### Security Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `securityContext.fsGroup` | Group ID for filesystem ownership | `999` |
-| `securityContext.runAsUser` | User ID to run the container | `999` |
-| `securityContext.runAsNonRoot` | Run as non-root user | `true` |
-| `podSecurityContext` | Security context for the pod | `{}` |
+| Parameter                      | Description                       | Default |
+| ------------------------------ | --------------------------------- | ------- |
+| `securityContext.fsGroup`      | Group ID for filesystem ownership | `999`   |
+| `securityContext.runAsUser`    | User ID to run the container      | `999`   |
+| `securityContext.runAsNonRoot` | Run as non-root user              | `true`  |
+| `podSecurityContext`           | Security context for the pod      | `{}`    |
 
 ### Health Check Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `livenessProbe.enabled` | Enable liveness probe | `true` |
-| `livenessProbe.initialDelaySeconds` | Initial delay before starting probes | `30` |
-| `livenessProbe.periodSeconds` | How often to perform the probe | `10` |
-| `livenessProbe.timeoutSeconds` | Timeout for each probe attempt | `5` |
-| `livenessProbe.failureThreshold` | Number of failures before pod is restarted | `6` |
-| `livenessProbe.successThreshold` | Number of successes to mark probe as successful | `1` |
-| `readinessProbe.enabled` | Enable readiness probe | `true` |
-| `readinessProbe.initialDelaySeconds` | Initial delay before starting probes | `5` |
-| `readinessProbe.periodSeconds` | How often to perform the probe | `10` |
-| `readinessProbe.timeoutSeconds` | Timeout for each probe attempt | `5` |
-| `readinessProbe.failureThreshold` | Number of failures before pod is marked unready | `6` |
-| `readinessProbe.successThreshold` | Number of successes to mark probe as successful | `1` |
+| Parameter                            | Description                                     | Default |
+| ------------------------------------ | ----------------------------------------------- | ------- |
+| `livenessProbe.enabled`              | Enable liveness probe                           | `true`  |
+| `livenessProbe.initialDelaySeconds`  | Initial delay before starting probes            | `30`    |
+| `livenessProbe.periodSeconds`        | How often to perform the probe                  | `10`    |
+| `livenessProbe.timeoutSeconds`       | Timeout for each probe attempt                  | `5`     |
+| `livenessProbe.failureThreshold`     | Number of failures before pod is restarted      | `6`     |
+| `livenessProbe.successThreshold`     | Number of successes to mark probe as successful | `1`     |
+| `readinessProbe.enabled`             | Enable readiness probe                          | `true`  |
+| `readinessProbe.initialDelaySeconds` | Initial delay before starting probes            | `5`     |
+| `readinessProbe.periodSeconds`       | How often to perform the probe                  | `10`    |
+| `readinessProbe.timeoutSeconds`      | Timeout for each probe attempt                  | `5`     |
+| `readinessProbe.failureThreshold`    | Number of failures before pod is marked unready | `6`     |
+| `readinessProbe.successThreshold`    | Number of successes to mark probe as successful | `1`     |
 
 ### Additional Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `extraEnv` | Additional environment variables to set | `[]` |
-| `extraVolumes` | Additional volumes to add to the pod | `[]` |
-| `extraVolumeMounts` | Additional volume mounts to add to the MongoDB container | `[]` |
+| Parameter           | Description                                              | Default |
+| ------------------- | -------------------------------------------------------- | ------- |
+| `extraEnv`          | Additional environment variables to set                  | `[]`    |
+| `extraVolumes`      | Additional volumes to add to the pod                     | `[]`    |
+| `extraVolumeMounts` | Additional volume mounts to add to the MongoDB container | `[]`    |
 
 ## Example Values
 
@@ -236,6 +237,7 @@ kubectl port-forward --namespace default svc/my-mongodb 27017:27017
 ```
 
 Then connect using:
+
 ```bash
 mongosh --host 127.0.0.1 --port 27017 --authenticationDatabase admin -u admin -p [PASSWORD]
 ```

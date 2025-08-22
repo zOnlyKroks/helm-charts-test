@@ -8,17 +8,18 @@ A curated collection of production-ready Helm charts for open-source cloud-nativ
 
 ## Available Charts
 
-| Chart | Description |
-|-------|-------------|
+| Chart                                  | Description                                                                                                               |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
 | [ClusterPirate](charts/clusterpirate/) | Client agent for the CloudPirates Managed Observability Platform to connect your Kubernetes cluster to our infrastructure |
-| [Common](charts/common/) | A library chart for common templates and helper functions |
-| [MariaDB](charts/mariadb/) | High-performance, open-source relational database server that is a drop-in replacement for MySQL |
-| [MinIO](charts/minio/) | High Performance Object Storage compatible with Amazon S3 APIs |
-| [MongoDB](charts/mongodb/) | MongoDB a flexible NoSQL database for scalable, real-time data management |
-| [PostgreSQL](charts/postgres/) | The World's Most Advanced Open Source Relational Database |
-| [Redis](charts/redis/) | In-memory data structure store, used as a database, cache, and message broker |
-| [TimescaleDB](charts/timescaledb/) | TimescaleDB is a PostgreSQL extension for high-performance real-time analytics on time-series and event data |
-| [Valkey](charts/valkey/) | High performance in-memory data structure store, fork of Redis |
+| [Common](charts/common/)               | A library chart for common templates and helper functions                                                                 |
+| [MariaDB](charts/mariadb/)             | High-performance, open-source relational database server that is a drop-in replacement for MySQL                          |
+| [MinIO](charts/minio/)                 | High Performance Object Storage compatible with Amazon S3 APIs                                                            |
+| [MongoDB](charts/mongodb/)             | MongoDB a flexible NoSQL database for scalable, real-time data management                                                 |
+| [PostgreSQL](charts/postgres/)         | The World's Most Advanced Open Source Relational Database                                                                 |
+| [RabbitMQ](charts/rabbitmq/)           | A messaging broker that implements the Advanced Message Queuing Protocol (AMQP)                                           |
+| [Redis](charts/redis/)                 | In-memory data structure store, used as a database, cache, and message broker                                             |
+| [TimescaleDB](charts/timescaledb/)     | TimescaleDB is a PostgreSQL extension for high-performance real-time analytics on time-series and event data              |
+| [Valkey](charts/valkey/)               | High performance in-memory data structure store, fork of Redis                                                            |
 
 ## Quick Start
 
@@ -30,19 +31,20 @@ A curated collection of production-ready Helm charts for open-source cloud-nativ
 
 ### Installing Charts
 
-   ```bash
-   # From repository
-   helm install my-release oci://registry-1.docker.io/cloudpirates/<chartname>
-   
-   # From local clone
-   helm install my-release ./charts/<chart-name>
-   ```
+```bash
+# From repository
+helm install my-release oci://registry-1.docker.io/cloudpirates/<chartname>
+
+# From local clone
+helm install my-release ./charts/<chart-name>
+```
 
 ## Chart Features
 
 All charts in this repository provide:
 
 ### 🔒 **Security First**
+
 - **Cryptographically Signed**: All charts are signed with [Cosign](COSIGN.md) for supply chain security
 - Non-root containers by default
 - Read-only root filesystems where possible
@@ -51,6 +53,7 @@ All charts in this repository provide:
 - No hardcoded credentials
 
 ### 📊 **Production Ready**
+
 - Comprehensive health checks (liveness, readiness, startup probes)
 - Resource requests and limits support
 - Persistent storage configurations
@@ -58,6 +61,7 @@ All charts in this repository provide:
 - Health check endpoints
 
 ### 🎛️ **Highly Configurable**
+
 - Extensive values.yaml with detailed documentation
 - Support for existing secrets and ConfigMaps
 - Flexible ingress configurations
@@ -69,7 +73,7 @@ All charts in this repository provide:
 Each chart provides extensive configuration options through `values.yaml`. Key configuration areas include:
 
 - **Authentication & Security**: User credentials, existing secrets, security contexts
-- **Storage**: Persistent volumes, storage classes, backup configurations  
+- **Storage**: Persistent volumes, storage classes, backup configurations
 - **Networking**: Services, ingress, network policies
 - **Scaling**: Replica counts, autoscaling, resource limits
 - **Monitoring**: Metrics, service monitors, health checks
@@ -101,7 +105,9 @@ helm package ./charts/<chart-name>
 ## Support
 
 ### Chart Issues
+
 For issues specific to these Helm charts:
+
 - Check individual chart README files for troubleshooting
 - Review chart documentation and examples
 - Verify configuration values

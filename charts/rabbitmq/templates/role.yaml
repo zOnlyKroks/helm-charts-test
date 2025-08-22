@@ -1,0 +1,19 @@
+{{- if .Values.peerDiscoveryK8sPlugin.enabled }}
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ template "rabbitmq.fullname" . }}-peer-discovery
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "rabbitmq.labels" . | nindent 4 }}
+  {{- with (include "rabbitmq.annotations" .) }}
+  annotations:
+    {{- . | nindent 4 }}
+  {{- end }}
+rules:
+  - apiGroups: [""]
+    resources: ["endpoints"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["create"]
+{{- end }}

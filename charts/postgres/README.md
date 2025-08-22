@@ -17,13 +17,13 @@ A Helm chart for PostgreSQL - The World's Most Advanced Open Source Relational D
 To install the chart with the release name `my-postgres`:
 
 ```bash
-$ helm install my-postgres oci://registry-1.docker.io/cloudpirates/postgres
+helm install my-postgres oci://registry-1.docker.io/cloudpirates/postgres
 ```
 
 Or install directly from the local chart:
 
 ```bash
-$ helm install my-postgres ./charts/postgres
+helm install my-postgres ./charts/postgres
 ```
 
 The command deploys PostgreSQL on the Kubernetes cluster in the default configuration. The [Configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -33,7 +33,7 @@ The command deploys PostgreSQL on the Kubernetes cluster in the default configur
 To uninstall/delete the `my-postgres` deployment:
 
 ```bash
-$ helm uninstall my-postgres
+helm uninstall my-postgres
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -43,6 +43,7 @@ The command removes all the Kubernetes components associated with the chart and 
 This Helm chart is cryptographically signed with Cosign to ensure authenticity and prevent tampering.
 
 **Public Key:**
+
 ```
 -----BEGIN PUBLIC KEY-----
 MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE7BgqFgKdPtHdXz6OfYBklYwJgGWQ
@@ -62,150 +63,150 @@ The following table lists the configurable parameters of the PostgreSQL chart an
 
 ### Global parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `global.imageRegistry` | Global Docker image registry | `""` |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]` |
+| Parameter                 | Description                                     | Default |
+| ------------------------- | ----------------------------------------------- | ------- |
+| `global.imageRegistry`    | Global Docker image registry                    | `""`    |
+| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`    |
 
 ### PostgreSQL image configuration
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `image.registry` | PostgreSQL image registry | `docker.io` |
-| `image.repository` | PostgreSQL image repository | `postgres` |
-| `image.tag` | PostgreSQL image tag (immutable tags are recommended) | `"17.2"` |
-| `image.digest` | PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""` |
-| `image.pullPolicy` | PostgreSQL image pull policy | `IfNotPresent` |
+| Parameter          | Description                                                                                                | Default        |
+| ------------------ | ---------------------------------------------------------------------------------------------------------- | -------------- |
+| `image.registry`   | PostgreSQL image registry                                                                                  | `docker.io`    |
+| `image.repository` | PostgreSQL image repository                                                                                | `postgres`     |
+| `image.tag`        | PostgreSQL image tag (immutable tags are recommended)                                                      | `"17.2"`       |
+| `image.digest`     | PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`           |
+| `image.pullPolicy` | PostgreSQL image pull policy                                                                               | `IfNotPresent` |
 
 ### Deployment configuration
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `replicaCount` | Number of PostgreSQL replicas to deploy (Note: PostgreSQL doesn't support multi-master replication by default) | `1` |
-| `nameOverride` | String to partially override postgres.fullname | `""` |
-| `fullnameOverride` | String to fully override postgres.fullname | `""` |
-| `commonLabels` | Labels to add to all deployed objects | `{}` |
-| `commonAnnotations` | Annotations to add to all deployed objects | `{}` |
+| Parameter           | Description                                                                                                    | Default |
+| ------------------- | -------------------------------------------------------------------------------------------------------------- | ------- |
+| `replicaCount`      | Number of PostgreSQL replicas to deploy (Note: PostgreSQL doesn't support multi-master replication by default) | `1`     |
+| `nameOverride`      | String to partially override postgres.fullname                                                                 | `""`    |
+| `fullnameOverride`  | String to fully override postgres.fullname                                                                     | `""`    |
+| `commonLabels`      | Labels to add to all deployed objects                                                                          | `{}`    |
+| `commonAnnotations` | Annotations to add to all deployed objects                                                                     | `{}`    |
 
 ### Pod annotations and labels
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `podAnnotations` | Map of annotations to add to the pods | `{}` |
-| `podLabels` | Map of labels to add to the pods | `{}` |
+| Parameter        | Description                           | Default |
+| ---------------- | ------------------------------------- | ------- |
+| `podAnnotations` | Map of annotations to add to the pods | `{}`    |
+| `podLabels`      | Map of labels to add to the pods      | `{}`    |
 
 ### Security Context
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `podSecurityContext.fsGroup` | Group ID for the volumes of the pod | `999` |
-| `securityContext.allowPrivilegeEscalation` | Enable container privilege escalation | `false` |
-| `securityContext.runAsNonRoot` | Configure the container to run as a non-root user | `true` |
-| `securityContext.runAsUser` | User ID for the PostgreSQL container | `999` |
-| `securityContext.runAsGroup` | Group ID for the PostgreSQL container | `999` |
-| `securityContext.readOnlyRootFilesystem` | Mount container root filesystem as read-only | `false` |
-| `securityContext.capabilities.drop` | Linux capabilities to be dropped | `["ALL"]` |
+| Parameter                                  | Description                                       | Default   |
+| ------------------------------------------ | ------------------------------------------------- | --------- |
+| `podSecurityContext.fsGroup`               | Group ID for the volumes of the pod               | `999`     |
+| `securityContext.allowPrivilegeEscalation` | Enable container privilege escalation             | `false`   |
+| `securityContext.runAsNonRoot`             | Configure the container to run as a non-root user | `true`    |
+| `securityContext.runAsUser`                | User ID for the PostgreSQL container              | `999`     |
+| `securityContext.runAsGroup`               | Group ID for the PostgreSQL container             | `999`     |
+| `securityContext.readOnlyRootFilesystem`   | Mount container root filesystem as read-only      | `false`   |
+| `securityContext.capabilities.drop`        | Linux capabilities to be dropped                  | `["ALL"]` |
 
 ### PostgreSQL Authentication
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `auth.enablePostgresUser` | Enable/disable the postgres user | `true` |
-| `auth.postgresPassword` | Password for the postgres admin user. If not set, a random password will be generated | `""` |
-| `auth.username` | Name for a custom user to create | `""` |
-| `auth.password` | Password for the custom user to create | `""` |
-| `auth.database` | Name for a custom database to create | `""` |
-| `auth.existingSecret` | Name of existing secret to use for PostgreSQL credentials | `""` |
-| `auth.secretKeys.adminPasswordKey` | Name of key in existing secret to use for PostgreSQL credentials | `"postgres-password"` |
-| `auth.secretKeys.userPasswordKey` | Name of key in existing secret to use for PostgreSQL credentials | `"password"` |
-| `auth.secretKeys.replicationPasswordKey` | Name of key in existing secret to use for replication user password | `"replication-password"` |
+| Parameter                                | Description                                                                           | Default                  |
+| ---------------------------------------- | ------------------------------------------------------------------------------------- | ------------------------ |
+| `auth.enablePostgresUser`                | Enable/disable the postgres user                                                      | `true`                   |
+| `auth.postgresPassword`                  | Password for the postgres admin user. If not set, a random password will be generated | `""`                     |
+| `auth.username`                          | Name for a custom user to create                                                      | `""`                     |
+| `auth.password`                          | Password for the custom user to create                                                | `""`                     |
+| `auth.database`                          | Name for a custom database to create                                                  | `""`                     |
+| `auth.existingSecret`                    | Name of existing secret to use for PostgreSQL credentials                             | `""`                     |
+| `auth.secretKeys.adminPasswordKey`       | Name of key in existing secret to use for PostgreSQL credentials                      | `"postgres-password"`    |
+| `auth.secretKeys.userPasswordKey`        | Name of key in existing secret to use for PostgreSQL credentials                      | `"password"`             |
+| `auth.secretKeys.replicationPasswordKey` | Name of key in existing secret to use for replication user password                   | `"replication-password"` |
 
 ### PostgreSQL Configuration
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `config.postgresqlSharedPreloadLibraries` | Shared preload libraries (comma-separated list) | `""` |
-| `config.postgresqlMaxConnections` | Maximum number of connections | `100` |
-| `config.postgresqlSharedBuffers` | Amount of memory the database server uses for shared memory buffers | `""` |
-| `config.postgresqlEffectiveCacheSize` | Effective cache size | `""` |
-| `config.postgresqlWorkMem` | Amount of memory to be used by internal sort operations and hash tables | `""` |
-| `config.postgresqlMaintenanceWorkMem` | Maximum amount of memory to be used by maintenance operations | `""` |
-| `config.postgresqlWalBuffers` | Amount of memory used in shared memory for WAL data | `""` |
-| `config.postgresqlCheckpointCompletionTarget` | Time spent flushing dirty buffers during checkpoint, as fraction of checkpoint interval | `""` |
-| `config.postgresqlRandomPageCost` | Sets the planner's estimate of the cost of a non-sequentially-fetched disk page | `""` |
-| `config.postgresqlLogStatement` | Sets the type of statements logged | `""` |
-| `config.postgresqlLogMinDurationStatement` | Sets the minimum execution time above which statements will be logged | `""` |
-| `config.extraConfig` | Additional PostgreSQL configuration parameters | `[]` |
-| `config.existingConfigmap` | Name of existing ConfigMap with PostgreSQL configuration | `""` |
+| Parameter                                     | Description                                                                             | Default |
+| --------------------------------------------- | --------------------------------------------------------------------------------------- | ------- |
+| `config.postgresqlSharedPreloadLibraries`     | Shared preload libraries (comma-separated list)                                         | `""`    |
+| `config.postgresqlMaxConnections`             | Maximum number of connections                                                           | `100`   |
+| `config.postgresqlSharedBuffers`              | Amount of memory the database server uses for shared memory buffers                     | `""`    |
+| `config.postgresqlEffectiveCacheSize`         | Effective cache size                                                                    | `""`    |
+| `config.postgresqlWorkMem`                    | Amount of memory to be used by internal sort operations and hash tables                 | `""`    |
+| `config.postgresqlMaintenanceWorkMem`         | Maximum amount of memory to be used by maintenance operations                           | `""`    |
+| `config.postgresqlWalBuffers`                 | Amount of memory used in shared memory for WAL data                                     | `""`    |
+| `config.postgresqlCheckpointCompletionTarget` | Time spent flushing dirty buffers during checkpoint, as fraction of checkpoint interval | `""`    |
+| `config.postgresqlRandomPageCost`             | Sets the planner's estimate of the cost of a non-sequentially-fetched disk page         | `""`    |
+| `config.postgresqlLogStatement`               | Sets the type of statements logged                                                      | `""`    |
+| `config.postgresqlLogMinDurationStatement`    | Sets the minimum execution time above which statements will be logged                   | `""`    |
+| `config.extraConfig`                          | Additional PostgreSQL configuration parameters                                          | `[]`    |
+| `config.existingConfigmap`                    | Name of existing ConfigMap with PostgreSQL configuration                                | `""`    |
 
 ### Service configuration
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `service.type` | PostgreSQL service type | `ClusterIP` |
-| `service.port` | PostgreSQL service port | `5432` |
-| `service.targetPort` | PostgreSQL container port | `5432` |
-| `service.annotations` | Service annotations | `{}` |
+| Parameter             | Description               | Default     |
+| --------------------- | ------------------------- | ----------- |
+| `service.type`        | PostgreSQL service type   | `ClusterIP` |
+| `service.port`        | PostgreSQL service port   | `5432`      |
+| `service.targetPort`  | PostgreSQL container port | `5432`      |
+| `service.annotations` | Service annotations       | `{}`        |
 
 ### Ingress configuration
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `ingress.enabled` | Enable ingress record generation for PostgreSQL | `false` |
-| `ingress.className` | IngressClass that will be used to implement the Ingress | `""` |
-| `ingress.annotations` | Additional annotations for the Ingress resource | `{}` |
-| `ingress.hosts[0].host` | Hostname for PostgreSQL ingress | `postgres.local` |
-| `ingress.hosts[0].paths[0].path` | Path for PostgreSQL ingress | `/` |
-| `ingress.hosts[0].paths[0].pathType` | Path type for PostgreSQL ingress | `Prefix` |
-| `ingress.tls` | TLS configuration for PostgreSQL ingress | `[]` |
+| Parameter                            | Description                                             | Default          |
+| ------------------------------------ | ------------------------------------------------------- | ---------------- |
+| `ingress.enabled`                    | Enable ingress record generation for PostgreSQL         | `false`          |
+| `ingress.className`                  | IngressClass that will be used to implement the Ingress | `""`             |
+| `ingress.annotations`                | Additional annotations for the Ingress resource         | `{}`             |
+| `ingress.hosts[0].host`              | Hostname for PostgreSQL ingress                         | `postgres.local` |
+| `ingress.hosts[0].paths[0].path`     | Path for PostgreSQL ingress                             | `/`              |
+| `ingress.hosts[0].paths[0].pathType` | Path type for PostgreSQL ingress                        | `Prefix`         |
+| `ingress.tls`                        | TLS configuration for PostgreSQL ingress                | `[]`             |
 
 ### Resources
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `resources` | The resources to allocate for the container | `{}` |
+| Parameter   | Description                                 | Default |
+| ----------- | ------------------------------------------- | ------- |
+| `resources` | The resources to allocate for the container | `{}`    |
 
 ### Persistence
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `persistence.enabled` | Enable persistence using Persistent Volume Claims | `true` |
-| `persistence.storageClass` | Persistent Volume storage class | `""` |
-| `persistence.annotations` | Persistent Volume Claim annotations | `{}` |
-| `persistence.size` | Persistent Volume size | `20Gi` |
-| `persistence.accessModes` | Persistent Volume access modes | `["ReadWriteOnce"]` |
-| `persistence.existingClaim` | The name of an existing PVC to use for persistence | `""` |
+| Parameter                   | Description                                        | Default             |
+| --------------------------- | -------------------------------------------------- | ------------------- |
+| `persistence.enabled`       | Enable persistence using Persistent Volume Claims  | `true`              |
+| `persistence.storageClass`  | Persistent Volume storage class                    | `""`                |
+| `persistence.annotations`   | Persistent Volume Claim annotations                | `{}`                |
+| `persistence.size`          | Persistent Volume size                             | `20Gi`              |
+| `persistence.accessModes`   | Persistent Volume access modes                     | `["ReadWriteOnce"]` |
+| `persistence.existingClaim` | The name of an existing PVC to use for persistence | `""`                |
 
 ### Liveness and readiness probes
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `livenessProbe.enabled` | Enable livenessProbe on PostgreSQL containers | `true` |
-| `livenessProbe.initialDelaySeconds` | Initial delay seconds for livenessProbe | `30` |
-| `livenessProbe.periodSeconds` | Period seconds for livenessProbe | `10` |
-| `livenessProbe.timeoutSeconds` | Timeout seconds for livenessProbe | `5` |
-| `livenessProbe.failureThreshold` | Failure threshold for livenessProbe | `3` |
-| `livenessProbe.successThreshold` | Success threshold for livenessProbe | `1` |
-| `readinessProbe.enabled` | Enable readinessProbe on PostgreSQL containers | `true` |
-| `readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe | `5` |
-| `readinessProbe.periodSeconds` | Period seconds for readinessProbe | `5` |
-| `readinessProbe.timeoutSeconds` | Timeout seconds for readinessProbe | `5` |
-| `readinessProbe.failureThreshold` | Failure threshold for readinessProbe | `3` |
-| `readinessProbe.successThreshold` | Success threshold for readinessProbe | `1` |
-| `startupProbe.enabled` | Enable startupProbe on PostgreSQL containers | `true` |
-| `startupProbe.initialDelaySeconds` | Initial delay seconds for startupProbe | `30` |
-| `startupProbe.periodSeconds` | Period seconds for startupProbe | `10` |
-| `startupProbe.timeoutSeconds` | Timeout seconds for startupProbe | `5` |
-| `startupProbe.failureThreshold` | Failure threshold for startupProbe | `30` |
-| `startupProbe.successThreshold` | Success threshold for startupProbe | `1` |
+| Parameter                            | Description                                    | Default |
+| ------------------------------------ | ---------------------------------------------- | ------- |
+| `livenessProbe.enabled`              | Enable livenessProbe on PostgreSQL containers  | `true`  |
+| `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe        | `30`    |
+| `livenessProbe.periodSeconds`        | Period seconds for livenessProbe               | `10`    |
+| `livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe              | `5`     |
+| `livenessProbe.failureThreshold`     | Failure threshold for livenessProbe            | `3`     |
+| `livenessProbe.successThreshold`     | Success threshold for livenessProbe            | `1`     |
+| `readinessProbe.enabled`             | Enable readinessProbe on PostgreSQL containers | `true`  |
+| `readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe       | `5`     |
+| `readinessProbe.periodSeconds`       | Period seconds for readinessProbe              | `5`     |
+| `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe             | `5`     |
+| `readinessProbe.failureThreshold`    | Failure threshold for readinessProbe           | `3`     |
+| `readinessProbe.successThreshold`    | Success threshold for readinessProbe           | `1`     |
+| `startupProbe.enabled`               | Enable startupProbe on PostgreSQL containers   | `true`  |
+| `startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe         | `30`    |
+| `startupProbe.periodSeconds`         | Period seconds for startupProbe                | `10`    |
+| `startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe               | `5`     |
+| `startupProbe.failureThreshold`      | Failure threshold for startupProbe             | `30`    |
+| `startupProbe.successThreshold`      | Success threshold for startupProbe             | `1`     |
 
 ### Node Selection
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `nodeSelector` | Node labels for pod assignment | `{}` |
-| `tolerations` | Toleration labels for pod assignment | `[]` |
-| `affinity` | Affinity settings for pod assignment | `{}` |
+| Parameter      | Description                          | Default |
+| -------------- | ------------------------------------ | ------- |
+| `nodeSelector` | Node labels for pod assignment       | `{}`    |
+| `tolerations`  | Toleration labels for pod assignment | `[]`    |
+| `affinity`     | Affinity settings for pod assignment | `{}`    |
 
 ## Examples
 
@@ -298,15 +299,15 @@ config:
 affinity:
   podAntiAffinity:
     preferredDuringSchedulingIgnoredDuringExecution:
-    - weight: 100
-      podAffinityTerm:
-        labelSelector:
-          matchExpressions:
-          - key: app.kubernetes.io/name
-            operator: In
-            values:
-            - postgres
-        topologyKey: kubernetes.io/hostname
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                  - postgres
+          topologyKey: kubernetes.io/hostname
 ```
 
 ### Using Existing Secret for Authentication
@@ -385,7 +386,7 @@ Get the auto-generated passwords:
 # Admin password
 kubectl get secret my-postgres -o jsonpath="{.data.postgres-password}" | base64 --decode
 
-# Custom user password  
+# Custom user password
 kubectl get secret my-postgres -o jsonpath="{.data.password}" | base64 --decode
 ```
 
@@ -394,17 +395,20 @@ kubectl get secret my-postgres -o jsonpath="{.data.password}" | base64 --decode
 ### Common Issues
 
 1. **Pod fails to start with permission errors**
+
    - Ensure your storage class supports the required access modes
    - Check if security contexts are compatible with your cluster policies
    - Verify the PostgreSQL data directory permissions
 
 2. **Cannot connect to PostgreSQL**
+
    - Verify the service is running: `kubectl get svc`
    - Check if authentication is properly configured
    - Ensure firewall rules allow access to port 5432
    - Check PostgreSQL logs: `kubectl logs <pod-name>`
 
 3. **Database initialization fails**
+
    - Check if persistent volume has enough space
    - Verify environment variables are set correctly
    - Review pod events: `kubectl describe pod <pod-name>`
@@ -418,21 +422,24 @@ kubectl get secret my-postgres -o jsonpath="{.data.password}" | base64 --decode
 ### Performance Tuning
 
 1. **Memory Configuration**
+
    ```yaml
    config:
-     postgresqlSharedBuffers: "256MB"    # 25% of RAM
+     postgresqlSharedBuffers: "256MB" # 25% of RAM
      postgresqlEffectiveCacheSize: "1GB" # 75% of RAM
-     postgresqlWorkMem: "8MB"            # RAM / max_connections
+     postgresqlWorkMem: "8MB" # RAM / max_connections
      postgresqlMaintenanceWorkMem: "128MB"
    ```
 
 2. **Connection Settings**
+
    ```yaml
    config:
      postgresqlMaxConnections: 200
    ```
 
 3. **WAL and Checkpoints**
+
    ```yaml
    config:
      postgresqlWalBuffers: "16MB"
@@ -457,6 +464,7 @@ kubectl get secret my-postgres -o jsonpath="{.data.password}" | base64 --decode
 ### Backup and Recovery
 
 **Manual Backup**
+
 ```bash
 kubectl exec -it <pod-name> -- pg_dump -U postgres -d mydb > backup.sql
 ```
@@ -464,6 +472,7 @@ kubectl exec -it <pod-name> -- pg_dump -U postgres -d mydb > backup.sql
 ### Getting Support
 
 For issues related to this Helm chart, please check:
+
 - [PostgreSQL Documentation](https://www.postgresql.org/docs/)
 - [Kubernetes Documentation](https://kubernetes.io/docs/)
 - Chart repository issues
