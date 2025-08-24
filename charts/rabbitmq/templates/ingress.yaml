@@ -48,7 +48,7 @@ spec:
               service:
                 name: {{ $fullName }}
                 port:
-                  name: management
+                  number: {{ $svcPort }}
           {{- end }}
     {{- end }}
 {{- end }}
