@@ -338,10 +338,37 @@ Inside the pod, configure as follows (replace `my-bucket-name` as needed):
     mc mb local/my-bucket-name
     ```
 
-3. **Set bucket policy to public**:
+3. Create a custom policy in `/tmp/policy.json` to only allow `GetObject`, alternatively use the predefined `download` policy:
+    ```bash
+    echo '
+    {
+      "Statement": [
+        {
+        "Action": [
+          "s3:GetObject"
+        ],
+        "Effect": "Allow",
+        "Principal": {
+          "AWS": [
+          "*"
+          ]
+        },
+        "Resource": [
+          "arn:aws:s3:::my-bucket-name/*"
+        ]
+        }
+      ],
+      "Version": "2012-10-17"
+    }' > /tmp/policy.yaml
+    ```
+4. **Set bucket policy**:
 
     ```bash
-    mc anonymous set public local/my-bucket-name
+    # Set to download (allow get and list objects)
+    mc anonymous set download local/my-bucket-name
+
+    # Set to custom policy (allow only get objects)
+    mc anonymous set-json /tmp/policy.json local/my-bucket-name
     ```
 
 **Summary:**  
