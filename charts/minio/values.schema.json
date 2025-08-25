@@ -268,24 +268,10 @@
           "minimum": 1,
           "maximum": 65535
         },
-        "targetPort": {
-          "type": "integer",
-          "title": "Target Port",
-          "description": "MinIO container port",
-          "minimum": 1,
-          "maximum": 65535
-        },
         "consolePort": {
           "type": "integer",
           "title": "Console Service Port",
           "description": "MinIO console service port",
-          "minimum": 1,
-          "maximum": 65535
-        },
-        "consoleTargetPort": {
-          "type": "integer",
-          "title": "Console Target Port",
-          "description": "MinIO console container port",
           "minimum": 1,
           "maximum": 65535
         },
