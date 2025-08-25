@@ -137,9 +137,7 @@ The following table lists the configurable parameters of the MinIO chart and the
 | --------------------------- | ---------------------------- | ----------- |
 | `service.type`              | MinIO service type           | `ClusterIP` |
 | `service.port`              | MinIO service port           | `9000`      |
-| `service.targetPort`        | MinIO container port         | `9000`      |
 | `service.consolePort`       | MinIO console service port   | `9090`      |
-| `service.consoleTargetPort` | MinIO console container port | `9090`      |
 | `service.annotations`       | Service annotations          | `{}`        |
 
 ### Ingress configuration
@@ -278,32 +276,77 @@ Deploy with production values:
 helm install my-minio ./charts/minio -f values-production.yaml
 ```
 
-### High Availability Configuration
+### Exposing a Bucket Publicly (“CDN Server” Setup)
+
+You can make a MinIO bucket publicly accessible (e.g. as a CDN endpoint) using Ingress and MinIO's CLI tool (`mc`). Below is an example configuration 
+and the commands needed to set this up.
+
+#### 1. Install the Helm Chart with Public Ingress
+
+Ensure the **Ingress controller** (like [ingress-nginx](https://kubernetes.github.io/ingress-nginx/)) is deployed in your cluster.
+
+Example `values.yaml` snippet for Helm install (replace `cdn.my-domain.local` and `my-bucket-name` with your own values):
 
 ```yaml
-# values-ha.yaml
-replicaCount: 3
-
-affinity:
-  podAntiAffinity:
-    preferredDuringSchedulingIgnoredDuringExecution:
-      - weight: 100
-        podAffinityTerm:
-          labelSelector:
-            matchExpressions:
-              - key: app.kubernetes.io/name
-                operator: In
-                values:
-                  - minio
-          topologyKey: kubernetes.io/hostname
-
-resources:
-  requests:
-    memory: "2Gi"
-    cpu: "1000m"
-  limits:
-    memory: "4Gi"
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    # Uncomment if using cert-manager for TLS certificates
+    # kubernetes.io/tls-acme: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /my-bucket-name/$1
+    nginx.ingress.kubernetes.io/use-regex: "true"
+  hosts:
+    - host: cdn.my-domain.local
+      paths:
+        - path: /(.*)
+          pathType: ImplementationSpecific
+  # Uncomment and configure for TLS
+  # tls:
+  #   - secretName: minio-ingress-tls
+  #     hosts:
+  #       - cdn.my-domain.local
 ```
+
+Install or upgrade the chart with:
+
+```bash
+helm install my-minio <chart> -f values.yaml
+# Or, if upgrading:
+# helm upgrade my-minio <chart> -f values.yaml
+```
+
+#### 2. Configure Your Bucket for Public Access
+
+You need the [MinIO Client (`mc`)](https://min.io/docs/minio/linux/reference/minio-mc.html) to manage bucket policies. You can access `mc` directly in the MinIO pod:
+
+```bash
+kubectl exec -it -n <NAMESPACE> <MINIO_POD_NAME> -- bash
+```
+
+Inside the pod, configure as follows (replace `my-bucket-name` as needed):
+
+1. **Set up access alias** (for local MinIO within pod):
+
+    ```bash
+    mc alias set local http://localhost:9000 $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD
+    ```
+
+2. **Create your bucket** (skip if already exists):
+
+    ```bash
+    mc mb local/my-bucket-name
+    ```
+
+3. **Set bucket policy to public**:
+
+    ```bash
+    mc anonymous set public local/my-bucket-name
+    ```
+
+**Summary:**  
+After these steps, your bucket (`my-bucket-name`) will be accessible via `https://cdn.my-domain.local/<object>` (if using TLS), and is publicly readable.
+
 
 ### Using Existing Secret for Credentials
 

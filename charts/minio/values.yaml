@@ -86,12 +86,8 @@ service:
   type: ClusterIP
   ## @param service.port MinIO service port
   port: 9000
-  ## @param service.targetPort MinIO container port
-  targetPort: 9000
   ## @param service.consolePort MinIO console service port
   consolePort: 9090
-  ## @param service.consoleTargetPort MinIO console container port
-  consoleTargetPort: 9090
   ## @param service.annotations Service annotations
   annotations: {}
 
@@ -127,6 +123,7 @@ consoleIngress:
   className: ""
   ## @param consoleIngress.annotations Additional annotations for the Console Ingress resource
   annotations: {}
+    # nginx.ingress.kubernetes.io/proxy-body-size: 1000m
   ## @param consoleIngress.hosts[0].host Hostname for MinIO Console ingress
   ## @param consoleIngress.hosts[0].paths[0].path Path for MinIO Console ingress
   ## @param consoleIngress.hosts[0].paths[0].pathType Path type for MinIO Console ingress
@@ -200,7 +197,7 @@ readinessProbe:
 
 startupProbe:
   ## @param startupProbe.enabled Enable startupProbe on MinIO containers
-  enabled: true
+  enabled: false
   ## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
   initialDelaySeconds: 10
   ## @param startupProbe.periodSeconds Period seconds for startupProbe
