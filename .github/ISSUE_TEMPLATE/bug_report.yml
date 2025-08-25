@@ -1,0 +1,45 @@
+name: 🐞 Bug Report
+description: Create a report to help us improve
+labels: ["tech-issues"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting an issue.
+        Please fill in as much of the following form as you're able.
+  - type: input
+    attributes:
+      label: Name and Version
+      description: Chart name and optional version
+      placeholder: mariadb 0.1.5
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: What steps will reproduce the bug?
+      description: Enter details about your bug.
+      placeholder: |
+        1. In this environment...
+        2. With this config...
+        3. Run '...'
+        4. See error...
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Are you using any custom parameters or values?
+      description: Add any parameter used via `--set` or as a `values.yaml` customization.
+  - type: textarea
+    attributes:
+      label: What is the expected behavior?
+      description: A clear description of what you expected to happen.
+  - type: textarea
+    attributes:
+      label: What is the actual behavior?
+      description: Please describe what you are currently experiencing, including any unexpected results or issues.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Additional informations
+      description: Tell us anything else you think we should know.
