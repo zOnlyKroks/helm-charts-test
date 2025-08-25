@@ -1,6 +1,9 @@
 suite: test valkey common parameters
 templates:
   - statefulset.yaml
+set:
+  image:
+    tag: 8.1.3@sha256:5b8f8c333bef895c925f56629d6ba90aea95a4f7391f62411e625267c600b19c
 tests:
   - it: should use default values when nothing is overridden
     asserts:

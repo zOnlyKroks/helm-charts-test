@@ -22,7 +22,7 @@ image:
   ## @param image.repository Valkey image repository
   repository: valkey/valkey
   ## @param image.tag Valkey image tag (immutable tags are recommended)
-  tag: "8.1.3@sha256:5b8f8c333bef895c925f56629d6ba90aea95a4f7391f62411e625267c600b19c"
+  tag: "8.1.3-alpine3.22@sha256:d827e7f7552cdee40cc7482dbae9da020f42bc47669af6f71182a4ef76a22773"
   ## @param image.imagePullPolicy Valkey image pull policy
   imagePullPolicy: Always
 
@@ -99,7 +99,8 @@ ingress:
   ## @param ingress.className IngressClass that will be used to implement the Ingress
   className: ""
   ## @param ingress.annotations Additional annotations for the Ingress resource
-  annotations: {}
+  annotations:
+    {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   ## @param ingress.hosts[0].host Hostname for Valkey ingress
