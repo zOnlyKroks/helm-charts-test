@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "minio.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- include "minio.labels" . | nindent 4 }}
   {{- if .Values.commonAnnotations }}
@@ -76,10 +76,10 @@ spec:
             {{- end }}
           ports:
             - name: minio
-              containerPort: {{ .Values.service.targetPort }}
+              containerPort: {{ .Values.service.port }}
               protocol: TCP
             - name: console
-              containerPort: {{ .Values.service.consoleTargetPort }}
+              containerPort: {{ .Values.service.consolePort }}
               protocol: TCP
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
@@ -117,8 +117,10 @@ spec:
             successThreshold: {{ .Values.startupProbe.successThreshold }}
             failureThreshold: {{ .Values.startupProbe.failureThreshold }}
           {{- end }}
+          {{- if .Values.resources }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
