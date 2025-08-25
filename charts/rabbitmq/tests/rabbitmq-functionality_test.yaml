@@ -167,8 +167,10 @@ tests:
           path: spec.volumeClaimTemplates[0].spec.storageClassName
           value: "fast-ssd"
 
-  - it: should create ingress when enabled
+  - it: should create and configure ingress correctly when enabled
     set:
+      service:
+        managementPort: 15672
       ingress:
         enabled: true
         hosts:
@@ -183,6 +185,9 @@ tests:
       - equal:
           path: spec.rules[0].host
           value: rabbitmq.example.com
+      - equal:
+          path: spec.rules[0].http.paths[0].backend.service.port.number
+          value: 15672
 
   - it: should configure security contexts correctly
     set:
