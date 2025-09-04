@@ -2,7 +2,7 @@
 
 ## 0.2.1 (2025-09-04)
 
-* [mariadb]: Default randomized password ([#35](https://github.com/CloudPirates-io/helm-charts/pull/35))
+* [mariadb] Default randomized password ([#35](https://github.com/CloudPirates-io/helm-charts/pull/35))
 
 ## 0.2.0 (2025-09-02)
 
