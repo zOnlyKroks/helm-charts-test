@@ -60,14 +60,10 @@ Get the secret name for MariaDB root password
 {{- end }}
 
 {{/*
-Return the MariaDB Secret Name
+Validate values of MariaDB - Authentication
 */}}
-{{- define "mariadb.secretName" -}}
-{{- if .Values.auth.existingSecret }}
-{{- .Values.auth.existingSecret }}
-{{- else }}
-{{- include "mariadb.fullname" . }}
-{{- end }}
+{{- define "mariadb.validateValues.auth" -}}
+{{/* No validation needed - empty rootPassword will trigger auto-generation */}}
 {{- end }}
 
 {{/*
