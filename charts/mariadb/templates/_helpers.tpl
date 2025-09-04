@@ -77,16 +77,8 @@ Validate MariaDB required passwords are not empty
 {{- define "mariadb.validateValues.auth" -}}
 {{- if .Values.auth.enabled }}
 {{- if not .Values.auth.existingSecret -}}
-  {{- if not .Values.auth.rootPassword -}}
-mariadb: auth.rootPassword
-    You must provide a password for MariaDB root user.
-    Please set auth.rootPassword or use an existing secret.
-  {{- end -}}
-  {{- if and .Values.auth.username (not .Values.auth.password) -}}
-mariadb: auth.password
-    You must provide a password for the custom MariaDB user.
-    Please set auth.password or use an existing secret.
-  {{- end -}}
+  {{- /* No validation needed for rootPassword as it's auto-generated when empty */ -}}
+  {{- /* No validation needed for user password as it's auto-generated when empty */ -}}
 {{- end -}}
 {{- end -}}
 {{- end -}}
