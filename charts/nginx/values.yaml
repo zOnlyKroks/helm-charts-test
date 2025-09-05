@@ -63,12 +63,6 @@ serviceAccount:
   ## @param serviceAccount.automountServiceAccountToken Automatically mount service account token
   automountServiceAccountToken: false
 
-## @section ConfigMap parameters
-configMap:
-  ## @param configMap.create Create a ConfigMap for Nginx configuration
-  create: false
-  ## @param configMap.data ConfigMap data
-  data: {}
 
 autoscaling:
   enabled: false
@@ -101,7 +95,7 @@ affinity: {}
 
 containerSecurityContext:
   ## @param containerSecurityContext.runAsUser User ID to run the container
-  runAsUser: 11211
+  runAsUser: 101
   ## @param containerSecurityContext.runAsNonRoot Run as non-root user
   runAsNonRoot: true
   ## @param containerSecurityContext.allowPrivilegeEscalation Set Nginx container's privilege escalation
@@ -110,7 +104,7 @@ containerSecurityContext:
 ## @param podSecurityContext Security context for the pod
 podSecurityContext:
   ## @param podSecurityContext.fsGroup Set Nginx pod's Security Context fsGroup
-  fsGroup: 11211
+  fsGroup: 101
 
 livenessProbe:
   ## @param livenessProbe.enabled Enable liveness probe
@@ -153,3 +147,53 @@ extraVolumeMounts: []
 
 ## @param extraObjects Array of extra objects to deploy with the release
 extraObjects: []
+
+## @param config Custom NGINX configuration file (nginx.conf)
+## Example configuration:
+## config: |-
+##   user  nginx;
+##   worker_processes  1;
+##   error_log  /var/log/nginx/error.log warn;
+##   pid        /run/nginx.pid;
+##   events {
+##       worker_connections  1024;
+##   }
+##   http {
+##       include       /etc/nginx/mime.types;
+##       default_type  application/octet-stream;
+##       log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+##                         '$status $body_bytes_sent "$http_referer" '
+##                         '"$http_user_agent" "$http_x_forwarded_for"';
+##       access_log  /var/log/nginx/access.log  main;
+##       sendfile        on;
+##       keepalive_timeout  65;
+##       include /etc/nginx/conf.d/*.conf;
+##   }
+##
+config: ""
+
+## @param serverConfig Custom server block to be added to NGINX configuration
+## PHP-FPM example server block:
+## serverConfig: |-
+##   server {
+##     listen 0.0.0.0:8080;
+##     root /myapp;
+##     location / {
+##       index index.html index.php;
+##     }
+##     location ~ \.php$ {
+##       fastcgi_pass phpfpm-server:9000;
+##       fastcgi_index index.php;
+##       include fastcgi.conf;
+##     }
+##   }
+##
+serverConfig: ""
+## @param streamServerConfig Custom stream server block to be added to NGINX configuration
+## streamServerConfig: |-
+##   server {
+##     listen 0.0.0.0:8080 udp;
+##     proxy_pass localhost:9000;
+##   }
+##
+streamServerConfig: ""
