@@ -70,16 +70,12 @@ configMap:
   ## @param configMap.data ConfigMap data
   data: {}
 
-## @section Nginx configuration options
-config:
-  ## @param config.memoryLimit Maximum amount of memory to use for cache (in MB)
-  memoryLimit: 64
-  ## @param config.maxConnections Maximum number of simultaneous connections
-  maxConnections: 1024
-  ## @param config.extraArgs Additional command-line arguments
-  extraArgs: []
-  ## @param config.verbosity Verbosity level (0-2)
-  verbosity: 0
+autoscaling:
+  enabled: false
+  minReplicas: ""
+  maxReplicas: ""
+  targetCPUUtilizationPercentage: ""
+  targetMemoryUtilizationPercentage: ""
 
 ## @param resources Resource limits and requests for Nginx pod
 resources:
