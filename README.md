@@ -24,6 +24,7 @@ This repository provides secure, well-documented, and configurable Helm charts f
 | [Redis](charts/redis/)                 | In-memory data structure store, used as a database, cache, and message broker                                             |
 | [TimescaleDB](charts/timescaledb/)     | TimescaleDB is a PostgreSQL extension for high-performance real-time analytics on time-series and event data              |
 | [Valkey](charts/valkey/)               | High-performance in-memory data structure store, fork of Redis                                                            |
+| [Nginx](charts/nginx/)                 | High-performance HTTP server and reverse proxy                                                                            |
 
 ## Quick Start
 
