@@ -69,69 +69,68 @@ The following table lists the configurable parameters of the Nginx chart and the
 | `commonLabels`      | Labels to add to all deployed objects           | `{}`    |
 | `commonAnnotations` | Annotations to add to all deployed objects      | `{}`    |
 
+
 ### Nginx Image Parameters
 
 | Parameter           | Description                                          | Default                                                                            |
 | ------------------- | ---------------------------------------------------- | ---------------------------------------------------------------------------------- |
 | `image.registry`    | Nginx image registry                                 | `docker.io`                                                                        |
 | `image.repository`  | Nginx image repository                               | `nginx`                                                                            |
-| `image.tag`         | Nginx image tag (immutable tags are recommended)     | `"1.28.0@sha256:24ccf9a6192d2c6c5c4a6e9d2fdfa2a8e382b15f8dd7d0e05a1579f6a46f7776"` |
+| `image.tag`         | Nginx image tag                                      | `"1.28.0@sha256:24ccf9a6192d2c6c5c4a6e9d2fdfa2a8e382b15f8dd7d0e05a1579f6a46f7776"` |
 | `image.pullPolicy`  | Nginx image pull policy                              | `Always`                                                                           |
-| `image.pullSecrets` | Nginx image pull secrets                             | `[]`                                                                               |
+
 
 ### Nginx Configuration Parameters
 
-| Parameter               | Description                                    | Default |
-| ----------------------- | ---------------------------------------------- | ------- |
-| `config.memoryLimit`    | Maximum amount of memory to use for cache (MB) | `64`    |
-| `config.maxConnections` | Maximum number of simultaneous connections     | `1024`  |
-| `config.verbosity`      | Verbosity level (0-2)                          | `0`     |
-| `config.extraArgs`      | Additional command-line arguments              | `[]`    |
+| Parameter             | Description                                               | Default |
+| --------------------- | --------------------------------------------------------- | ------- |
+| `config`              | Custom NGINX configuration file (nginx.conf)              | `""`    |
+| `serverConfig`        | Custom server block to be added to NGINX configuration    | `""`    |
+| `streamServerConfig`  | Custom stream server block to be added to NGINX config    | `""`    |
+
 
 ### Service Parameters
 
-| Parameter             | Description                                         | Default     |
-| --------------------- | --------------------------------------------------- | ----------- |
-| `service.type`        | Nginx service type                                  | `ClusterIP` |
-| `service.port`        | Nginx service port                                  | `8080`       |
-| `service.nodePort`    | Node port for Nginx service                         | `""`        |
-| `service.clusterIP`   | Static cluster IP or "None" for headless service    | `""`        |
-| `service.annotations` | Additional custom annotations for Nginx service     | `{}`        |
+| Parameter        | Description              | Default     |
+| ---------------- | ------------------------ | ----------- |
+| `service.type`   | Nginx service type       | `ClusterIP` |
+| `service.port`   | Nginx service port       | `8080`      |
+
 
 ### Security Context Parameters
 
 | Parameter                                           | Description                                             | Default |
 | --------------------------------------------------- | ------------------------------------------------------- | ------- |
-| `podSecurityContext.enabled`                        | Enabled pod Security Context                            | `true`  |
-| `podSecurityContext.fsGroup`                        | Set Nginx pod's Security Context fsGroup                | `8080` |
-| `containerSecurityContext.enabled`                  | Enabled Nginx container's Security Context              | `true`  |
-| `containerSecurityContext.runAsUser`                | Set Nginx container's Security Context runAsUser        | `8080` |
+| `podSecurityContext.fsGroup`                        | Set Nginx pod's Security Context fsGroup                | `101`   |
+| `containerSecurityContext.runAsUser`                | Set Nginx container's Security Context runAsUser        | `101`   |
 | `containerSecurityContext.runAsNonRoot`             | Set Nginx container's Security Context runAsNonRoot     | `true`  |
 | `containerSecurityContext.allowPrivilegeEscalation` | Set Nginx container's privilege escalation              | `false` |
 
+
 ### Resources Parameters
 
-| Parameter            | Description                                          | Default                        |
-| -------------------- | ---------------------------------------------------- | ------------------------------ |
-| `resources.limits`   | The resources limits for the Nginx containers        | `{memory: "128Mi"}`            |
-| `resources.requests` | The requested resources for the Nginx containers     | `{cpu: "50m", memory: "64Mi"}` |
+| Parameter   | Description                              | Default |
+| ----------- | ---------------------------------------- | ------- |
+| `resources` | Resource limits and requests for Nginx pod| `{}`    |
+
 
 ### Health Check Parameters
 
 | Parameter                            | Description                                   | Default |
 | ------------------------------------ | --------------------------------------------- | ------- |
-| `livenessProbe.enabled`              | Enable livenessProbe on Nginx containers      | `true`  |
-| `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe       | `30`    |
-| `livenessProbe.periodSeconds`        | Period seconds for livenessProbe              | `10`    |
-| `livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe             | `5`     |
-| `livenessProbe.failureThreshold`     | Failure threshold for livenessProbe           | `3`     |
-| `livenessProbe.successThreshold`     | Success threshold for livenessProbe           | `1`     |
-| `readinessProbe.enabled`             | Enable readinessProbe on Nginx containers     | `true`  |
-| `readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe      | `5`     |
-| `readinessProbe.periodSeconds`       | Period seconds for readinessProbe             | `5`     |
-| `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe            | `5`     |
-| `readinessProbe.failureThreshold`    | Failure threshold for readinessProbe          | `3`     |
-| `readinessProbe.successThreshold`    | Success threshold for readinessProbe          | `1`     |
+| `livenessProbe.enabled`              | Enable liveness probe                         | `true`  |
+| `livenessProbe.initialDelaySeconds`  | Initial delay before starting probes          | `30`    |
+| `livenessProbe.periodSeconds`        | How often to perform the probe                | `10`    |
+| `livenessProbe.timeoutSeconds`       | Timeout for each probe attempt                | `5`     |
+| `livenessProbe.failureThreshold`     | Number of failures before pod is restarted    | `3`     |
+| `livenessProbe.successThreshold`     | Number of successes to mark probe as successful| `1`    |
+| `readinessProbe.enabled`             | Enable readiness probe                        | `true`  |
+| `readinessProbe.initialDelaySeconds` | Initial delay before starting probes          | `5`     |
+| `readinessProbe.periodSeconds`       | How often to perform the probe                | `5`     |
+| `readinessProbe.timeoutSeconds`      | Timeout for each probe attempt                | `5`     |
+| `readinessProbe.failureThreshold`    | Number of failures before pod is marked unready| `3`    |
+| `readinessProbe.successThreshold`    | Number of successes to mark probe as successful| `1`    |
+
 
 ### Service Account Parameters
 
@@ -142,31 +141,26 @@ The following table lists the configurable parameters of the Nginx chart and the
 | `serviceAccount.name`                         | The name of the service account to use                | `""`    |
 | `serviceAccount.automountServiceAccountToken` | Automatically mount service account token             | `false` |
 
-### ConfigMap Parameters
-
-| Parameter          | Description                                    | Default |
-| ------------------ | ---------------------------------------------- | ------- |
-| `configMap.create` | Create a ConfigMap for Nginx configuration     | `false` |
-| `configMap.data`   | ConfigMap data                                 | `{}`    |
 
 ### Ingress Parameters
 
 | Parameter             | Description                                                                   | Default                                                                                         |
 | --------------------- | ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| `ingress.enabled`     | Enable ingress record generation for Nginx                                    | `false`                                                                                         |
-| `ingress.className`   | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+) | `""`                                                                                            |
+| `ingress.enabled`     | Enable ingress record generation                                              | `false`                                                                                         |
+| `ingress.className`   | IngressClass that will be be used to implement the Ingress                    | `""`                                                                                            |
 | `ingress.annotations` | Additional annotations for the Ingress resource                               | `{}`                                                                                            |
-| `ingress.hosts`       | An array with hosts and paths                                                 | `[{"host": "nginx.local", "paths": [{"path": "/", "pathType": "ImplementationSpecific"}]}]` |
+| `ingress.hosts`       | An array with hosts and paths                                                 | `[{{host: "nginx.local", paths: [{{path: "/", pathType: "ImplementationSpecific"}}]}}]`      |
 | `ingress.tls`         | TLS configuration for the Ingress                                             | `[]`                                                                                            |
+
 
 ### Extra Configuration Parameters
 
 | Parameter           | Description                                                                         | Default |
 | ------------------- | ----------------------------------------------------------------------------------- | ------- |
-| `extraEnv`          | A list of additional environment variables                                          | `[]`    |
-| `extraVolumes`      | A list of additional existing volumes that will be mounted into the container       | `[]`    |
-| `extraVolumeMounts` | A list of additional existing volume mounts that will be mounted into the container | `[]`    |
-| `extraObjects`      | A list of additional Kubernetes objects to deploy alongside the release             | `[]`    |
+| `extraEnv`          | Additional environment variables to set                                             | `[]`    |
+| `extraVolumes`      | Additional volumes to add to the pod                                                | `[]`    |
+| `extraVolumeMounts` | Additional volume mounts to add to the Nginx container                             | `[]`    |
+| `extraObjects`      | Array of extra objects to deploy with the release                                   | `[]`    |
 
 #### Extra Objects
 
@@ -204,33 +198,33 @@ extraObjects:
 
 All objects in `extraObjects` will be rendered and deployed with the release. You can use any valid Kubernetes manifest, and reference Helm values or built-in objects as needed (just remember to quote template expressions).
 
+
 ### Pod Configuration Parameters
 
 | Parameter        | Description                    | Default |
 | ---------------- | ------------------------------ | ------- |
-| `podAnnotations` | Additional pod annotations     | `{}`    |
-| `podLabels`      | Additional pod labels          | `{}`    |
-| `nodeSelector`   | Node labels for pod assignment | `{}`    |
+| `nodeSelector`   | Node selector for pod assignment| `{}`    |
 | `tolerations`    | Tolerations for pod assignment | `[]`    |
-| `affinity`       | Affinity for pod assignment    | `{}`    |
+| `affinity`       | Affinity rules for pod assignment| `{}`  |
 
 ## Examples
+
 
 ### Basic Installation
 
 Create a `values.yaml` file:
 
 ```yaml
-config:
-  memoryLimit: 128
-  maxConnections: 2048
-
+replicaCount: 2
 resources:
   limits:
     memory: 256Mi
   requests:
     cpu: 100m
     memory: 128Mi
+service:
+  type: ClusterIP
+  port: 8080
 ```
 
 Install the chart:
@@ -239,56 +233,28 @@ Install the chart:
 helm install my-nginx charts/nginx -f values.yaml
 ```
 
-### Production Setup
+### Custom NGINX Configuration
 
 ```yaml
-replicaCount: 3
-
-config:
-  memoryLimit: 512
-  maxConnections: 4096
-  verbosity: 1
-
-resources:
-  limits:
-    memory: 1Gi
-  requests:
-    cpu: 500m
-    memory: 512Mi
-
-service:
-  type: ClusterIP
-
-# Use anti-affinity to spread pods across nodes
-affinity:
-  podAntiAffinity:
-    preferredDuringSchedulingIgnoredDuringExecution:
-      - weight: 100
-        podAffinityTerm:
-          labelSelector:
-            matchExpressions:
-              - key: app.kubernetes.io/name
-                operator: In
-                values:
-                  - nginx
-          topologyKey: kubernetes.io/hostname
-```
-
-### Custom Configuration with ConfigMap
-
-```yaml
-configMap:
-  create: true
-  data:
-    nginx.conf: |
-      -m 256
-      -c 2048
-      -v
-
-config:
-  extraArgs:
-    - "-o"
-    - "modern"
+config: |-
+  user  nginx;
+  worker_processes  1;
+  error_log  /var/log/nginx/error.log warn;
+  pid        /run/nginx.pid;
+  events {
+      worker_connections  1024;
+  }
+  http {
+      include       /etc/nginx/mime.types;
+      default_type  application/octet-stream;
+      log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                        '$status $body_bytes_sent "$http_referer" '
+                        '"$http_user_agent" "$http_x_forwarded_for"';
+      access_log  /var/log/nginx/access.log  main;
+      sendfile        on;
+      keepalive_timeout  65;
+      include /etc/nginx/conf.d/*.conf;
+  }
 ```
 
 ### With Service Account
@@ -300,22 +266,46 @@ serviceAccount:
     eks.amazonaws.com/role-arn: arn:aws:iam::123456789012:role/nginx-role
 ```
 
+### Enable Ingress
+
+```yaml
+ingress:
+  enabled: true
+  className: "nginx"
+  hosts:
+    - host: nginx.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+```
+
+### Enable Autoscaling
+
+```yaml
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
+```
+
 ## Troubleshooting
+
 
 ### Connection Issues
 
 1. **Check deployment and service status**:
 
-   ```bash
-   kubectl get deployment -l app.kubernetes.io/name=nginx
-   kubectl get svc -l app.kubernetes.io/name=nginx
-   kubectl get pods -l app.kubernetes.io/name=nginx
-   ```
+  ```bash
+  kubectl get deployment -l app.kubernetes.io/name=nginx
+  kubectl get svc -l app.kubernetes.io/name=nginx
+  kubectl get pods -l app.kubernetes.io/name=nginx
+  ```
 2. **Check pod logs**:
 
-   ```bash
-   kubectl logs <pod-name>
-   ```
+  ```bash
+  kubectl logs <pod-name>
+  ```
 
 ### Performance Tuning
 
