@@ -41,7 +41,7 @@ spec:
           imagePullPolicy: {{ include "common.imagePullPolicy" (dict "image" .Values.image) }}
           ports:
             - name: nginx
-              containerPort: 8080
+              containerPort: 80
               protocol: TCP
           {{- if .Values.extraEnv }}
           env:

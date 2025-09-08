@@ -33,7 +33,7 @@ service:
   ## @param service.type Kubernetes service type
   type: ClusterIP
   ## @param service.port Nginx service port (use 8080 to avoid permission issues with non-root user)
-  port: 8080
+  port: 80
 
 ## @section Ingress parameters
 ingress:
@@ -48,7 +48,7 @@ ingress:
     - host: nginx.local
       paths:
         - path: /
-          pathType: ImplementationSpecific
+          pathType: Prefix
   ## @param ingress.tls An array with the tls configuration
   tls: []
 

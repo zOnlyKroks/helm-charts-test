@@ -3,7 +3,7 @@ name: nginx
 description: Nginx is a high-performance HTTP server and reverse proxy.
 type: application
 
-version: 0.1.1
+version: 0.1.2
 appVersion: "1.28.0"
 
 keywords:
@@ -28,4 +28,4 @@ dependencies:
     version: "1.x.x"
     repository: oci://registry-1.docker.io/cloudpirates
 
-icon: https://a.storyblok.com/f/143071/512x512/0faa83eb34/nginx-logo.svg
+icon: https://a.storyblok.com/f/143071/512x512/9fcd98c061/nginx-logo.svg
