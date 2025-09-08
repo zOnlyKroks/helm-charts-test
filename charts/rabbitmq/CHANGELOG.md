@@ -1,8 +1,8 @@
 # Changelog
 
-## 0.1.1 (2025-09-08)
+## 0.1.2 (2025-09-08)
 
-* [rabbitmq]: Bump RabbitMQ to latests stable ([#45](https://github.com/CloudPirates-io/helm-charts/pull/45))
+* [rabbitmq] Update RabbitMQ to 4.1.4 ([#45](https://github.com/CloudPirates-io/helm-charts/pull/45))
 
 ## 0.1.0 (2025-09-02)
 
