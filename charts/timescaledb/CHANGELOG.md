@@ -2,7 +2,7 @@
 
 ## 0.2.1 (2025-09-08)
 
-* Bump Timescaledb to latests stable ([#46](https://github.com/CloudPirates-io/helm-charts/pull/46))
+* [timescaledb] Update timescale to 2.22.0 ([#46](https://github.com/CloudPirates-io/helm-charts/pull/46))
 
 ## 0.2.0 (2025-09-02)
 
