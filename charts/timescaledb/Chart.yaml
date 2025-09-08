@@ -3,7 +3,7 @@ name: timescaledb
 description: TimescaleDB - The Open Source Time-Series Database for PostgreSQL
 type: application
 version: 0.2.1
-appVersion: "2.21.3-pg17"
+appVersion: "2.22.0-pg17"
 keywords:
   - timescaledb
   - timeseries
