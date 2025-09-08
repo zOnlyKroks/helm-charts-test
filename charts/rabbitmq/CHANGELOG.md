@@ -1,8 +1,13 @@
 # Changelog
 
-## 0.1.1 (2025-09-08)
+## 0.1.2 (2025-09-08)
 
-* Feature/rabbitmq erlang cookie ([#47](https://github.com/CloudPirates-io/helm-charts/pull/47))
+* [rabbitmq] Update RabbitMQ to 4.1.4 ([#45](https://github.com/CloudPirates-io/helm-charts/pull/45))
+
+## <small>0.1.1 (2025-09-08)</small>
+
+* Fix erlang.cookie creation ([640e725](https://github.com/CloudPirates-io/helm-charts/commit/640e725))
+* Update CHANGELOG.md ([63b1299](https://github.com/CloudPirates-io/helm-charts/commit/63b1299))
 
 ## 0.1.0 (2025-09-02)
 
