@@ -1,40 +1,33 @@
 {
-  "extends": [
-    "config:recommended"
-  ],
-  "enabledManagers": [
-    "helm-values"
-  ],
+  "extends": ["config:recommended"],
+  "enabledManagers": ["helm-values"],
   "helm-values": {
-    "managerFilePatterns": [
-      "/^charts/.*values\\.yaml$/"
-    ],
+    "managerFilePatterns": ["/^charts/.*values\\.yaml$/"],
     "versioning": "regex:^.+@.+$",
     "extractVersion": "(?<version>[^@]+)@(?<sha>sha256:[a-f0-9]{64})",
     "rangeStrategy": "replace"
   },
   "packageRules": [
     {
-      "matchManagers": [
-        "helm-values"
-      ],
-      "matchUpdateTypes": [
-        "minor",
-        "patch",
-        "digest"
-      ],
-      "matchPackageNames": [
-        "/.*/"
-      ]
+      "matchManagers": ["helm-values"],
+      "matchUpdateTypes": ["minor", "patch", "digest"],
+      "matchPackageNames": ["/^docker\\.io\\/.+/"],
+      "labels": ["dependencies", "renovate"],
+      "commitMessagePrefix": "[{{{ replace \"docker.io/\" \"\" packageName }}}]",
+      "commitMessageAction": "chore(deps): update"
     },
     {
-      "matchManagers": [
-        "helm-values"
-      ],
+      "matchManagers": ["helm-values"],
+      "matchUpdateTypes": ["minor", "patch", "digest"],
+      "excludePackageNames": ["/^docker\\.io\\/.+/"],
+      "labels": ["dependencies", "renovate"],
+      "commitMessagePrefix": "[{{{ packageName }}}]",
+      "commitMessageAction": "chore(deps): update"
+    },
+    {
+      "matchManagers": ["helm-values"],
       "enabled": false,
-      "matchPackageNames": [
-        "/harbor.cloudpirates.io/koperator-internal/services/clusterpirate/"
-      ]
+      "matchPackageNames": ["/harbor.cloudpirates.io/koperator-internal/services/clusterpirate/"]
     }
   ]
 }
