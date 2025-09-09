@@ -1,19 +1,20 @@
 {
-  "extends": [
-    "config:recommended",
-    ":dependencyDashboard"
-  ],
-  "labels": [
-    "dependencies"
-  ],
-  "branchPrefix": "renovate/",
-  "prHourlyLimit": 10,
-  "prConcurrentLimit": 5,
-  "pinDigests": true,
-  "hostRules": [
+  "extends": ["config:base"],
+  "enabledManagers": ["helm-values"],
+  "helm-values": {
+    "fileMatch": ["^charts/.*values\\.yaml$"],
+    "versioning": "regex:^.+@.+$",
+    "extractVersion": "(?<version>[^@]+)@(?<sha>[a-f0-9]{7,40})",
+    "rangeStrategy": "replace"
+  },
+  "packageRules": [
     {
-      "matchHost": "harbor.cloudpirates.io",
-      "enabled": false
+      "matchManagers": ["helm-values"],
+      "matchPackagePatterns": [".*"],
+      "extractVersion": "(?<tag>[^@]+)@(?<sha>[a-f0-9]{7,40})",
+      "versioning": "regex:^.+@.+$",
+      "rangeStrategy": "replace",
+      "updateTypes": ["minor", "patch", "digest"]
     }
   ]
 }
