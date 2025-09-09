@@ -39,7 +39,6 @@ spec:
             - |
               echo "$RABBITMQ_ERLANG_COOKIE" > /var/lib/rabbitmq/.erlang.cookie
               chmod 400 /var/lib/rabbitmq/.erlang.cookie
-              chown 999:999 /var/lib/rabbitmq/.erlang.cookie
           env:
             - name: RABBITMQ_ERLANG_COOKIE
               valueFrom:
