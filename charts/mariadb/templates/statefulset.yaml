@@ -126,6 +126,10 @@ spec:
             - name: config
               mountPath: /etc/mysql/conf.d
             {{- end }}
+            {{- if .Values.initdbScriptsConfigMap }}
+            - name: custom-init-scripts
+              mountPath: /docker-entrypoint-initdb.d
+            {{- end }}
       volumes:
         - name: tmp-volume
           emptyDir: {}
@@ -137,6 +141,11 @@ spec:
         - name: config
           configMap:
             name: {{ include "mariadb.configMapName" . }}
+        {{- end }}
+        {{- if .Values.initdbScriptsConfigMap }}
+        - name: custom-init-scripts
+          configMap:
+            name: {{ .Values.initdbScriptsConfigMap }}
         {{- end }}
         {{- range $secret := .Values.extraSecrets }}
         - name: {{ $secret.name }}

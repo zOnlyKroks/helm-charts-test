@@ -132,6 +132,21 @@ extraVolumes: []
 ##    mountPath: /mnt/tmp
 ##    pvcName: pvc-001
 
+## @section Initialization scripts
+## @param initdbScriptsConfigMap Name of a ConfigMap with initialization scripts
+## The ConfigMap should contain one or more keys ending in .sql, .sql.gz or .sh
+## Example:
+##   apiVersion: v1
+##   kind: ConfigMap
+##   metadata:
+##     name: mariadb-initdb
+##   data:
+##     01-init.sql: |
+##       CREATE DATABASE mydb;
+##       CREATE USER 'myuser'@'%' IDENTIFIED BY 'mypassword';
+##       GRANT ALL PRIVILEGES ON mydb.* TO 'myuser'@'%';
+initdbScriptsConfigMap: ""
+
 ## @section MariaDB container's liveness probe parameters
 livenessProbe:
   ## @param livenessProbe.enabled Enable livenessProbe on MariaDB containers
