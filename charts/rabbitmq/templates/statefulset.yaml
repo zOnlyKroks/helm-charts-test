@@ -21,40 +21,37 @@ spec:
       labels:
         {{- include "rabbitmq.selectorLabels" . | nindent 8 }}
     spec:
-{{- with (include "rabbitmq.imagePullSecrets" .) }}
-{{ . | nindent 6 }}
-{{- end }}
+      {{- with (include "rabbitmq.imagePullSecrets" .) }}
+      {{ . | nindent 6 }}
+      {{- end }}
       serviceAccountName: {{ include "rabbitmq.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       {{- if .Values.auth.enabled }}
       initContainers:
-        - name: {{ .Chart.Name }}-init
+        - name: init-erlang-cookie
           image: busybox
+          command:
+            - sh
+            - -c
+            - |
+              echo "$RABBITMQ_ERLANG_COOKIE" > /var/lib/rabbitmq/.erlang.cookie
+              chmod 400 /var/lib/rabbitmq/.erlang.cookie
+              chown 999:999 /var/lib/rabbitmq/.erlang.cookie
           env:
             - name: RABBITMQ_ERLANG_COOKIE
               valueFrom:
                 secretKeyRef:
                   name: {{ include "rabbitmq.secretName" . }}
                   key: {{ include "rabbitmq.secretErlangCookieKey" . }}
-          command:
-            - sh
-            - -c
-            - |
-              if [ ! -f /var/lib/rabbitmq/.erlang.cookie ]; then
-                echo "Copy erlang cookie"
-                echo $RABBITMQ_ERLANG_COOKIE > /var/lib/rabbitmq/.erlang.cookie
-              else
-                echo "Erlang cookie already exists."
-              fi
-              chmod 600 /var/lib/rabbitmq/.erlang.cookie
           volumeMounts:
             - name: data
               mountPath: /var/lib/rabbitmq
-      {{- end }}
+      {{- end }}‚
       containers:
         - name: {{ .Chart.Name }}
-          securityContext: {{- toYaml .Values.securityContext | nindent 12 }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 10 }}
           image: {{ include "rabbitmq.image" . | quote }}
           imagePullPolicy: {{ include "common.imagePullPolicy" (dict "image" .Values.image) }}
           ports:
