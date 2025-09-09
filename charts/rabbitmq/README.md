@@ -69,12 +69,13 @@ The following table lists the configurable parameters of the RabbitMQ chart and 
 
 ### Common parameters
 
-| Parameter           | Description                                    | Default |
-| ------------------- | ---------------------------------------------- | ------- |
-| `nameOverride`      | String to partially override rabbitmq.fullname | `""`    |
-| `fullnameOverride`  | String to fully override rabbitmq.fullname     | `""`    |
-| `commonLabels`      | Labels to add to all deployed objects          | `{}`    |
-| `commonAnnotations` | Annotations to add to all deployed objects     | `{}`    |
+| Parameter           | Description                                    | Default         |
+| ------------------- | ---------------------------------------------- | --------------- |
+| `nameOverride`      | String to partially override rabbitmq.fullname | `""`            |
+| `fullnameOverride`  | String to fully override rabbitmq.fullname     | `""`            |
+| `commonLabels`      | Labels to add to all deployed objects          | `{}`            |
+| `commonAnnotations` | Annotations to add to all deployed objects     | `{}`            |
+| `clusterDomain`     | Kubernetes cluster domain                      | `cluster.local` |
 
 ### RabbitMQ image parameters
 

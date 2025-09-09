@@ -1,24 +1,40 @@
 {
-  "extends": ["config:base"],
-  "enabledManagers": ["helm-values"],
+  "extends": [
+    "config:recommended"
+  ],
+  "enabledManagers": [
+    "helm-values"
+  ],
   "helm-values": {
-    "fileMatch": ["^charts/.*values\\.yaml$"],
+    "managerFilePatterns": [
+      "/^charts/.*values\\.yaml$/"
+    ],
     "versioning": "regex:^.+@.+$",
     "extractVersion": "(?<version>[^@]+)@(?<sha>sha256:[a-f0-9]{64})",
     "rangeStrategy": "replace"
   },
   "packageRules": [
     {
-      "matchManagers": ["helm-values"],
-      "matchPackagePatterns": [".*"],
-      "matchUpdateTypes": ["minor", "patch", "digest"]
+      "matchManagers": [
+        "helm-values"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "digest"
+      ],
+      "matchPackageNames": [
+        "/.*/"
+      ]
     },
     {
-      "matchManagers": ["helm-values"],
-      "matchPackagePatterns": [
-        "harbor.cloudpirates.io/koperator-internal/services/clusterpirate"
+      "matchManagers": [
+        "helm-values"
       ],
-      "enabled": false
+      "enabled": false,
+      "matchPackageNames": [
+        "/harbor.cloudpirates.io/koperator-internal/services/clusterpirate/"
+      ]
     }
   ]
 }

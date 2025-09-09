@@ -86,6 +86,11 @@
         }
       }
     },
+    "clusterDomain": {
+      "type": "string",
+      "title": "Cluster Domain",
+      "description": "Kubernetes cluster domain"
+    },
     "replicaCount": {
       "type": "integer",
       "title": "Replica Count",
