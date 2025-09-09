@@ -94,7 +94,7 @@ spec:
                   fieldPath: metadata.name
             {{- if .Values.peerDiscoveryK8sPlugin.useLongname }}
             - name: RABBITMQ_NODENAME
-              value: rabbit@$(NODE_NAME).{{ include "rabbitmq.fullname" . }}-headless.{{ .Release.Namespace }}.svc.cluster.local
+              value: rabbit@$(NODE_NAME).{{ include "rabbitmq.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
             {{- else }}
             - name: RABBITMQ_NODENAME
               value: rabbit@$(NODE_NAME)

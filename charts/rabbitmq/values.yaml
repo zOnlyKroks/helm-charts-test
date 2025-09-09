@@ -26,6 +26,9 @@ image:
   ## @param image.imagePullPolicy RabbitMQ image pull policy
   imagePullPolicy: Always
 
+## @param clusterDomain Kubernetes cluster domain
+clusterDomain: cluster.local
+
 ## @section Deployment configuration
 ## @param replicaCount Number of RabbitMQ replicas to deploy (clustering needs to be enabled to set more than 1 replicas)
 replicaCount: 1
