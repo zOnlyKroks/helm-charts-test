@@ -11,10 +11,7 @@
     {
       "matchManagers": ["helm-values"],
       "matchPackagePatterns": [".*"],
-      "extractVersion": "(?<tag>[^@]+)@(?<sha>[a-f0-9]{7,40})",
-      "versioning": "regex:^.+@.+$",
-      "rangeStrategy": "replace",
-      "updateTypes": ["minor", "patch", "digest"]
+      "matchUpdateTypes": ["minor", "patch", "digest"]
     }
   ]
 }
