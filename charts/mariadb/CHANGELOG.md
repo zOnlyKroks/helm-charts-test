@@ -1,8 +1,8 @@
 # Changelog
 
-## 0.2.1 (2025-09-04)
+## 0.2.3 (2025-09-09)
 
-* [mariadb] Default randomized password ([#35](https://github.com/CloudPirates-io/helm-charts/pull/35))
+* Update docker.io/mariadb:12.0.2 Docker digest to a5af517 ([#52](https://github.com/CloudPirates-io/helm-charts/pull/52))
 
 ## 0.2.0 (2025-09-02)
 
