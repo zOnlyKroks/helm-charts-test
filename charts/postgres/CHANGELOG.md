@@ -1,6 +1,10 @@
 # Changelog
 
-## <small>0.2.2</small> (2025-08-27)
+## 0.2.3 (2025-09-09)
+
+* Update docker.io/postgres:17.6 Docker digest to 29574e2 ([#58](https://github.com/CloudPirates-io/helm-charts/pull/58))
+
+## <small>0.2.1 (2025-08-26)</small>
 
 * add first draft of postgres helm-chart ([ac297fa](https://github.com/CloudPirates-io/helm-charts/commit/ac297fa))
 * add postgres-secret lookup ([e628c3f](https://github.com/CloudPirates-io/helm-charts/commit/e628c3f))
