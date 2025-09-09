@@ -1,8 +1,8 @@
 # Changelog
 
-## 0.2.1 (2025-09-04)
+## 0.2.4 (2025-09-09)
 
-* [mariadb] Default randomized password ([#35](https://github.com/CloudPirates-io/helm-charts/pull/35))
+* [mariadb]: Mariadb initdbscript ([#62](https://github.com/CloudPirates-io/helm-charts/pull/62))
 
 ## 0.2.0 (2025-09-02)
 
