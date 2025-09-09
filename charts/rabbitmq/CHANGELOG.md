@@ -1,8 +1,8 @@
 # Changelog
 
-## 0.1.2 (2025-09-08)
+## 0.1.3 (2025-09-09)
 
-* [rabbitmq] Update RabbitMQ to 4.1.4 ([#45](https://github.com/CloudPirates-io/helm-charts/pull/45))
+* [rabbitmq]: Fix erlang cookie copy / access rights ([#48](https://github.com/CloudPirates-io/helm-charts/pull/48))
 
 ## <small>0.1.1 (2025-09-08)</small>
 
