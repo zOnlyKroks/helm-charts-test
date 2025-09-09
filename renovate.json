@@ -4,7 +4,7 @@
   "helm-values": {
     "fileMatch": ["^charts/.*values\\.yaml$"],
     "versioning": "regex:^.+@.+$",
-    "extractVersion": "(?<version>[^@]+)@(?<sha>[a-f0-9]{7,40})",
+    "extractVersion": "(?<version>[^@]+)@(?<sha>sha256:[a-f0-9]{64})",
     "rangeStrategy": "replace"
   },
   "packageRules": [
@@ -12,14 +12,13 @@
       "matchManagers": ["helm-values"],
       "matchPackagePatterns": [".*"],
       "matchUpdateTypes": ["minor", "patch", "digest"]
-    }
-  ],
-  "hostRules": [
+    },
     {
-      "hostType": "docker",
-      "matchHost": "harbor.cloudpirates.io",
-      "username": "{{ env.DOCKER_USER }}",
-      "password": "{{ env.DOCKER_PASSWORD }}"
+      "matchManagers": ["helm-values"],
+      "matchPackagePatterns": [
+        "harbor.cloudpirates.io/koperator-internal/services/clusterpirate"
+      ],
+      "enabled": false
     }
   ]
 }
