@@ -13,5 +13,13 @@
       "matchPackagePatterns": [".*"],
       "matchUpdateTypes": ["minor", "patch", "digest"]
     }
+  ],
+  "hostRules": [
+    {
+      "hostType": "docker",
+      "matchHost": "harbor.cloudpirates.io",
+      "username": "{{ env.DOCKER_USER }}",
+      "password": "{{ env.DOCKER_PASSWORD }}"
+    }
   ]
 }
