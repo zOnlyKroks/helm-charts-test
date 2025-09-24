@@ -88,29 +88,20 @@ jobs:
                   tmp.write('{{ template "chart.valuesSection" . }}')
                   template_file = tmp.name
 
-              # Use a unique output file path to avoid conflicts
-              output_file = f'/tmp/values_output_{os.path.basename(chart_path)}.md'
-
               try:
-
+                  # Run helm-docs and capture output directly
                   result = subprocess.run([
                       'helm-docs',
                       '--template-files', template_file,
-                      '--output-file', output_file
+                      '--dry-run'
                   ], capture_output=True, text=True, cwd=chart_path)
 
                   if result.returncode != 0:
                       print(f"helm-docs failed for {chart_path}: {result.stderr}")
                       return False
 
-                  # Check if output file was created
-                  if not os.path.exists(output_file):
-                      print(f"helm-docs output file not created: {output_file}")
-                      return False
-
-                  # Read the generated values section
-                  with open(output_file, 'r') as f:
-                      new_values_content = f.read().strip()
+                  # Use the stdout output directly
+                  new_values_content = result.stdout.strip()
 
                   # Read existing README
                   with open(readme_path, 'r') as f:
@@ -137,8 +128,6 @@ jobs:
 
               finally:
                   os.unlink(template_file)
-                  if os.path.exists(output_file):
-                      os.unlink(output_file)
 
               return False
 
