@@ -107,24 +107,51 @@ jobs:
                   with open(readme_path, 'r') as f:
                       content = f.read()
 
-                  # Find Configuration section and replace everything until next ## section
-                  config_pattern = r'(## Configuration\s*\n)(.*?)(?=\n## [^#]|\Z)'
+                  # Find Configuration section and replace only the values table, preserving other content
+                  # Look for the pattern that includes text before the table
+                  config_pattern = r'(## Configuration\s*\n)(.*?)(\n\| Parameter \| Description \| Type \| Default \|\n\|[|\-\s]+\|.*?)(?=\n## [^#]|\Z)'
+                  table_only_pattern = r'(\n\| Parameter \| Description \| Type \| Default \|\n\|[|\-\s]+\|.*?)(?=\n## [^#]|\n\n## [^#]|\Z)'
+
                   if re.search(config_pattern, content, re.DOTALL):
+                      # Replace the entire Configuration section but preserve descriptive text structure
+                      match = re.search(config_pattern, content, re.DOTALL)
+                      if match:
+                          # Extract any descriptive text before the table
+                          existing_desc = match.group(2).split('\n| Parameter')[0].strip()
+                          if existing_desc:
+                              updated_content = re.sub(
+                                  config_pattern,
+                                  rf'\1\n{existing_desc}\n\n{new_values_content}\n\n',
+                                  content,
+                                  flags=re.DOTALL
+                              )
+                          else:
+                              updated_content = re.sub(
+                                  config_pattern,
+                                  rf'\1\n{new_values_content}\n\n',
+                                  content,
+                                  flags=re.DOTALL
+                              )
+                      else:
+                          updated_content = content
+                  elif re.search(table_only_pattern, content, re.DOTALL):
+                      # Just replace the table part if no full Configuration section match
                       updated_content = re.sub(
-                          config_pattern,
-                          rf'\1\n{new_values_content}\n\n',
+                          table_only_pattern,
+                          f'\n{new_values_content}',
                           content,
                           flags=re.DOTALL
                       )
-
-                      # Write back only if changed
-                      if updated_content != content:
-                          with open(readme_path, 'w') as f:
-                              f.write(updated_content)
-                          print(f"Updated values table in {readme_path}")
-                          return True
                   else:
-                      print(f"No Configuration section found in {readme_path}")
+                      print(f"No Configuration section or values table found in {readme_path}")
+                      return False
+
+                  # Write back only if changed
+                  if updated_content != content:
+                      with open(readme_path, 'w') as f:
+                          f.write(updated_content)
+                      print(f"Updated values table in {readme_path}")
+                      return True
 
               finally:
                   os.unlink(template_file)
