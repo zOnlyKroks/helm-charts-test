@@ -58,6 +58,43 @@ jobs:
         if: steps.list-changed.outputs.changed == 'true'
         run: ct lint --target-branch ${{ github.event.repository.default_branch }} --validate-maintainers=false --additional-commands "helm unittest {{ .Path }}"
 
+      - name: Install helm-docs
+        if: steps.list-changed.outputs.changed == 'true'
+        run: |
+          cd /tmp
+          curl -sSL https://github.com/norwoodj/helm-docs/releases/download/v1.14.2/helm-docs_1.14.2_Linux_x86_64.tar.gz | tar xz
+          sudo mv helm-docs /usr/local/bin/helm-docs
+
+      - name: Generate documentation with helm-docs
+        if: steps.list-changed.outputs.changed == 'true'
+        run: |
+          for chart_directory in ${{ steps.list-changed.outputs.changedCharts }}; do
+            echo "Generating documentation for $chart_directory"
+            helm-docs --chart-search-root="$chart_directory" --template-files=README.md.gotmpl --template-files=_templates.gotmpl
+          done
+
+      - name: Check for documentation changes
+        if: steps.list-changed.outputs.changed == 'true'
+        id: doc-changes
+        run: |
+          if git diff --quiet; then
+            echo "No documentation changes detected"
+            echo "changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "Documentation changes detected"
+            echo "changes=true" >> $GITHUB_OUTPUT
+            git diff --name-only
+          fi
+
+      - name: Commit documentation changes
+        if: steps.list-changed.outputs.changed == 'true' && steps.doc-changes.outputs.changes == 'true'
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+          git add charts/*/README.md
+          git commit -m "docs: auto-update chart documentation with helm-docs" --signoff
+          git push
+
   update-changelog:
     runs-on: ubuntu-latest
     needs: [lint-test]
