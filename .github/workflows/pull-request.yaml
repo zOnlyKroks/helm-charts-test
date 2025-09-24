@@ -107,21 +107,24 @@ jobs:
                   with open(readme_path, 'r') as f:
                       content = f.read()
 
-                  # Find Configuration section and replace only the values table, preserving other content
-                  # Look for the pattern that includes text before the table
-                  config_pattern = r'(## Configuration\s*\n)(.*?)(\n\| Parameter \| Description \| Type \| Default \|\n\|[|\-\s]+\|.*?)(?=\n## [^#]|\Z)'
-                  table_only_pattern = r'(\n\| Parameter \| Description \| Type \| Default \|\n\|[|\-\s]+\|.*?)(?=\n## [^#]|\n\n## [^#]|\Z)'
+                  # Find Configuration section and replace everything from it to the next ## section
+                  # This preserves any introductory text but replaces all the parameter tables
+                  config_pattern = r'(## Configuration\s*\n)(.*?)(?=\n## [^#]|\Z)'
 
                   if re.search(config_pattern, content, re.DOTALL):
-                      # Replace the entire Configuration section but preserve descriptive text structure
+                      # Find the Configuration section and get any intro text before first table or subsection
                       match = re.search(config_pattern, content, re.DOTALL)
                       if match:
-                          # Extract any descriptive text before the table
-                          existing_desc = match.group(2).split('\n| Parameter')[0].strip()
-                          if existing_desc:
+                          section_content = match.group(2)
+
+                          # Look for intro text before the first ### subsection or table
+                          intro_match = re.match(r'(.*?)(?=\n###|\n\||\Z)', section_content, re.DOTALL)
+                          intro_text = intro_match.group(1).strip() if intro_match else ""
+
+                          if intro_text:
                               updated_content = re.sub(
                                   config_pattern,
-                                  rf'\1\n{existing_desc}\n\n{new_values_content}\n\n',
+                                  rf'\1\n{intro_text}\n\n{new_values_content}\n\n',
                                   content,
                                   flags=re.DOTALL
                               )
@@ -134,16 +137,8 @@ jobs:
                               )
                       else:
                           updated_content = content
-                  elif re.search(table_only_pattern, content, re.DOTALL):
-                      # Just replace the table part if no full Configuration section match
-                      updated_content = re.sub(
-                          table_only_pattern,
-                          f'\n{new_values_content}',
-                          content,
-                          flags=re.DOTALL
-                      )
                   else:
-                      print(f"No Configuration section or values table found in {readme_path}")
+                      print(f"No Configuration section found in {readme_path}")
                       return False
 
                   # Write back only if changed
