@@ -143,7 +143,6 @@ jobs:
 
           # Exit with status code to indicate if changes were made
           sys.exit(0 if any_changes else 1)
-          EOF
 
           # Run the Python script
           CHANGED_CHARTS="${{ steps.list-changed.outputs.changedCharts }}" python3 update_values.py
