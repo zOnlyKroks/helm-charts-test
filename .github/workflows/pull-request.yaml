@@ -65,13 +65,92 @@ jobs:
           curl -sSL https://github.com/norwoodj/helm-docs/releases/download/v1.14.2/helm-docs_1.14.2_Linux_x86_64.tar.gz | tar xz
           sudo mv helm-docs /usr/local/bin/helm-docs
 
-      - name: Generate documentation with helm-docs
+      - name: Generate values documentation
         if: steps.list-changed.outputs.changed == 'true'
         run: |
-          for chart_directory in ${{ steps.list-changed.outputs.changedCharts }}; do
-            echo "Generating documentation for $chart_directory"
-            helm-docs --chart-search-root="$chart_directory" --template-files=README.md.gotmpl --template-files=_templates.gotmpl
-          done
+          # Create a script to update only the values tables
+          cat > update_values.py << 'EOF'
+          import os
+          import sys
+          import subprocess
+          import re
+          import tempfile
+
+          def update_chart_values(chart_path):
+              readme_path = os.path.join(chart_path, "README.md")
+
+              if not os.path.exists(readme_path):
+                  print(f"README.md not found in {chart_path}, skipping...")
+                  return False
+
+              # Generate helm-docs output to get values table
+              with tempfile.NamedTemporaryFile(mode='w', suffix='.md', delete=False) as tmp:
+                  tmp.write('{{ template "chart.valuesSection" . }}')
+                  template_file = tmp.name
+
+              try:
+                  result = subprocess.run([
+                      'helm-docs',
+                      '--chart-search-root', chart_path,
+                      '--template-files', template_file,
+                      '--output-file', '/tmp/values_output.md'
+                  ], capture_output=True, text=True, cwd=chart_path)
+
+                  if result.returncode != 0:
+                      print(f"helm-docs failed for {chart_path}: {result.stderr}")
+                      return False
+
+                  # Read the generated values section
+                  with open('/tmp/values_output.md', 'r') as f:
+                      new_values_content = f.read().strip()
+
+                  # Read existing README
+                  with open(readme_path, 'r') as f:
+                      content = f.read()
+
+                  # Find Configuration section and replace everything until next ## section
+                  config_pattern = r'(## Configuration\s*\n)(.*?)(?=\n## [^#]|\Z)'
+                  if re.search(config_pattern, content, re.DOTALL):
+                      updated_content = re.sub(
+                          config_pattern,
+                          rf'\1\n{new_values_content}\n\n',
+                          content,
+                          flags=re.DOTALL
+                      )
+
+                      # Write back only if changed
+                      if updated_content != content:
+                          with open(readme_path, 'w') as f:
+                              f.write(updated_content)
+                          print(f"Updated values table in {readme_path}")
+                          return True
+                  else:
+                      print(f"No Configuration section found in {readme_path}")
+
+              finally:
+                  os.unlink(template_file)
+                  if os.path.exists('/tmp/values_output.md'):
+                      os.unlink('/tmp/values_output.md')
+
+              return False
+
+          # Process each chart
+          charts_changed = os.environ.get('CHANGED_CHARTS', '').split()
+          any_changes = False
+
+          for chart in charts_changed:
+              if update_chart_values(chart.strip()):
+                  any_changes = True
+
+          # Exit with status code to indicate if changes were made
+          sys.exit(0 if any_changes else 1)
+          EOF
+
+          # Run the Python script
+          CHANGED_CHARTS="${{ steps.list-changed.outputs.changedCharts }}" python3 update_values.py
+          VALUES_UPDATED=$?
+          echo "values_updated=$VALUES_UPDATED" >> $GITHUB_OUTPUT
+        id: update-values
 
       - name: Check for documentation changes
         if: steps.list-changed.outputs.changed == 'true'
@@ -92,7 +171,7 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
           git add charts/*/README.md
-          git commit -m "docs: auto-update chart documentation with helm-docs" --signoff
+          git commit -m "docs: auto-update chart values documentation with helm-docs" --signoff
           git push
 
   update-changelog:
