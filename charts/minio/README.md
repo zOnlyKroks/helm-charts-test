@@ -65,194 +65,90 @@ cosign verify --key cosign.pub registry-1.docker.io/cloudpirates/minio:<version>
 
 ## Configuration
 
-The following table lists the configurable parameters of the MinIO chart and their default values.
 
-### Global parameters
+## Values
 
-| Parameter                 | Description                                     | Default |
-| ------------------------- | ----------------------------------------------- | ------- |
-| `global.imageRegistry`    | Global Docker image registry                    | `""`    |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`    |
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| affinity | object | `{}` |  |
+| auth.existingSecret | string | `""` |  |
+| auth.existingSecretPasswordKey | string | `"password"` |  |
+| auth.existingSecretUserKey | string | `"user"` |  |
+| auth.rootPassword | string | `""` |  |
+| auth.rootUser | string | `"admin"` |  |
+| commonAnnotations | object | `{}` |  |
+| commonLabels | object | `{}` |  |
+| config.browserEnabled | bool | `true` |  |
+| config.domain | string | `""` |  |
+| config.extraEnvVars | list | `[]` |  |
+| config.region | string | `""` |  |
+| config.serverUrl | string | `""` |  |
+| consoleIngress.annotations | object | `{}` |  |
+| consoleIngress.className | string | `""` |  |
+| consoleIngress.enabled | bool | `false` |  |
+| consoleIngress.hosts[0].host | string | `"minio-console.local"` |  |
+| consoleIngress.hosts[0].paths[0].path | string | `"/"` |  |
+| consoleIngress.hosts[0].paths[0].pathType | string | `"Prefix"` |  |
+| consoleIngress.tls | list | `[]` |  |
+| extraObjects | list | `[]` |  |
+| fullnameOverride | string | `""` |  |
+| global.imagePullSecrets | list | `[]` |  |
+| global.imageRegistry | string | `""` |  |
+| image.imagePullPolicy | string | `"Always"` |  |
+| image.registry | string | `"docker.io"` |  |
+| image.repository | string | `"minio/minio"` |  |
+| image.tag | string | `"RELEASE.2025-09-07T16-13-09Z@sha256:14cea493d9a34af32f524e538b8346cf79f3321eff8e708c1e2960462bd8936e"` |  |
+| ingress.annotations | object | `{}` |  |
+| ingress.className | string | `""` |  |
+| ingress.enabled | bool | `false` |  |
+| ingress.hosts[0].host | string | `"minio.local"` |  |
+| ingress.hosts[0].paths[0].path | string | `"/"` |  |
+| ingress.hosts[0].paths[0].pathType | string | `"Prefix"` |  |
+| ingress.tls | list | `[]` |  |
+| livenessProbe.enabled | bool | `true` |  |
+| livenessProbe.failureThreshold | int | `3` |  |
+| livenessProbe.initialDelaySeconds | int | `30` |  |
+| livenessProbe.periodSeconds | int | `10` |  |
+| livenessProbe.successThreshold | int | `1` |  |
+| livenessProbe.timeoutSeconds | int | `5` |  |
+| nameOverride | string | `""` |  |
+| nodeSelector | object | `{}` |  |
+| persistence.accessModes[0] | string | `"ReadWriteOnce"` |  |
+| persistence.annotations | object | `{}` |  |
+| persistence.enabled | bool | `true` |  |
+| persistence.existingClaim | string | `""` |  |
+| persistence.mountPath | string | `"/mnt/data"` |  |
+| persistence.size | string | `"8Gi"` |  |
+| persistence.storageClass | string | `""` |  |
+| podAnnotations | object | `{}` |  |
+| podLabels | object | `{}` |  |
+| podSecurityContext.fsGroup | int | `1001` |  |
+| readinessProbe.enabled | bool | `true` |  |
+| readinessProbe.failureThreshold | int | `3` |  |
+| readinessProbe.initialDelaySeconds | int | `5` |  |
+| readinessProbe.periodSeconds | int | `5` |  |
+| readinessProbe.successThreshold | int | `1` |  |
+| readinessProbe.timeoutSeconds | int | `3` |  |
+| replicaCount | int | `1` |  |
+| resources | object | `{}` |  |
+| securityContext.allowPrivilegeEscalation | bool | `false` |  |
+| securityContext.capabilities.drop[0] | string | `"ALL"` |  |
+| securityContext.readOnlyRootFilesystem | bool | `true` |  |
+| securityContext.runAsGroup | int | `1001` |  |
+| securityContext.runAsNonRoot | bool | `true` |  |
+| securityContext.runAsUser | int | `1001` |  |
+| service.annotations | object | `{}` |  |
+| service.consolePort | int | `9090` |  |
+| service.port | int | `9000` |  |
+| service.type | string | `"ClusterIP"` |  |
+| startupProbe.enabled | bool | `false` |  |
+| startupProbe.failureThreshold | int | `30` |  |
+| startupProbe.initialDelaySeconds | int | `10` |  |
+| startupProbe.periodSeconds | int | `10` |  |
+| startupProbe.successThreshold | int | `1` |  |
+| startupProbe.timeoutSeconds | int | `5` |  |
+| tolerations | list | `[]` |  |
 
-### MinIO image configuration
-
-| Parameter          | Description                                                                                           | Default                          |
-| ------------------ | ----------------------------------------------------------------------------------------------------- | -------------------------------- |
-| `image.registry`   | MinIO image registry                                                                                  | `docker.io`                      |
-| `image.repository` | MinIO image repository                                                                                | `minio/minio`                    |
-| `image.tag`        | MinIO image tag (immutable tags are recommended)                                                      | `"RELEASE.2024-08-17T01-24-54Z"` |
-| `image.digest`     | MinIO image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                             |
-| `image.pullPolicy` | MinIO image pull policy                                                                               | `IfNotPresent`                   |
-
-### MinIO Authentication
-
-| Parameter                        | Description                                                          | Default      |
-| -------------------------------- | -------------------------------------------------------------------- | ------------ |
-| `auth.rootUser`                  | MinIO root username                                                  | `"admin"`    |
-| `auth.rootPassword`              | MinIO root password. If not set, a random password will be generated | `""`         |
-| `auth.existingSecret`            | Name of existing secret containing MinIO credentials                 | `""`         |
-| `auth.existingSecretUserKey`     | Key in existing secret containing username                           | `"user"`     |
-| `auth.existingSecretPasswordKey` | Key in existing secret containing password                           | `"password"` |
-
-### MinIO configuration
-
-| Parameter               | Description                                               | Default |
-| ----------------------- | --------------------------------------------------------- | ------- |
-| `config.region`         | MinIO server default region                               | `""`    |
-| `config.browserEnabled` | Enable MinIO web browser                                  | `true`  |
-| `config.domain`         | MinIO server domain                                       | `""`    |
-| `config.serverUrl`      | MinIO server URL for console                              | `""`    |
-| `config.extraEnvVars`   | Extra environment variables to be set on MinIO containers | `[]`    |
-
-### Deployment configuration
-
-| Parameter          | Description                                 | Default |
-| ------------------ | ------------------------------------------- | ------- |
-| `replicaCount`     | Number of MinIO replicas to deploy          | `1`     |
-| `nameOverride`     | String to partially override minio.fullname | `""`    |
-| `fullnameOverride` | String to fully override minio.fullname     | `""`    |
-
-### Pod annotations and labels
-
-| Parameter        | Description                           | Default |
-| ---------------- | ------------------------------------- | ------- |
-| `podAnnotations` | Map of annotations to add to the pods | `{}`    |
-| `podLabels`      | Map of labels to add to the pods      | `{}`    |
-
-### Security Context
-
-| Parameter                                  | Description                                       | Default   |
-| ------------------------------------------ | ------------------------------------------------- | --------- |
-| `podSecurityContext.fsGroup`               | Group ID for the volumes of the pod               | `1000`    |
-| `securityContext.allowPrivilegeEscalation` | Enable container privilege escalation             | `false`   |
-| `securityContext.runAsNonRoot`             | Configure the container to run as a non-root user | `true`    |
-| `securityContext.runAsUser`                | User ID for the MinIO container                   | `1000`    |
-| `securityContext.runAsGroup`               | Group ID for the MinIO container                  | `1000`    |
-| `securityContext.readOnlyRootFilesystem`   | Mount container root filesystem as read-only      | `true`    |
-| `securityContext.capabilities.drop`        | Linux capabilities to be dropped                  | `["ALL"]` |
-
-### Service configuration
-
-| Parameter             | Description                | Default     |
-| --------------------- | -------------------------- | ----------- |
-| `service.type`        | MinIO service type         | `ClusterIP` |
-| `service.port`        | MinIO service port         | `9000`      |
-| `service.consolePort` | MinIO console service port | `9090`      |
-| `service.annotations` | Service annotations        | `{}`        |
-
-### Ingress configuration
-
-| Parameter                            | Description                                             | Default       |
-| ------------------------------------ | ------------------------------------------------------- | ------------- |
-| `ingress.enabled`                    | Enable ingress record generation for MinIO              | `false`       |
-| `ingress.className`                  | IngressClass that will be used to implement the Ingress | `""`          |
-| `ingress.annotations`                | Additional annotations for the Ingress resource         | `{}`          |
-| `ingress.hosts[0].host`              | Hostname for MinIO ingress                              | `minio.local` |
-| `ingress.hosts[0].paths[0].path`     | Path for MinIO ingress                                  | `/`           |
-| `ingress.hosts[0].paths[0].pathType` | Path type for MinIO ingress                             | `Prefix`      |
-| `ingress.tls`                        | TLS configuration for MinIO ingress                     | `[]`          |
-
-### Console Ingress configuration
-
-| Parameter                                   | Description                                             | Default               |
-| ------------------------------------------- | ------------------------------------------------------- | --------------------- |
-| `consoleIngress.enabled`                    | Enable ingress record generation for MinIO Console      | `false`               |
-| `consoleIngress.className`                  | IngressClass that will be used to implement the Ingress | `""`                  |
-| `consoleIngress.annotations`                | Additional annotations for the Console Ingress resource | `{}`                  |
-| `consoleIngress.hosts[0].host`              | Hostname for MinIO Console ingress                      | `minio-console.local` |
-| `consoleIngress.hosts[0].paths[0].path`     | Path for MinIO Console ingress                          | `/`                   |
-| `consoleIngress.hosts[0].paths[0].pathType` | Path type for MinIO Console ingress                     | `Prefix`              |
-| `consoleIngress.tls`                        | TLS configuration for MinIO Console ingress             | `[]`                  |
-
-### Resources
-
-| Parameter   | Description                                 | Default |
-| ----------- | ------------------------------------------- | ------- |
-| `resources` | The resources to allocate for the container | `{}`    |
-
-### Persistence
-
-| Parameter                   | Description                                        | Default             |
-| --------------------------- | -------------------------------------------------- | ------------------- |
-| `persistence.enabled`       | Enable persistence using Persistent Volume Claims  | `true`              |
-| `persistence.storageClass`  | Persistent Volume storage class                    | `""`                |
-| `persistence.annotations`   | Persistent Volume Claim annotations                | `{}`                |
-| `persistence.size`          | Persistent Volume size                             | `10Gi`              |
-| `persistence.accessModes`   | Persistent Volume access modes                     | `["ReadWriteOnce"]` |
-| `persistence.existingClaim` | The name of an existing PVC to use for persistence | `""`                |
-
-### Liveness and readiness probes
-
-| Parameter                            | Description                               | Default |
-| ------------------------------------ | ----------------------------------------- | ------- |
-| `livenessProbe.enabled`              | Enable livenessProbe on MinIO containers  | `true`  |
-| `livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe   | `30`    |
-| `livenessProbe.periodSeconds`        | Period seconds for livenessProbe          | `10`    |
-| `livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe         | `5`     |
-| `livenessProbe.failureThreshold`     | Failure threshold for livenessProbe       | `3`     |
-| `livenessProbe.successThreshold`     | Success threshold for livenessProbe       | `1`     |
-| `readinessProbe.enabled`             | Enable readinessProbe on MinIO containers | `true`  |
-| `readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe  | `5`     |
-| `readinessProbe.periodSeconds`       | Period seconds for readinessProbe         | `5`     |
-| `readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe        | `3`     |
-| `readinessProbe.failureThreshold`    | Failure threshold for readinessProbe      | `3`     |
-| `readinessProbe.successThreshold`    | Success threshold for readinessProbe      | `1`     |
-| `startupProbe.enabled`               | Enable startupProbe on MinIO containers   | `true`  |
-| `startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe    | `10`    |
-| `startupProbe.periodSeconds`         | Period seconds for startupProbe           | `10`    |
-| `startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe          | `5`     |
-| `startupProbe.failureThreshold`      | Failure threshold for startupProbe        | `30`    |
-| `startupProbe.successThreshold`      | Success threshold for startupProbe        | `1`     |
-
-### Node Selection
-
-| Parameter      | Description                          | Default |
-| -------------- | ------------------------------------ | ------- |
-| `nodeSelector` | Node labels for pod assignment       | `{}`    |
-| `tolerations`  | Toleration labels for pod assignment | `[]`    |
-| `affinity`     | Affinity settings for pod assignment | `{}`    |
-
-### Extra Configuration Parameters
-
-| Parameter           | Description                                                                         | Default |
-| ------------------- | ----------------------------------------------------------------------------------- | ------- |
-| `extraObjects`      | A list of additional Kubernetes objects to deploy alongside the release             | `[]`    |
-
-#### Extra Objects
-
-You can use the `extraObjects` array to deploy additional Kubernetes resources (such as NetworkPolicies, ConfigMaps, etc.) alongside the release. This is useful for customizing your deployment with extra manifests that are not covered by the default chart options.
-
-**Helm templating is supported in any field, but all template expressions must be quoted.** For example, to use the release namespace, write `namespace: "{{ .Release.Namespace }}"`.
-
-**Example: Deploy a NetworkPolicy with templating**
-
-```yaml
-extraObjects:
-  - apiVersion: networking.k8s.io/v1
-    kind: NetworkPolicy
-    metadata:
-      name: allow-dns
-      namespace: "{{ .Release.Namespace }}"
-    spec:
-      podSelector: {}
-      policyTypes:
-        - Egress
-      egress:
-        - to:
-            - namespaceSelector:
-                matchLabels:
-                  kubernetes.io/metadata.name: kube-system
-              podSelector:
-                matchLabels:
-                  k8s-app: kube-dns
-        - ports:
-            - port: 53
-              protocol: UDP
-            - port: 53
-              protocol: TCP
-```
-
-All objects in `extraObjects` will be rendered and deployed with the release. You can use any valid Kubernetes manifest, and reference Helm values or built-in objects as needed (just remember to quote template expressions).
 
 ## Examples
 
