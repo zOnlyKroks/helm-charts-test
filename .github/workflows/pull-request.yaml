@@ -91,7 +91,6 @@ jobs:
               try:
                   result = subprocess.run([
                       'helm-docs',
-                      '--chart-search-root', chart_path,
                       '--template-files', template_file,
                       '--output-file', '/tmp/values_output.md'
                   ], capture_output=True, text=True, cwd=chart_path)
