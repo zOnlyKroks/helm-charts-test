@@ -22,7 +22,7 @@ image:
   ## @param image.repository MongoDB image repository
   repository: mongo
   ## @param image.tag MongoDB image tag
-  tag: "8.0.13@sha256:c75092233f998275c7b2c3942bb897994adb709bc5b9b7d043cc642ec521b6c7"
+  tag: "8.0.13@sha256:cf340b1e5283843c63eb12999922f20c463ae31285f746d30f05dcc21cd1d47c"
   ## @param image.pullPolicy MongoDB image pull policy
   pullPolicy: Always
 
