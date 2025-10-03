@@ -22,7 +22,7 @@ image:
   ## @param image.repository RabbitMQ image repository
   repository: rabbitmq
   ## @param image.tag RabbitMQ image tag
-  tag: "4.1.4-management@sha256:326cd7c1f0398aa7702764aac33849f377192ed291188a295c3c2fbe67f92515"
+  tag: "4.1.4-management@sha256:06f418f2f0a96e5262844351195b83f47655c193cd74c2b5072898147492d6cf"
   ## @param image.imagePullPolicy RabbitMQ image pull policy
   imagePullPolicy: Always
 
